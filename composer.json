@@ -2,15 +2,31 @@
     "name": "thoughtful-web/library-wp",
     "description": "Helpful WordPress scripts released as free open source software under GNU GPL-2.0+ License",
     "type": "library",
+	"require": {
+		"php": ">=7.3.5"
+	},
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.6",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1"
     },
-    "license": "gpl-2.0-or-later",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
-            "name": "Zachary K Watkins",
-            "email": "3458875+ZachWatkins@users.noreply.github.com"
+            "name": "Zachary Kendall Watkins",
+            "email": "3458875+ZachWatkins@users.noreply.github.com",
+			"homepage": "https://github.com/zachwatkins/",
+            "role": "Creator, Developer"
         }
-    ]
+    ],
+	"support": {
+		"issues": "https://github.com/thoughtful-web/library-wp/issues",
+		"source": "https://github.com/thoughtful-web",
+		"docs": "https://raw.githubusercontent.com/thoughtful-web/library-wp/main/README.md"
+	},
+	"readme": "README.md",
+	"autoload": {
+		"psr-4": {
+			"ThoughtfulWeb\\LibraryWP\\": "src/"
+		}
+	}
 }
