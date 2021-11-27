@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"editor.wordWrap": "on",
+		"editor.detectIndentation": false,
+		"editor.insertSpaces": false,
+		"files.eol": "\n",
+	"php.validate.enable": true,
+	"php.validate.run": "onSave",
+	}
+}

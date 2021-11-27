@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+		"felixfbecker.php-pack",
+		"ikappas.phpcs",
+		"wordpresstoolbox.wordpress-toolbox",
+		"neilbrayfield.php-docblocker"
+	]
+}
