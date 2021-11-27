@@ -16,7 +16,7 @@
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\Library\Admin;
+namespace ThoughtfulWeb\LibraryWP\Admin;
 
 /**
  * The Notice class.

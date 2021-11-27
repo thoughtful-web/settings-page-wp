@@ -2,7 +2,7 @@
 /**
  * The file that extends WP_Error notification capabilities.
  *
- * @package    ThoughtfulWeb\Library
+ * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Admin
  * @author     Zachary Kendall Watkins <zwatkins.it@gmail.com>
  * @copyright  2021 Zachary Kendall Watkins
@@ -12,9 +12,9 @@
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\Library\Admin\Page;
+namespace ThoughtfulWeb\LibraryWP\Admin\Page;
 
-use ThoughtfulWeb\Library\File\Auth_Include as TWL_File_Include;
+use ThoughtfulWeb\LibraryWP\File\Auth_Include as TWL_File_Include;
 
 /**
  * Undocumented class

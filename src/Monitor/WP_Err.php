@@ -12,7 +12,7 @@
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\Library\Monitor;
+namespace ThoughtfulWeb\LibraryWP\Monitor;
 
 /**
  * The class that monitors WP Errors and pushes notifications to channels.

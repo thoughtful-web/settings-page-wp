@@ -1,7 +1,7 @@
 <?php
 /**
  * The file that provides plugin activation requirement features via a configuration file or an array
- * passed to the ThoughtfulWeb\Library\Plugin_Activation constructor.
+ * passed to the ThoughtfulWeb\LibraryWP\Plugin_Activation constructor.
  *
  * @package    ThoughtfulWeb\Library
  * @subpackage Plugin
@@ -14,10 +14,10 @@
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\Library\Plugin;
+namespace ThoughtfulWeb\LibraryWP\Plugin;
 
-use ThoughtfulWeb\Library\File_Read as TWL_FileRead;
-use ThoughtfulWeb\Library\Monitor\Incident as TWLM_Error;
+use ThoughtfulWeb\LibraryWP\File_Read as TWL_FileRead;
+use ThoughtfulWeb\LibraryWP\Monitor\Incident as TWLM_Error;
 
 /**
  * The class that validates configuration requirements.
@@ -77,7 +77,7 @@ class Requirements {
 	 */
 	public function __construct( $requirements ) {
 
-		
+
 		$this->requirements = $this->get( $requirements );
 		return $this->requirements;
 

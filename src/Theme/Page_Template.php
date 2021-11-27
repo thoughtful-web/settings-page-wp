@@ -12,10 +12,10 @@
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\Library\Theme;
+namespace ThoughtfulWeb\LibraryWP\Theme;
 
-use ThoughtfulWeb\Library\Error_Helper as Error_Helper;
-use ThoughtfulWeb\Library\File\Load as TWL_File_Load;
+use ThoughtfulWeb\LibraryWP\Error_Helper as Error_Helper;
+use ThoughtfulWeb\LibraryWP\File\Load as TWL_File_Load;
 
 /**
  * The class that registers page template file registration.

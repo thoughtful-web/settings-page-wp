@@ -2,7 +2,7 @@
 /**
  * File include helper class.
  * Use this within a file to be included by others.
- * Example: new \ThoughtfulWeb\Library\File\Auth_Include( __FILE__, __DIR__ . '/thoughtfulweb/library/file/class-auth-include.php', $_SERVER, 'ABSPATH' );
+ * Example: new \ThoughtfulWeb\LibraryWP\File\Auth_Include( __FILE__, __DIR__ . '/thoughtfulweb/library/file/class-auth-include.php', $_SERVER, 'ABSPATH' );
  *
  * @package    ThoughtfulWeb\Library
  * @subpackage File
@@ -14,7 +14,7 @@
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\Library\File;
+namespace ThoughtfulWeb\LibraryWP\File;
 
 /**
  * The File Require class.

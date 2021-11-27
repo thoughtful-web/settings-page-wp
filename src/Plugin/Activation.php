@@ -14,10 +14,10 @@
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\Library\Plugin;
+namespace ThoughtfulWeb\LibraryWP\Plugin;
 
-use ThoughtfulWeb\Library\Plugin\Requirements as TWLP_Requirements;
-use ThoughtfulWeb\Library\Monitor\WP_Err as TWL_Monitor_WP_Err;
+use ThoughtfulWeb\LibraryWP\Plugin\Requirements as TWLP_Requirements;
+use ThoughtfulWeb\LibraryWP\Monitor\WP_Err as TWL_Monitor_WP_Err;
 
 /**
  * The class that handles plugin activation and deactivation.
