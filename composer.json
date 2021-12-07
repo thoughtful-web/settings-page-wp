@@ -6,8 +6,8 @@
 		"php": ">=7.3.5"
 	},
     "require-dev": {
-        "wp-coding-standards/wpcs": "^2.3",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1"
+        "squizlabs/php_codesniffer": "*",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.6"
     },
     "license": "GPL-2.0-or-later",
     "authors": [
@@ -28,5 +28,11 @@
 		"psr-4": {
 			"ThoughtfulWeb\\LibraryWP\\": "src/"
 		}
-	}
+	},
+	"scripts": {
+		"post-install-cmd": "phpcs --config-set colors 1"
+	},
+    "extra": {
+        "phpcodesniffer-search-depth": 5
+    }
 }
