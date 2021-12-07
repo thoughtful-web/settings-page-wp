@@ -2,7 +2,7 @@
 /**
  * The file that extends WP_Error notification capabilities.
  *
- * @package    ThoughtfulWeb\Library
+ * @package    Thoughtful_Web\Library_WP
  * @subpackage Monitor
  * @copyright  Zachary Watkins 2021
  * @author     Zachary Watkins <watkinza@gmail.com>
@@ -12,7 +12,7 @@
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Monitor;
+namespace Thoughtful_Web\Library_WP\Monitor;
 
 /**
  * The class that monitors WP Errors and pushes notifications to channels.

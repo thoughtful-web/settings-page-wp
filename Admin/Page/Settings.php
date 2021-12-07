@@ -2,19 +2,19 @@
 /**
  * The file that extends WP_Error notification capabilities.
  *
- * @package    ThoughtfulWeb\LibraryWP
+ * @package    Thoughtful_Web\Library_WP
  * @subpackage Admin
  * @author     Zachary Kendall Watkins <zwatkins.it@gmail.com>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/zachwatkins/wordpress-plugin-name/blob/master/thoughtfulweb/library/admin/class-acf-fieldset.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/class-acf-fieldset.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Admin\Page;
+namespace Thoughtful_Web\Library_WP\Admin\Page;
 
-use ThoughtfulWeb\LibraryWP\File\Auth_Include as TWL_File_Include;
+use \Thoughtful_Web\Library_WP\File\Auth_Include as TWL_File_Include;
 
 /**
  * Undocumented class

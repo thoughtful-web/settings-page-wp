@@ -25,8 +25,8 @@
 	},
 	"readme": "README.md",
 	"autoload": {
-		"psr-4": {
-			"ThoughtfulWeb\\LibraryWP\\": "src/"
-		}
+		"classmap": [
+			["Admin/", "Admin/Page/", "File/", "Monitor/", "Plugin/", "Theme/"]
+		]
 	}
 }

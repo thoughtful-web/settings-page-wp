@@ -4,17 +4,17 @@
  * Use this within a file to be included by others.
  * Example: new \ThoughtfulWeb\LibraryWP\File\Auth_Include( __FILE__, __DIR__ . '/thoughtfulweb/library/file/class-auth-include.php', $_SERVER, 'ABSPATH' );
  *
- * @package    ThoughtfulWeb\Library
+ * @package    Thoughtful_Web\Library_WP
  * @subpackage File
  * @copyright  Zachary Watkins 2021
  * @author     Zachary Watkins <watkinza@gmail.com>
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
- * @link       https://github.com/zachwatkins/wordpress-plugin-name/blob/master/thoughtfulweb/library/admin/class-page-template.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/class-page-template.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\File;
+namespace Thoughtful_Web\Library_WP\File;
 
 /**
  * The File Require class.
