@@ -22,54 +22,60 @@ use \Thoughtful_Web\Library_WP\File\Auth_Include as TWL_File_Include;
 class Settings {
 
 	/**
+	 * Settings page and field Parameters.
+	 *
+	 * @var array $fieldset The Settings page and fieldset parameters.
+	 */
+	private $params = array(
+		'method'      => 'add_menu_page',
+		'method_args' => array(
+			'page_title' => 'Settings',
+			'menu_title' => 'Settings',
+			'capability' => 'manage_options',
+			'menu_slug'  => 'twl-admin-settings',
+			'function'   => null,
+			'icon_url'   => '',
+			'position'   => null,
+		),
+		'heading'     => array(),
+		'fieldsets'   => array(
+			array(
+				'group'  => 'thoughtful-settings-group-1',
+				'fields' => array(),
+			),
+		),
+	);
+
+	/**
 	 * Settings page fieldset file.
 	 *
 	 * @var string $fieldset_file The fieldset file to load.
 	 */
-	private $fieldset_file = __DIR__ . '../../../../fields/admin-page-settings.php';
-
-	/**
-	 * Settings page fieldset array.
-	 *
-	 * @var array $fieldset THe fieldset for form data to show on the Settings page.
-	 */
-	private $fieldset = array(
-		'add_menu_page' => array(
-			'args'   => array(
-				'page_title' => 'Settings',
-				'menu_title' => 'Settings',
-				'capability' => 'manage_options',
-				'menu_slug'  => 'twl-admin-settings',
-				'function'   => null,
-				'icon_url'   => '',
-				'position'   => null,
-			),
-			'fields' => array(
-				array(
-					'group_slug' => 'twl-admin-group-1',
-				),
-			),
-		),
-	);
+	private $fieldset_file_path;
 
 	/**
 	 * Admin settings class constructor.
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param string $fieldset_file The fieldset file path relative to the root directory.
-	 * @param string $basedir       The root directory path.
+	 * @param string $params  The settings page parameters file path relative to the root directory.
 	 */
-	public function __construct( $fieldset_file = '', $basedir = '' ) {
+	public function __construct( $params = '' ) {
 
-		$fieldset_file = $this->validate_file_path( $fieldset_file, $basedir );
-
-		if ( ! $fieldset_file ) {
-			return;
+		if ( is_string( $params ) ) {
+			$fieldset_file_path = $this->validate_file_path( $params );
+			if ( $fieldset_file_path ) {
+				$this->params = include $fieldset_file_path;
+			} else {
+				return false;
+			}
+		} elseif ( ! empty( $params ) ) {
+			$this->params = $params;
+		} else {
+			return false;
 		}
 
-		// Initialize loading the file.
-		$this->fieldset = include $fieldset_file;
+		// Initialize.
 		$this->add_hooks();
 
 	}
@@ -79,27 +85,16 @@ class Settings {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param string $fieldset_file The fieldset file path relative to the root directory.
-	 * @param string $basedir       The root directory path.
+	 * @param string $fieldset_file_path The fieldset file path relative to the root directory.
 	 *
 	 * @return string|false
 	 */
-	public function validate_file_path( $fieldset_file = '', $basedir = '' ) {
+	public function validate_file_path( $file_path = '' ) {
 
-		if ( empty( $fieldset_file ) || ! is_string( $fieldset_file ) ) {
-			return '';
-		}
+		// Discern the correct path to the file.
+		$file_path = realpath( $file_path );
 
-		// Discern the correct path to the Settings fieldset file.
-		$path = $fieldset_file;
-		if ( ! file_exists( $path ) ) {
-			if ( 0 === strpos( $path, './' ) ) {
-				$path = ltrim( $path, '.' );
-			}
-			$path = "$basedir$path";
-		}
-
-		return file_exists( $path ) ? $path : false;
+		return file_exists( $file_path ) ? $file_path : false;
 
 	}
 
