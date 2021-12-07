@@ -86,12 +86,26 @@ class Auth_Include {
 	 */
 	private static function error_404() {
 
+		if ( ! defined( 'ABSPATH' ) ) {
+			// The WordPress runtime environment is not available.
+			$wp_config = dirname( dirname( dirname( dirname( dirname( dirname( __DIR__ ) ) ) ) . '/wp-config.php';
+			if ( file_exists( $wp_config ) ) {
+				include_once $wp_config;
+
+				global $wp_query;
+				$wp_query->set_404();
+				status_header( 404 );
+				get_template_part( 404 );
+				exit();
+			}
+		}
+
 		header( 'HTTP/1.0 404 Not Found', true, 404 );
 
 		/* choose the appropriate page to redirect users */
 		header( 'location: /404.php' );
 
-		die();
+		exit();
 
 	}
 }

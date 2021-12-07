@@ -29,19 +29,32 @@ class Settings {
 	private $params = array(
 		'method'      => 'add_menu_page',
 		'method_args' => array(
-			'page_title' => 'Settings',
-			'menu_title' => 'Settings',
+			'page_title' => 'A Thoughtful Settings Page',
+			'menu_title' => 'Thoughtful Settings',
 			'capability' => 'manage_options',
-			'menu_slug'  => 'twl-admin-settings',
+			'menu_slug'  => 'thoughtful-settings',
 			'function'   => null,
-			'icon_url'   => '',
-			'position'   => null,
+			'icon_url'   => 'dashicons-admin-settings',
+			'position'   => 2,
 		),
+		'description' => 'A thoughtful settings page description.',
 		'heading'     => array(),
 		'fieldsets'   => array(
 			array(
-				'group'  => 'thoughtful-settings-group-1',
-				'fields' => array(),
+				'section' => 'thoughtful-section-1',
+				'title'   => '',
+				'fields'  => array(
+					array(
+						'label'       => 'Text Field',
+						'id'          => 'my_text_field',
+						'type'        => 'text',
+						'section'     => 'thoughtful-settings_section',
+						'desc'        => 'Description',
+						'placeholder' => 'placeholder',
+						'label_for'   => null,
+						'class'       => null,
+					),
+				),
 			),
 		),
 	);
@@ -107,82 +120,103 @@ class Settings {
 	 */
 	private function add_hooks() {
 
-		add_action( 'init', array( $this, 'fieldset_init' ) );
+		add_action( 'admin_menu', array( $this, 'add_settings' ) );
+		add_action( 'admin_init', array( $this, 'add_sections' ) );
+		add_action( 'admin_init', array( $this, 'add_fields' ) );
+
+		// add_action( 'admin_init', array( $this, 'settings_init' ) );
+
 
 	}
 
+	public function add_settings() {
+		add_menu_page(
+			$this->params['method_args']['page_title'],
+			$this->params['method_args']['menu_title'],
+			$this->params['method_args']['capability'],
+			$this->params['method_args']['menu_slug'],
+			array( $this, 'add_settings_content' ),
+			$this->params['method_args']['icon_url'],
+			$this->params['method_args']['position']
+		);
+	}
+
+	public function add_settings_content() { ?>
+		<div class="wrap">
+			<h1><?php $this->params['method_args']['page_title']; ?></h1>
+			<?php settings_errors(); ?>
+			<form method="POST" action="options.php">
+				<?php
+					$fieldsets = $this->params['fieldsets'];
+					foreach ( $fieldsets as $key => $fieldset ) {
+						settings_fields( $fieldset['section'] );
+					}
+					do_settings_sections( $this->params['method_args']['menu_slug'] );
+					submit_button();
+				?>
+			</form>
+		</div> <?php
+	}
+
 	/**
-	 * Initialize the fieldset array declaration.
+	 * Add settings sections.
 	 *
 	 * @since 0.1.0
 	 *
 	 * @return void
 	 */
-	public function fieldset_init() {
+	public function add_sections() {
 
-		$fieldset = $this->validate_fieldset();
-		$method   = $this->validate_fieldset_method();
-		$hook     = isset( $fieldset['add_menu_page'] ) ? 'add_menu' : 'add_submenu';
-		$fields   = $fieldset[ "{$hook}_page" ];
+		$fieldsets = $this->params['fieldsets'];
+		foreach ( $fieldsets as $key => $fieldset ) {
+			add_settings_section(
+				$fieldset['section'],
+				$fieldset['title'],
+				array(),
+				$this->params['method_args']['menu_slug']
+			);
+		}
+	}
 
-		if ( is_multisite() ) {
-
-			add_action( 'network_admin_menu', array( $this, $hook ) );
-
-			foreach ($variable as $key => $value) {
-				# code...
+	public function add_fields() {
+		$menu_slug = $this->params['method_args']['menu_slug'];
+		$fieldsets = $this->params['fieldsets'];
+		foreach( $fieldsets as $fieldset ){
+			$section = $fieldset['section'];
+			$fields  = $fieldset['fields'];
+			foreach ( $fields as $field ) {
+				add_settings_field(
+					$field['id'],
+					$field['label'],
+					array( $this, 'field_callback' ),
+					$menu_slug,
+					$section,
+					$field
+				);
+				register_setting( $this->params['method_args']['menu_slug'], $field['id'] );
 			}
-			add_action( 'network_admin_edit_' . $fields['menu_slug'], array( $this, 'save_site_option' ) );
-
-		} else {
-
-			add_action( 'admin_menu', array( $this, $hook ) );
-			add_action( 'admin_edit_' . $fieldset[ "{$hook}_page" ], array( $this, 'save_site_option' ) );
-
 		}
-
-		add_action( 'admin_init', array( $this, 'register_settings' ) );
-
 	}
 
-	/**
-	 * Validate the fieldset declaration.
-	 *
-	 * @return array
-	 */
-	private function validate_fieldset() {
-
-		$valid = false;
-
-		$fieldset = $this->fieldset;
-
-		if ( array_key_exists( 'add_menu_page', $fieldset ) ) {
-			$fieldset['add_menu_page']['function'] = array( $this, 'content_admin_menu_page' );
-			$valid = true;
+	public function field_callback( $field ) {
+		$value = get_option( $field['id'] );
+		$placeholder = '';
+		if ( isset( $field['placeholder'] ) ) {
+			$placeholder = $field['placeholder'];
 		}
-
-		return $fieldset;
-
-	}
-
-	/**
-	 * Validate the fieldset declaration.
-	 *
-	 * @return array
-	 */
-	private function validate_fieldset_method() {
-
-		$valid = false;
-
-		$fieldset = $this->fieldset;
-		$keys     = array_keys( $fieldset );
-
-		if ( array_key_exists( 'add_menu_page', $fieldset ) ) {
-			$fieldset['add_menu_page']['function'] = array( $this, 'content_admin_menu_page' );
-			$valid = true;
+		switch ( $field['type'] ) {
+			default:
+				printf( '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />',
+					$field['id'],
+					$field['type'],
+					$placeholder,
+					$value
+				);
 		}
-
-		return $fieldset;
-
+		if( isset($field['desc']) ) {
+			if( $desc = $field['desc'] ) {
+				printf( '<p class="description">%s </p>', $desc );
+			}
+		}
 	}
 }
