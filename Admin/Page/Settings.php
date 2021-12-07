@@ -3,11 +3,11 @@
  * The file that extends WP_Error notification capabilities.
  *
  * @package    Thoughtful_Web\Library_WP
- * @subpackage Admin
+ * @subpackage Admin\Page
  * @author     Zachary Kendall Watkins <zwatkins.it@gmail.com>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/class-acf-fieldset.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/class-settings.php
  * @since      0.1.0
  */
 

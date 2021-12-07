@@ -6,10 +6,10 @@
  *
  * @package    Thoughtful_Web\Library_WP
  * @subpackage File
- * @copyright  Zachary Watkins 2021
- * @author     Zachary Watkins <watkinza@gmail.com>
+ * @author     Zachary Kendall Watkins <zwatkins.it@gmail.com>
+ * @copyright  2021 Zachary Kendall Watkins
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/class-page-template.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/file/auth_include.php
  * @since      0.1.0
  */
 
