@@ -4,17 +4,17 @@
  * Use this within a file to be included by others.
  * Example: new \ThoughtfulWeb\LibraryWP\File\Auth_Include( __FILE__, __DIR__ . '/thoughtfulweb/library/file/class-auth-include.php', $_SERVER, 'ABSPATH' );
  *
- * @package    ThoughtfulWeb\Library
+ * @package    Thoughtful_Web\Library_WP
  * @subpackage File
- * @copyright  Zachary Watkins 2021
- * @author     Zachary Watkins <watkinza@gmail.com>
+ * @author     Zachary Kendall Watkins <zwatkins.it@gmail.com>
+ * @copyright  2021 Zachary Kendall Watkins
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
- * @link       https://github.com/zachwatkins/wordpress-plugin-name/blob/master/thoughtfulweb/library/admin/class-page-template.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/file/auth_include.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\File;
+namespace Thoughtful_Web\Library_WP\File;
 
 /**
  * The File Require class.
@@ -86,12 +86,26 @@ class Auth_Include {
 	 */
 	private static function error_404() {
 
+		if ( ! defined( 'ABSPATH' ) ) {
+			// The WordPress runtime environment is not available.
+			$wp_config = dirname( dirname( dirname( dirname( dirname( dirname( __DIR__ ) ) ) ) . '/wp-config.php';
+			if ( file_exists( $wp_config ) ) {
+				include_once $wp_config;
+
+				global $wp_query;
+				$wp_query->set_404();
+				status_header( 404 );
+				get_template_part( 404 );
+				exit();
+			}
+		}
+
 		header( 'HTTP/1.0 404 Not Found', true, 404 );
 
 		/* choose the appropriate page to redirect users */
 		header( 'location: /404.php' );
 
-		die();
+		exit();
 
 	}
 }

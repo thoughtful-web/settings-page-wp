@@ -2,20 +2,20 @@
 /**
  * The file that facilitates page template file registration.
  *
- * @package    Thoughtful Web Library for WordPress
- * @subpackage Utility
- * @copyright  Zachary Watkins 2021
- * @author     Zachary Watkins <watkinza@gmail.com>
+ * @package    Thoughtful_Web\Library_WP
+ * @subpackage Theme
+ * @author     Zachary Kendall Watkins <zwatkins.it@gmail.com>
+ * @copyright  2021 Zachary Kendall Watkins
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
- * @link       https://github.com/zachwatkins/wordpress-plugin-name/blob/master/util/class-page-template.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/theme/page_template.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Theme;
+namespace Thoughtful_Web\Library_WP\Theme;
 
-use ThoughtfulWeb\LibraryWP\Error_Helper as Error_Helper;
-use ThoughtfulWeb\LibraryWP\File\Load as TWL_File_Load;
+use \Thoughtful_Web\Library_WP\Error_Helper as Error_Helper;
+use \Thoughtful_Web\Library_WP\File\Load as TWL_File_Load;
 
 /**
  * The class that registers page template file registration.

@@ -6,17 +6,17 @@
  *     Pointer to current line in file: __LINE__
  *     Get the current class name:      get_class($this)
  *
- * @package    ThoughtfulWeb\Library
+ * @package    Thoughtful_Web\Library_WP
  * @subpackage Admin
  * @author     Zachary Kendall Watkins <zwatkins.it@gmail.com>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/zachwatkins/wordpress-plugin-name/blob/master/thoughtfulweb/library/admin/class-notice.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/class-notice.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Admin;
+namespace Thoughtful_Web\Library_WP\Admin;
 
 /**
  * The Notice class.

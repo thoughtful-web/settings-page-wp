@@ -4,20 +4,20 @@
  *
  * Links to PHP core documentation are included but this file will not be easy to grasp for beginners.
  *
- * @package    ThoughtfulWeb\Library
+ * @package    Thoughtful_Web\Library_WP
  * @subpackage Plugin
- * @copyright  Zachary Watkins 2021
- * @author     Zachary Watkins <watkinza@gmail.com>
+ * @author     Zachary Kendall Watkins <zwatkins.it@gmail.com>
+ * @copyright  2021 Zachary Kendall Watkins
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
  * @link       https://github.com/zachwatkins/wordpress-plugin-name/blob/master/util/class-activation.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Plugin;
+namespace Thoughtful_Web\Library_WP\Plugin;
 
-use ThoughtfulWeb\LibraryWP\Plugin\Requirements as TWLP_Requirements;
-use ThoughtfulWeb\LibraryWP\Monitor\WP_Err as TWL_Monitor_WP_Err;
+use \Thoughtful_Web\Library_WP\Plugin\Requirements as TWLP_Requirements;
+use \Thoughtful_Web\Library_WP\Monitor\WP_Err as TWL_Monitor_WP_Err;
 
 /**
  * The class that handles plugin activation and deactivation.

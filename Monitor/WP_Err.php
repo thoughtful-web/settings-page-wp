@@ -2,17 +2,17 @@
 /**
  * The file that extends WP_Error notification capabilities.
  *
- * @package    ThoughtfulWeb\Library
+ * @package    Thoughtful_Web\Library_WP
  * @subpackage Monitor
- * @copyright  Zachary Watkins 2021
- * @author     Zachary Watkins <watkinza@gmail.com>
+ * @author     Zachary Kendall Watkins <zwatkins.it@gmail.com>
+ * @copyright  2021 Zachary Kendall Watkins
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
- * @link       https://github.com/zachwatkins/wordpress-plugin-name/blob/master/util/class-alert.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/monitor/wp_err.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Monitor;
+namespace Thoughtful_Web\Library_WP\Monitor;
 
 /**
  * The class that monitors WP Errors and pushes notifications to channels.
