@@ -37,6 +37,7 @@ class Settings {
 			'icon_url'   => 'dashicons-admin-settings',
 			'position'   => 2,
 		),
+		'network'     => false,
 		'description' => 'A thoughtful settings page description.',
 		'heading'     => array(),
 		'fieldsets'   => array(
@@ -120,13 +121,15 @@ class Settings {
 	 */
 	private function add_hooks() {
 
-		add_action( 'admin_menu', array( $this, 'add_settings' ) );
+		if ( isset( $this->params['network'] && true === $this->params['network'] ) {
+			add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
+		} else {
+			add_action( 'admin_menu', array( $this, 'add_settings' ) );
+		}
 		add_action( 'admin_init', array( $this, 'add_sections' ) );
 		add_action( 'admin_init', array( $this, 'add_fields' ) );
 
 		// add_action( 'admin_init', array( $this, 'settings_init' ) );
-
-
 	}
 
 	public function add_settings() {
