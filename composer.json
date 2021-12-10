@@ -5,32 +5,40 @@
 	"require": {
 		"php": ">=7.3.5"
 	},
-    "require-dev": {
-        "squizlabs/php_codesniffer": "*",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.6"
-    },
     "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Zachary Kendall Watkins",
-            "email": "3458875+ZachWatkins@users.noreply.github.com",
+            "email": "zachwatkins@tapfuel.io",
 			"homepage": "https://github.com/zachwatkins/",
-            "role": "Creator, Developer"
+            "role": "Creator"
         }
     ],
 	"support": {
 		"issues": "https://github.com/thoughtful-web/library-wp/issues",
-		"source": "https://github.com/thoughtful-web",
+		"source": "https://github.com/thoughtful-web/library-wp/",
 		"docs": "https://raw.githubusercontent.com/thoughtful-web/library-wp/main/README.md"
 	},
 	"readme": "README.md",
 	"autoload": {
 		"psr-4": {
-			"ThoughtfulWeb\\LibraryWP\\": "src/"
+			"Thoughtful_Web\\Library_WP\\": "src/"
 		}
 	},
+	"require-dev": {
+		"wp-coding-standards/wpcs": "*"
+	},
 	"scripts": {
-		"post-install-cmd": "phpcs --config-set colors 1"
+		"post-install-cmd": [
+			"composer run-script --no-dev config-wpcs",
+			"phpcs --config-set colors 1"
+		],
+		"config-wpcs": [
+			"phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs",
+			"phpcs --config-set default_standard WordPress"
+		],
+		"checkwp": "phpcs --ignore=*/vendor/*,*/node_modules/* --filter=gitmodified .",
+		"fixwp": "phpcbf --ignore=*/vendor/*,*/node_modules/* --filter=gitmodified ."
 	},
     "extra": {
         "phpcodesniffer-search-depth": 5
