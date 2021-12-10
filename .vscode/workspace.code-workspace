@@ -1,15 +1,24 @@
 {
 	"folders": [
 		{
-			"path": ".."
+			"path": "../"
 		}
 	],
 	"settings": {
+		"phpcs.enable": true,
+		"phpcs.standard": "WordPress",
+		"phpcs.executablePath": "../vendor/bin/phpcs",
+		"phpcs.showWarnings": true,
+		"phpcs.composerJsonPath": "../composer.json",
 		"editor.wordWrap": "on",
-		"editor.detectIndentation": false,
 		"editor.insertSpaces": false,
+		"files.insertFinalNewline": true,
 		"files.eol": "\n",
-	"php.validate.enable": true,
-	"php.validate.run": "onSave",
+		"files.trimTrailingWhitespace": true,
+		"[markdown]": {
+			"files.trimTrailingWhitespace": false
+		},
+		"php.validate.enable": true,
+		"php.validate.run": "onSave",
 	}
 }
