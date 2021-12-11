@@ -6,7 +6,7 @@
 	],
 	"settings": {
 		"phpcs.enable": true,
-		"phpcs.standard": "WordPress",
+		"phpcs.standard": "../vendor/wp-coding-standards/wpcs",
 		"phpcs.executablePath": "../vendor/bin/phpcs",
 		"phpcs.showWarnings": true,
 		"phpcs.composerJsonPath": "../composer.json",

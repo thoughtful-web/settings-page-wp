@@ -4,7 +4,7 @@
  *
  * @package    Thoughtful_Web\Library_WP
  * @subpackage Theme
- * @author     Zachary Kendall Watkins <zwatkins.it@gmail.com>
+ * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
  * @link       https://github.com/thoughtful-web/library-wp/blob/master/theme/page_template.php

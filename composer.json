@@ -2,6 +2,7 @@
     "name": "thoughtful-web/library-wp",
     "description": "Helpful WordPress scripts released as free open source software under GNU GPL-2.0+ License",
     "type": "library",
+	"keywords": ["WordPress"],
 	"require": {
 		"php": ">=7.3.5"
 	},
@@ -12,7 +13,11 @@
             "email": "zachwatkins@tapfuel.io",
 			"homepage": "https://github.com/zachwatkins/",
             "role": "Creator"
-        }
+        },
+		{
+			"name"    : "Contributors",
+			"homepage": "https://github.com/thoughtful-web/library-wp/graphs/contributors"
+		}
     ],
 	"support": {
 		"issues": "https://github.com/thoughtful-web/library-wp/issues",

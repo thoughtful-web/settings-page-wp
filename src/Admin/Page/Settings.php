@@ -4,7 +4,7 @@
  *
  * @package    Thoughtful_Web\Library_WP
  * @subpackage Admin\Page
- * @author     Zachary Kendall Watkins <zwatkins.it@gmail.com>
+ * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
  * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/class-settings.php
