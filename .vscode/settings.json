@@ -1,4 +1,19 @@
 {
+	"phpcs.enable": true,
+	"phpcs.standard": "../vendor/wp-coding-standards/wpcs/",
+	"phpcs.executablePath": "../vendor/bin/phpcs",
+	"phpcs.showWarnings": true,
+	"phpcs.composerJsonPath": "../composer.json",
+	"editor.wordWrap": "on",
+	"editor.insertSpaces": false,
+	"files.insertFinalNewline": true,
+	"files.eol": "\n",
+	"files.trimTrailingWhitespace": true,
+	"[markdown]": {
+		"files.trimTrailingWhitespace": false
+	},
+	"php.validate.enable": true,
+	"php.validate.run": "onSave",
 	"intelephense.stubs": [
 		"apache",
 		"bcmath",

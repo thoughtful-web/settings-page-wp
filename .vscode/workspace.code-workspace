@@ -6,8 +6,8 @@
 	],
 	"settings": {
 		"phpcs.enable": true,
-		"phpcs.standard": "../vendor/wp-coding-standards/wpcs",
-		"phpcs.executablePath": "../vendor/bin/phpcs",
+		"phpcs.standard": "vendor/wp-coding-standards/wpcs",
+		"phpcs.executablePath": "vendor/bin/phpcs",
 		"phpcs.showWarnings": true,
 		"phpcs.composerJsonPath": "../composer.json",
 		"editor.wordWrap": "on",
