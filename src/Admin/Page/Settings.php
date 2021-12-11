@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Thoughtful_Web\Library_WP\Admin\Page;
 
 use \Thoughtful_Web\Library_WP\File\Auth_Include as TWL_File_Include;
+use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Compile as TWPL_Settings_Compile;
 
 /**
  * Undocumented class
