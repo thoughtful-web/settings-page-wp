@@ -23,11 +23,10 @@ use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Compile as TWPL_Settings_Comp
 class Settings {
 
 	/**
-	 * Settings page and field Parameters.
+	 * Default parameters.
 	 *
-	 * @var array $fieldset The Settings page and fieldset parameters.
+	 * @var array defaults The default values for the settings page registration parameters.
 	 */
-	private $params = array(
 	private $defaults = array(
 		'method'      => 'add_menu_page',
 		'method_args' => array(
@@ -39,27 +38,9 @@ class Settings {
 			'icon_url'   => 'dashicons-admin-settings',
 			'position'   => 2,
 		),
-		'network'     => false,
 		'description' => 'A thoughtful settings page description.',
-		'heading'     => array(),
-		'fieldsets'   => array(
-			array(
-				'section' => 'thoughtful-section-1',
-				'title'   => '',
-				'fields'  => array(
-					array(
-						'label'       => 'Text Field',
-						'id'          => 'my_text_field',
-						'type'        => 'text',
-						'section'     => 'thoughtful-settings_section',
-						'desc'        => 'Description',
-						'placeholder' => 'placeholder',
-						'label_for'   => null,
-						'class'       => null,
-					),
-				),
-			),
-		),
+		'network'     => false,
+		'fieldsets'   => array(),
 	);
 
 	/**
