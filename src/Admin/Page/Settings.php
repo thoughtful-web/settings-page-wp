@@ -3,22 +3,24 @@
  * The file that extends WP_Error notification capabilities.
  *
  * @package    Thoughtful_Web\Library_WP
- * @subpackage Admin\Page
+ * @subpackage Settings
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/class-settings.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/Admin/Page/Settings.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
 namespace Thoughtful_Web\Library_WP\Admin\Page;
 
-use \Thoughtful_Web\Library_WP\File\Auth_Include as TWL_File_Include;
+use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Field as TWPL_Settings_Field;
 use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Compile as TWPL_Settings_Compile;
 
 /**
- * Undocumented class
+ * The Admin Settings Page Class.
+ *
+ * @since 0.1.0
  */
 class Settings {
 
