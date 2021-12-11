@@ -27,6 +27,7 @@ class Settings {
 	 * @var array $fieldset The Settings page and fieldset parameters.
 	 */
 	private $params = array(
+	private $defaults = array(
 		'method'      => 'add_menu_page',
 		'method_args' => array(
 			'page_title' => 'A Thoughtful Settings Page',
@@ -61,54 +62,34 @@ class Settings {
 	);
 
 	/**
-	 * Settings page fieldset file.
+	 * Settings page and field Parameters.
 	 *
-	 * @var string $fieldset_file The fieldset file to load.
+	 * @var array $fieldset The Settings page and fieldset parameters.
 	 */
-	private $fieldset_file_path;
+	private $params = array();
+
+	/**
+	 * User capability requirement for accessing the settings page.
+	 *
+	 * @var string $capability The user capability string.
+	 */
+	private $capability = 'manage_options';
 
 	/**
 	 * Admin settings class constructor.
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param string $params  The settings page parameters file path relative to the root directory.
+	 * @param array|string $params The settings page parameters array or file path relative to the root directory.
 	 */
-	public function __construct( $params = '' ) {
+	public function __construct( $params = array() ) {
 
-		if ( is_string( $params ) ) {
-			$fieldset_file_path = $this->validate_file_path( $params );
-			if ( $fieldset_file_path ) {
-				$this->params = include $fieldset_file_path;
-			} else {
-				return false;
-			}
-		} elseif ( ! empty( $params ) ) {
-			$this->params = $params;
-		} else {
-			return false;
-		}
+		// Store attributes from the compiled parameters.
+		$this->params     = new TWPL_Settings_Compile( $params, $this->defaults );
+		$this->capability = $this->params['method_args']['capability'];
 
 		// Initialize.
 		$this->add_hooks();
-
-	}
-
-	/**
-	 * Configure class properties.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param string $fieldset_file_path The fieldset file path relative to the root directory.
-	 *
-	 * @return string|false
-	 */
-	public function validate_file_path( $file_path = '' ) {
-
-		// Discern the correct path to the file.
-		$file_path = realpath( $file_path );
-
-		return file_exists( $file_path ) ? $file_path : false;
 
 	}
 
@@ -121,7 +102,7 @@ class Settings {
 	 */
 	private function add_hooks() {
 
-		if ( isset( $this->params['network'] && true === $this->params['network'] ) {
+		if ( isset( $this->params['network'] ) && $this->params['network'] ) {
 			add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
 		} else {
 			add_action( 'admin_menu', array( $this, 'add_settings' ) );
@@ -132,7 +113,15 @@ class Settings {
 		// add_action( 'admin_init', array( $this, 'settings_init' ) );
 	}
 
+	/**
+	 * Add the settings page to the Admin navigation menu.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
 	public function add_settings() {
+
 		add_menu_page(
 			$this->params['method_args']['page_title'],
 			$this->params['method_args']['menu_title'],
@@ -142,23 +131,37 @@ class Settings {
 			$this->params['method_args']['icon_url'],
 			$this->params['method_args']['position']
 		);
+
 	}
 
-	public function add_settings_content() { ?>
-		<div class="wrap">
-			<h1><?php $this->params['method_args']['page_title']; ?></h1>
-			<?php settings_errors(); ?>
-			<form method="POST" action="options.php">
-				<?php
-					$fieldsets = $this->params['fieldsets'];
-					foreach ( $fieldsets as $key => $fieldset ) {
-						settings_fields( $fieldset['section'] );
-					}
-					do_settings_sections( $this->params['method_args']['menu_slug'] );
-					submit_button();
-				?>
-			</form>
-		</div> <?php
+	/**
+	 * Add content to the Admin settings page.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
+	public function add_settings_content() {
+
+		$method_args = $this->params['method_args'];
+		if ( current_user_can( $method_args['capability'] ) ) {
+			?>
+			<div class="wrap">
+				<h1><?php $method_args['page_title']; ?></h1>
+				<?php settings_errors(); ?>
+				<form method="POST" action="options.php">
+					<?php
+						foreach ( $this->params['fieldsets'] as $fieldset ) {
+							settings_fields( $fieldset['section'] );
+						}
+						do_settings_sections( $method_args['menu_slug'] );
+						submit_button();
+					?>
+				</form>
+			</div>
+			<?php
+		}
+
 	}
 
 	/**
@@ -170,56 +173,75 @@ class Settings {
 	 */
 	public function add_sections() {
 
-		$fieldsets = $this->params['fieldsets'];
-		foreach ( $fieldsets as $key => $fieldset ) {
+		$menu_slug = $this->params['method_args']['menu_slug'];
+		foreach ( $this->params['fieldsets'] as $fieldset ) {
 			add_settings_section(
 				$fieldset['section'],
 				$fieldset['title'],
-				array(),
-				$this->params['method_args']['menu_slug']
+				array( $this, 'add_section_description' ),
+				$menu_slug
 			);
 		}
+
 	}
 
+	/**
+	 * Add a section description.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param array $args {
+	 *     The section arguments.
+	 *
+	 *     @key string $id       The section ID.
+	 *     @key string $title    The section title.
+	 *     @key string $callback This function's name.
+	 * }
+	 *
+	 * @return void
+	 */
+	public function add_section_description( $args ) {
+
+		if ( ! current_user_can( $this->capability ) ) {
+			return;
+		}
+
+		$section_desc = $this->params['fieldsets'][ $id ]['description'];
+
+		if ( empty( $section_desc ) ) {
+			return;
+		}
+
+		$desc_html = "<p>$section_desc</p>";
+
+		echo wp_kses_post( $desc_html );
+
+	}
+
+	/**
+	 * Add each settings field to the page.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
 	public function add_fields() {
-		$menu_slug = $this->params['method_args']['menu_slug'];
-		$fieldsets = $this->params['fieldsets'];
-		foreach( $fieldsets as $fieldset ){
-			$section = $fieldset['section'];
-			$fields  = $fieldset['fields'];
-			foreach ( $fields as $field ) {
-				add_settings_field(
-					$field['id'],
-					$field['label'],
-					array( $this, 'field_callback' ),
-					$menu_slug,
-					$section,
-					$field
-				);
-				register_setting( $this->params['method_args']['menu_slug'], $field['id'] );
-			}
-		}
-	}
 
-	public function field_callback( $field ) {
-		$value = get_option( $field['id'] );
-		$placeholder = '';
-		if ( isset( $field['placeholder'] ) ) {
-			$placeholder = $field['placeholder'];
-		}
-		switch ( $field['type'] ) {
-			default:
-				printf( '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />',
-					$field['id'],
-					$field['type'],
-					$placeholder,
-					$value
-				);
-		}
-		if( isset($field['desc']) ) {
-			if( $desc = $field['desc'] ) {
-				printf( '<p class="description">%s </p>', $desc );
+		$page      = $this->params['method_args']['menu_slug'];
+		$callback  = array( $this, 'field_callback' );
+
+		foreach( $this->params['fieldsets'] as $fieldset ){
+
+			$section   = $fieldset['section'];
+			$fields    = $fieldset['fields'];
+
+			foreach ( $fields as $args ) {
+
+				new TWL_Settings_Field( $args, $callback, $page, $section );
+
 			}
+
 		}
+
 	}
 }
