@@ -81,8 +81,7 @@ class Settings {
 		$this->capability = $this->params['method_args']['capability'];
 
 		// Name the group of database options which the fields represent.
-		echo '<script>console.log("' . serialize($this->params['method_args']['menu_slug']) . '");</script>';
-		// $this->settings_group_slug = str_replace( '-', '_', sanitize_key( $this->params['method_args']['menu_slug'] ) );
+		$this->settings_group_slug = str_replace( '-', '_', sanitize_key( $this->params['method_args']['menu_slug'] ) );
 		// Initialize.
 		$this->add_hooks();
 

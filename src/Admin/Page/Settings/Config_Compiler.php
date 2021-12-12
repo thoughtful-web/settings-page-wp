@@ -67,10 +67,7 @@ class Config_Compiler {
 		}
 
 		// Apply default values to the parameters.
-		print_r($params);
-		print_r($defaults);
 		$params = $this->merge_parameters( $params, $defaults );
-		print_r($params);
 
 		// Configure fieldsets.
 		$fieldsets       = array_map( array( $this, 'configure_fieldsets' ), $params['fieldsets'] );
