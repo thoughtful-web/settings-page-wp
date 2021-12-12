@@ -49,7 +49,7 @@ class Settings {
 	 *
 	 * @var array $fieldset The Settings page and fieldset parameters.
 	 */
-	private $params = array();
+	private $config = array();
 
 	/**
 	 * User capability requirement for accessing the settings page.
@@ -70,16 +70,16 @@ class Settings {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param array|string $params The settings page parameters array or file path relative to the root directory.
+	 * @param array|string $settings The settings page parameters array or file path relative to the root directory.
 	 */
-	public function __construct( $params = array() ) {
+	public function __construct( $settings = array() ) {
 
 		// Store attributes from the compiled parameters.
-		$config   = new TWPL_Settings_Config();
-		$compiled = $config->compile( $params, $this->defaults );
+		$configurer = new TWPL_Settings_Config();
+		$compiled   = $configurer->compile( $settings, $this->defaults );
 
 		// Assign compiled values.
-		$this->params       = $compiled;
+		$this->config       = $compiled;
 		$this->capability   = $compiled['method_args']['capability'];
 		$this->option_group = $compiled['option_group'];
 
@@ -97,7 +97,7 @@ class Settings {
 	 */
 	private function add_hooks() {
 
-		if ( isset( $this->params['network'] ) && $this->params['network'] ) {
+		if ( isset( $this->config['network'] ) && $this->config['network'] ) {
 			add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
 			add_action( 'network_admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
 		} else {
@@ -120,13 +120,13 @@ class Settings {
 	public function add_settings() {
 
 		add_menu_page(
-			$this->params['method_args']['page_title'],
-			$this->params['method_args']['menu_title'],
-			$this->params['method_args']['capability'],
-			$this->params['method_args']['menu_slug'],
+			$this->config['method_args']['page_title'],
+			$this->config['method_args']['menu_title'],
+			$this->config['method_args']['capability'],
+			$this->config['method_args']['menu_slug'],
 			array( $this, 'add_settings_content' ),
-			$this->params['method_args']['icon_url'],
-			$this->params['method_args']['position']
+			$this->config['method_args']['icon_url'],
+			$this->config['method_args']['position']
 		);
 
 	}
@@ -140,7 +140,7 @@ class Settings {
 	 */
 	public function add_settings_content() {
 
-		$method_args = $this->params['method_args'];
+		$method_args = $this->config['method_args'];
 		if ( current_user_can( $method_args['capability'] ) ) {
 			?>
 			<div class="wrap">
@@ -148,7 +148,7 @@ class Settings {
 				<?php settings_errors(); ?>
 				<form method="POST" action="edit.php?action=<?php echo $this->option_group; ?>">
 					<?php
-						foreach ( $this->params['fieldsets'] as $fieldset ) {
+						foreach ( $this->config['fieldsets'] as $fieldset ) {
 							settings_fields( $fieldset['section'] );
 						}
 						do_settings_sections( $method_args['menu_slug'] );
@@ -170,9 +170,9 @@ class Settings {
 	 */
 	public function add_sections() {
 
-		$menu_slug = $this->params['method_args']['menu_slug'];
+		$menu_slug = $this->config['method_args']['menu_slug'];
 
-		foreach ( $this->params['fieldsets'] as $section_key => $fieldset ) {
+		foreach ( $this->config['fieldsets'] as $section_key => $fieldset ) {
 			add_settings_section(
 				$section_key,
 				$fieldset['title'],
@@ -204,7 +204,7 @@ class Settings {
 			return;
 		}
 
-		$section_desc = $this->params['fieldsets'][ $args['id'] ]['description'];
+		$section_desc = $this->config['fieldsets'][ $args['id'] ]['description'];
 
 		if ( empty( $section_desc ) ) {
 			return;
@@ -223,9 +223,9 @@ class Settings {
 	 */
 	public function add_fields() {
 
-		$page = $this->params['method_args']['menu_slug'];
+		$page = $this->config['method_args']['menu_slug'];
 
-		foreach( $this->params['fieldsets'] as $fieldset ){
+		foreach( $this->config['fieldsets'] as $fieldset ){
 
 			$section   = $fieldset['section'];
 			$fields    = $fieldset['fields'];
@@ -253,7 +253,7 @@ class Settings {
 		wp_redirect(
 			add_query_arg(
 				array(
-					'page'    => $this->params['method_args']['menu_slug'],
+					'page'    => $this->config['method_args']['menu_slug'],
 					'updated' => 'true',
 				),
 				( is_multisite() ? network_admin_url( 'admin.php' ) : admin_url( 'admin.php' ) )
