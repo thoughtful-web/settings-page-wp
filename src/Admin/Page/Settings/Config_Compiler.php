@@ -38,32 +38,26 @@ class Config_Compiler {
 	/**
 	 * Constructor for the Compile class.
 	 *
+	 * @return array
+	 */
+	public function construct() {}
+
+	/**
+	 * Get the compiler results.
+	 *
 	 * @param array $params   The Settings page configuration parameters.
 	 * @param array $defaults The default Settings page configuration parameters.
 	 *
 	 * @return array
 	 */
-	public function construct( $params, $defaults ) {
+	public function get_results( $params, $defaults ) {
 
 		$this->params   = $params;
 		$this->defaults = $defaults;
 
-	}
-
-	/**
-	 * Get the compiler results.
-	 *
-	 * @return array
-	 */
-	public function get_results() {
-
-		$params   = $this->params;
-		$defaults = $this->defaults;
-
 		if ( is_string( $params ) ) {
 			$fieldset_file_path = $this->validate_file_path( $params );
 			if ( $fieldset_file_path ) {
-				echo 'including file';
 				$params = include $fieldset_file_path;
 			} else {
 				return array();

@@ -76,17 +76,12 @@ class Settings {
 	public function __construct( $params = array() ) {
 
 		// Store attributes from the compiled parameters.
-		$compiler         = new TWPL_Settings_Config_Compiler( $params, $this->defaults );
-		$this->params     = $compiler->get_results();
-		echo '<pre>';
-		print_r($this->params);
-		echo '</pre>';
-		return;
+		$compiler         = new TWPL_Settings_Config_Compiler();
+		$this->params     = $compiler->get_results( $params, $this->defaults );
 		$this->capability = $this->params['method_args']['capability'];
 
 		// Name the group of database options which the fields represent.
 		$this->settings_group_slug = str_replace( '-', '_', sanitize_title( $this->params['method_args']['menu_slug'] ) );
-		error_log( serialize( $this->params ) );
 		// Initialize.
 		$this->add_hooks();
 
