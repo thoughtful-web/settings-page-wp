@@ -60,6 +60,13 @@ class Settings {
 	private $capability = 'manage_options';
 
 	/**
+	 * Name the group of database options which the fields represent.
+	 *
+	 * @var string $settings_group_slug The database option group name. Lowercase letters and underscores only.
+	 */
+	private $settings_group_slug = 'option';
+
+	/**
 	 * Admin settings class constructor.
 	 *
 	 * @since 0.1.0
@@ -68,9 +75,13 @@ class Settings {
 	 */
 	public function __construct( $params = array() ) {
 
+
 		// Store attributes from the compiled parameters.
 		$this->params     = new TWPL_Settings_Compile( $params, $this->defaults );
 		$this->capability = $this->params['method_args']['capability'];
+
+		// Name the group of database options which the fields represent.
+		$this->settings_group_slug = str_replace( '-', '_', sanitize_title( $this->params['method_args']['menu_slug'] ) );
 
 		// Initialize.
 		$this->add_hooks();
@@ -88,8 +99,10 @@ class Settings {
 
 		if ( isset( $this->params['network'] ) && $this->params['network'] ) {
 			add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
+			add_action( 'network_admin_edit_' . $this->settings_group_slug, array( $this, 'save_site_option' ) );
 		} else {
 			add_action( 'admin_menu', array( $this, 'add_settings' ) );
+			add_action( 'admin_edit_' . $this->settings_group_slug, array( $this, 'save_site_option' ) );
 		}
 		add_action( 'admin_init', array( $this, 'add_sections' ) );
 		add_action( 'admin_init', array( $this, 'add_fields' ) );
@@ -133,7 +146,7 @@ class Settings {
 			<div class="wrap">
 				<h1><?php $method_args['page_title']; ?></h1>
 				<?php settings_errors(); ?>
-				<form method="POST" action="options.php">
+				<form method="POST" action="edit.php?action=<?php echo $this->settings_group_slug; ?>">
 					<?php
 						foreach ( $this->params['fieldsets'] as $fieldset ) {
 							settings_fields( $fieldset['section'] );
@@ -211,8 +224,7 @@ class Settings {
 	 */
 	public function add_fields() {
 
-		$page      = $this->params['method_args']['menu_slug'];
-		$callback  = array( $this, 'field_callback' );
+		$page = $this->params['method_args']['menu_slug'];
 
 		foreach( $this->params['fieldsets'] as $fieldset ){
 
@@ -221,11 +233,34 @@ class Settings {
 
 			foreach ( $fields as $args ) {
 
-				new TWL_Settings_Field( $args, $callback, $page, $section );
+				new TWPL_Settings_Field( $args, $page, $section );
 
 			}
 
 		}
+
+	}
+
+	public function save_site_option() {
+
+		// Verify nonce.
+		wp_verify_nonce( $_POST['_wpnonce'], 'update' );
+
+		// Save the option.
+		$option = $_POST[ $this->option_key ];
+		update_site_option( $this->option_key, $option );
+
+		// Redirect to settings page.
+		wp_redirect(
+			add_query_arg(
+				array(
+					'page'    => $this->params['method_args']['menu_slug'],
+					'updated' => 'true',
+				),
+				( is_multisite() ? network_admin_url( 'admin.php' ) : admin_url( 'admin.php' ) )
+			)
+		);
+		exit;
 
 	}
 }

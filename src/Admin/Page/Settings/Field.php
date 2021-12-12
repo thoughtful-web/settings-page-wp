@@ -30,7 +30,7 @@ class Field {
 	private $type_assoc = array(
 		'text'        => 'string',
 		'textarea'    => 'string',
-		'wysiwyg'     => 'string',
+		'wp_editor'   => 'string',
 		'checkbox'    => 'boolean',
 		'radio'       => 'array',
 		'select'      => 'string',
@@ -41,19 +41,20 @@ class Field {
 
 	/**
 	 * Simple sanitization functions.
+	 * Null values are set at runtime.
 	 *
-	 * @var array $sanitizers Single sanitization functions for saving options to the database.
+	 * @var array $sanitize Single sanitization functions for saving options to the database.
 	 */
-	private $sanitizers = array(
+	private $sanitize = array(
 		'text'        => 'sanitize_text_field',
 		'textarea'    => 'sanitize_textarea_field',
-		'wysiwyg'     => 'wp_filter_post_kses',
+		'wp_editor'   => 'wp_filter_post_kses',
+		'email'       => 'sanitize_email',
 		'checkbox'    => null,
 		'radio'       => null,
 		'select'      => null,
 		'multiselect' => null,
 		'media'       => null,
-		'email'       => 'sanitize_email',
 	);
 
 	/**
@@ -72,16 +73,11 @@ class Field {
 	 *     @type array  $data_args {
 	 *         Data used to describe the setting when registered.
 	 *
-	 *         @type string     $type              The type of data associated with this setting.
-	 *                                             Valid values are 'string', 'boolean', 'integer',
-	 *                                             'number', 'array', and 'object'.
-	 *         @type string     $description       A description of the data attached to this setting.
-	 *         @type callable   $sanitize_callback A callback function that sanitizes the option's value.
-	 *         @type bool|array $show_in_rest      Whether data associated with this setting should be
-	 *                                             included in the REST API. When registering complex
-	 *                                             settings, this argument may optionally be an array
-	 *                                             with a 'schema' key.
-	 *         @type mixed      $default           Default value when calling `get_option()`.
+	 *         @type mixed      $default           Default value when calling `get_option()`. Optional.
+	 *         @type callable   $sanitize_callback A callback function that sanitizes the option's value. Optional.
+	 *         @type bool|array $show_in_rest      Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key.
+	 *         @type string     $type              The type of data associated with this setting. Only used for the REST API. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'.
+	 *         @type string     $description       A description of the data attached to this setting. Only used for the REST API.
 	 *     }
 	 * }
 	 * @param callable $callback Function that fills the field with the desired form inputs. The function should echo its output. Callable. Required.
@@ -91,11 +87,11 @@ class Field {
 	public function __construct( $field, $page, $section ) {
 
 		// Assign sanitization filters defined in this class but unable to be defined during build time.
-		$this->sanitizers['checkbox']    = array( $this, 'sanitize_booleanish' );
-		$this->sanitizers['radio']       = array( $this, 'sanitize_choices' );
-		$this->sanitizers['select']      = array( $this, 'sanitize_choices' );
-		$this->sanitizers['multiselect'] = array( $this, 'sanitize_choices' );
-		$this->sanitizers['media']       = array( $this, 'sanitize_file_name' );
+		$this->sanitize['checkbox']    = array( $this, 'sanitize_booleanish' );
+		$this->sanitize['radio']       = array( $this, 'sanitize_choices' );
+		$this->sanitize['select']      = array( $this, 'sanitize_choices' );
+		$this->sanitize['multiselect'] = array( $this, 'sanitize_choices' );
+		$this->sanitize['media']       = array( $this, 'sanitize_file_name' );
 
 		$params = $this->compile_settings_params( $field, $page );
 
@@ -132,12 +128,10 @@ class Field {
 		$results = array();
 
 		// Register the database settings field.
-		$option_group = sanitize_key( $page );
-		$option_group = str_replace('-', '_');
+		$option_group = str_replace( '-', '_', sanitize_key( $page ) );
 
 		// Known blacklist of database option names.
-		$blacklist = array( 'privacy', 'misc' );
-		if ( in_array( $option_group, $blacklist, true ) ) {
+		if ( in_array( $option_group, array( 'privacy', 'misc' ), true ) ) {
 			$option_group .= '_option';
 		}
 		$results['option_group'] = $option_group;
@@ -146,7 +140,7 @@ class Field {
 		$args = array(
 			'type'              => $this->type_assoc[ $field['type'] ],
 			'description'       => null,
-			'sanitize_callback' => array( $this, $this->sanitizers[ $field['type'] ] ),
+			'sanitize_callback' => array( $this, $this->sanitize[ $field['type'] ] ),
 		);
 		if ( array_key_exists( 'data_args', $field ) && array_key_exists( 'default', $field['data_args'] ) ) {
 			$args['default'] = $field['data_args']['default'];
@@ -177,8 +171,13 @@ class Field {
 		if ( isset( $field['placeholder'] ) ) {
 			$placeholder = $field['placeholder'];
 		}
-		switch ( $field['type'] ) {
 
+		$output = '';
+
+		switch ( $field['type'] ) {
+			case 'checkbox':
+
+				break;
 			case 'text':
 			default:
 				printf( '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />',
@@ -187,111 +186,9 @@ class Field {
 					$placeholder,
 					$value
 				);
+				break;
 		}
 
-	}
-
-	/**
-	 * Sanitizes a boolean option value.
-	 *
-	 * @param string $values         The unsanitized option value.
-	 * @param string $option         The option name.
-	 * @param string $original_value The original value passed to the function.
-	 *
-	 * @return string
-	 */
-	public function sanitize_booleanish( $values, $option, $original_value ) {
-
-		// Truthy values in a format we interpret later.
-		// Setting array keys to non-string values can have unintended effects.
-		$results  = array( false );
-		$bool_map = array(
-			'^true' => false,
-			'true'  => 'false',
-			'TRUE'  => 'FALSE',
-			'yes'   => 'no',
-			'YES'   => 'NO',
-			'^1'    => 0,
-			'1'     => '0'
-		);
-
-		// Assume values might be an array, sometimes.
-		// If the value was not an array remember to restore it to a non-array value at the end.
-		$was_array = true;
-		if ( ! is_array( $values ) ) {
-			$was_array = false;
-			$values = array( $values );
-		}
-
-		// Check each value for presence in the truthy array.
-		foreach ( $values as $value ) {
-			// Convert the value to a string but remember if it was not a string.
-			$ovalue = $value;
-			$value  = is_string( $value ) ? $value : '^' . strval( $value );
-			if ( array_key_exists( $value, $bool_map ) ) {
-				$results[] = $ovalue;
-			} else {
-				$results[] = 'no';
-			}
-		}
-
-		// Restore non-array state if necessary.
-		if ( ! $was_array ) {
-			$results = $results[0];
-		}
-
-		return $results;
-
-	}
-
-	/**
-	 * Sanitize title array.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param string $value          The unsanitized option value.
-	 * @param string $option         The option name.
-	 * @param string $original_value The original value passed to the function.
-	 *
-	 * @return string
-	 */
-	public function sanitize_choices( $value ) {
-
-		// The valid choices.
-		$choices = $this->params['field']['choices'];
-		$value   = sanitize_title( $value );
-		if ( ! array_key_exists( $value, $choices ) ) {
-			return '';
-		}
-
-		return $value;
-
-	}
-
-	/**
-	 * Sanitize and validate media upload's file name.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param string $value The media file's URL.
-	 *
-	 * @return void
-	 */
-	public function sanitize_file_name( $value ) {
-
-		$value = sanitize_file_name( $value );
-		if ( ! $value ) {
-			return;
-		}
-
-		$parsed = parse_url( $value );
-		$valid  = parse_url( get_admin_url() );
-		if (
-			$parsed['scheme'] === $valid['scheme']
-			&& $parsed['host'] === $valid['host']
-		) {
-			return $value;
-		}
 	}
 
 	/**

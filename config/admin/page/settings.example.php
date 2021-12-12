@@ -33,6 +33,9 @@ return array(
 					'type'        => 'text',
 					'desc'        => 'My text field description',
 					'placeholder' => 'my placeholder',
+					'data_args'   => array(
+						'default' => 'A thoughtful, optional, default value',
+					)
 				),
 				array(
 					'label'       => 'My Textarea Field',
@@ -44,7 +47,7 @@ return array(
 				array(
 					'label'       => 'My Editor Field',
 					'id'          => 'unique_editor_field',
-					'type'        => 'wysiwyg',
+					'type'        => 'wp_editor',
 					'desc'        => 'My editor field description',
 					'placeholder' => 'my placeholder',
 				),
