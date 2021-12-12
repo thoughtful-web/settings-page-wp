@@ -202,7 +202,7 @@ class Settings {
 			return;
 		}
 
-		$section_desc = $this->params['fieldsets'][ $id ]['description'];
+		$section_desc = $this->params['fieldsets'][ $args['id'] ]['description'];
 
 		if ( empty( $section_desc ) ) {
 			return;
