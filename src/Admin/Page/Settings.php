@@ -208,9 +208,7 @@ class Settings {
 			return;
 		}
 
-		$desc_html = "<p>$section_desc</p>";
-
-		echo wp_kses_post( $desc_html );
+		echo wp_kses_post( $section_desc );
 
 	}
 
