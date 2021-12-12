@@ -42,7 +42,6 @@ class Settings {
 		),
 		'description' => 'A thoughtful settings page description.',
 		'network'     => false,
-		'fieldsets'   => array(),
 	);
 
 	/**
@@ -170,9 +169,10 @@ class Settings {
 	public function add_sections() {
 
 		$menu_slug = $this->params['method_args']['menu_slug'];
-		foreach ( $this->params['fieldsets'] as $fieldset ) {
+
+		foreach ( $this->params['fieldsets'] as $section_key => $fieldset ) {
 			add_settings_section(
-				$fieldset['section'],
+				$section_key,
 				$fieldset['title'],
 				array( $this, 'add_section_description' ),
 				$menu_slug

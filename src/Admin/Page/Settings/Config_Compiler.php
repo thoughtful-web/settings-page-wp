@@ -70,11 +70,7 @@ class Config_Compiler {
 		$params = $this->merge_parameters( $params, $defaults );
 
 		// Configure fieldsets.
-		$fieldsets       = array_map( array( $this, 'configure_fieldsets' ), $params['fieldsets'] );
-		$section_ids     = array_column( $fieldsets, 'section' );
-		$keyed_fieldsets = array_fill_keys( $section_ids, $fieldsets );
-		// Assign the configurations.
-		$params['fieldsets'] = $keyed_fieldsets;
+		$params = $this->merge_fieldsets( $params );
 
 		return $params;
 
@@ -108,7 +104,6 @@ class Config_Compiler {
 	 * @return array
 	 */
 	private function merge_parameters( $params, $defaults ) {
-
 		foreach ( $defaults as $key => $default ) {
 			if ( is_array( $default ) ) {
 				if ( array_key_exists( $key, $params ) ) {
@@ -136,17 +131,23 @@ class Config_Compiler {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param array $settings The settings parameters.
+	 * @param array $params The settings parameters.
 	 *
 	 * @return array
 	 */
-	private function configure_fieldsets( $fieldset ) {
+	private function merge_fieldsets( $params ) {
 
-		$section_id = $fieldset['section'];
-		foreach ( $fieldset['fields'] as $key2 => $field ) {
-			// Assign the section ID to each field in the fieldset.
-			$fieldset['fields'][ $key2 ]['section'] = $section_id;
+		$fieldsets = $params['fieldsets'];
+		$results   = array();
+
+		foreach ( $fieldsets as $key => $fieldset ) {
+			$section_id = $fieldset['section'];
+			$results[ $section_id ] = $fieldset;
 		}
-		return $fieldset;
+
+		$params['fieldsets'] = $results;
+
+		return $params;
+
 	}
 }
