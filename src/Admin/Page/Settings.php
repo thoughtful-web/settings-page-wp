@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Thoughtful_Web\Library_WP\Admin\Page;
 
 use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Field as TWPL_Settings_Field;
-use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Config_Compiler as TWPL_Settings_Config_Compiler;
+use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Config as TWPL_Settings_Config;
 
 /**
  * The Admin Settings Page Class.
@@ -61,9 +61,9 @@ class Settings {
 	/**
 	 * Name the group of database options which the fields represent.
 	 *
-	 * @var string $settings_group_slug The database option group name. Lowercase letters and underscores only.
+	 * @var string $option_group The database option group name. Lowercase letters and underscores only. If not configured it will default  to the menu_slug method argument with hyphens replaced with underscores.
 	 */
-	private $settings_group_slug = 'option';
+	private $option_group = 'my_option';
 
 	/**
 	 * Admin settings class constructor.
@@ -75,12 +75,14 @@ class Settings {
 	public function __construct( $params = array() ) {
 
 		// Store attributes from the compiled parameters.
-		$compiler         = new TWPL_Settings_Config_Compiler();
-		$this->params     = $compiler->get_results( $params, $this->defaults );
-		$this->capability = $this->params['method_args']['capability'];
+		$config   = new TWPL_Settings_Config();
+		$compiled = $config->compile( $params, $this->defaults );
 
-		// Name the group of database options which the fields represent.
-		$this->settings_group_slug = str_replace( '-', '_', sanitize_key( $this->params['method_args']['menu_slug'] ) );
+		// Assign compiled values.
+		$this->params       = $compiled;
+		$this->capability   = $compiled['method_args']['capability'];
+		$this->option_group = $compiled['option_group'];
+
 		// Initialize.
 		$this->add_hooks();
 
@@ -97,10 +99,10 @@ class Settings {
 
 		if ( isset( $this->params['network'] ) && $this->params['network'] ) {
 			add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
-			add_action( 'network_admin_edit_' . $this->settings_group_slug, array( $this, 'save_site_option' ) );
+			add_action( 'network_admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
 		} else {
 			add_action( 'admin_menu', array( $this, 'add_settings' ) );
-			add_action( 'admin_edit_' . $this->settings_group_slug, array( $this, 'save_site_option' ) );
+			add_action( 'admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
 		}
 		add_action( 'admin_init', array( $this, 'add_sections' ) );
 		add_action( 'admin_init', array( $this, 'add_fields' ) );
@@ -144,7 +146,7 @@ class Settings {
 			<div class="wrap">
 				<h1><?php $method_args['page_title']; ?></h1>
 				<?php settings_errors(); ?>
-				<form method="POST" action="edit.php?action=<?php echo $this->settings_group_slug; ?>">
+				<form method="POST" action="edit.php?action=<?php echo $this->option_group; ?>">
 					<?php
 						foreach ( $this->params['fieldsets'] as $fieldset ) {
 							settings_fields( $fieldset['section'] );
@@ -230,7 +232,7 @@ class Settings {
 
 			foreach ( $fields as $args ) {
 
-				new TWPL_Settings_Field( $args, $page, $section );
+				new TWPL_Settings_Field( $args, $page, $section, $this->option_group );
 
 			}
 

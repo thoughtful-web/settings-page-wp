@@ -19,7 +19,7 @@ namespace Thoughtful_Web\Library_WP\Admin\Page\Settings;
  *
  * @since 0.1.0
  */
-class Config_Compiler {
+class Config {
 
 	/**
 	 * The settings configuration parameters.
@@ -50,10 +50,7 @@ class Config_Compiler {
 	 *
 	 * @return array
 	 */
-	public function get_results( $params, $defaults ) {
-
-		$this->params   = $params;
-		$this->defaults = $defaults;
+	public function compile( $params, $defaults ) {
 
 		if ( is_string( $params ) ) {
 			$fieldset_file_path = $this->validate_file_path( $params );
@@ -70,27 +67,9 @@ class Config_Compiler {
 		$params = $this->merge_parameters( $params, $defaults );
 
 		// Configure fieldsets.
-		$params = $this->merge_fieldsets( $params );
+		$params = $this->associate_fieldsets( $params );
 
 		return $params;
-
-	}
-
-	/**
-	 * Configure class properties.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param string $fieldset_file_path The fieldset file path relative to the root directory.
-	 *
-	 * @return string|false
-	 */
-	private function validate_file_path( $file_path = '' ) {
-
-		// Discern the correct path to the file.
-		$file_path = realpath( $file_path );
-
-		return file_exists( $file_path ) ? $file_path : false;
 
 	}
 
@@ -104,6 +83,7 @@ class Config_Compiler {
 	 * @return array
 	 */
 	private function merge_parameters( $params, $defaults ) {
+
 		foreach ( $defaults as $key => $default ) {
 			if ( is_array( $default ) ) {
 				if ( array_key_exists( $key, $params ) ) {
@@ -122,6 +102,26 @@ class Config_Compiler {
 			}
 		}
 
+		$params = $this->configure_missing_parameters( $params );
+
+		return $params;
+
+	}
+
+	/**
+	 * Configure parameters absent from both defaults and user defined parameters.
+	 *
+	 * @param array $params
+	 *
+	 * @return array
+	 */
+	private function configure_missing_parameters( $params ) {
+
+		// Configure the option_group name where database settings values will be stored.
+		if ( ! array_key_exists( 'option_group', $params ) ) {
+			$params['option_group'] = str_replace( '-', '_', sanitize_key( $params['method_args']['menu_slug'] ) );
+		}
+
 		return $params;
 
 	}
@@ -135,12 +135,11 @@ class Config_Compiler {
 	 *
 	 * @return array
 	 */
-	private function merge_fieldsets( $params ) {
+	private function associate_fieldsets ( $params ) {
 
-		$fieldsets = $params['fieldsets'];
-		$results   = array();
+		$results = array();
 
-		foreach ( $fieldsets as $key => $fieldset ) {
+		foreach ( $params['fieldsets'] as $fieldset ) {
 			$section_id = $fieldset['section'];
 			$results[ $section_id ] = $fieldset;
 		}

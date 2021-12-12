@@ -59,6 +59,7 @@ class Text_Field {
 	 *     @type array  $data_args {
 	 *         Data used to describe the setting when registered. Required.
 	 *
+	 *         @type string     $option_name       The option name. If not provided, will default to the ID attribute of the HTML element. Optional.
 	 *         @type mixed      $default           Default value when calling `get_option()`. Optional.
 	 *         @type callable   $sanitize_callback A callback function that sanitizes the option's value. Optional.
 	 *         @type bool|array $show_in_rest      Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key.
@@ -69,18 +70,11 @@ class Text_Field {
 	 * @param string   $page     The slug-name of the settings page on which to show the section (general, reading, writing, ...).
 	 * @param string   $section  The slug-name of the section of the settings page in which to show the box.
 	 */
-	public function __construct( $field, $page, $section ) {
+	public function __construct( $field, $page, $section, $option_group ) {
 
 		// Apply default values for field registration parameters.
 		$field       = array_merge_recursive( $this->default_field, $field );
 		$this->field = $field;
-
-		// Determine the database settings field.
-		// Known blacklist of database option names.
-		$option_group = str_replace( '-', '_', sanitize_key( $page ) );
-		if ( in_array( $option_group, array( 'privacy', 'misc' ), true ) ) {
-			$option_group .= '_option';
-		}
 
 		// Register the settings field output.
 		add_settings_field( $field['id'], $field['label'], array( $this, 'output' ), $page, $section, $field );

@@ -10,7 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 return array(
-	'method_args' => array(
+	'option_group' => 'thoughtful_settings',
+	'method_args'  => array(
 		'page_title' => 'A Thoughtful Settings Page',
 		'menu_title' => 'Thoughtful Settings',
 		'capability' => 'manage_options',
@@ -19,9 +20,9 @@ return array(
 		'icon_url'   => 'dashicons-admin-settings',
 		'position'   => 2,
 	),
-	'description' => 'A thoughtful settings page description.',
-	'network'     => false,
-	'fieldsets'   => array(
+	'description'  => 'A thoughtful settings page description.',
+	'network'      => false,
+	'fieldsets'    => array(
 		array(
 			'section'     => 'unique-section-id-1',
 			'description' => '',
