@@ -67,7 +67,10 @@ class Config_Compiler {
 		}
 
 		// Apply default values to the parameters.
-		$params = array_merge_recursive( $defaults, $params );
+		print_r($params);
+		print_r($defaults);
+		$params = $this->merge_parameters( $params, $defaults );
+		print_r($params);
 
 		// Configure fieldsets.
 		$fieldsets       = array_map( array( $this, 'configure_fieldsets' ), $params['fieldsets'] );
@@ -95,6 +98,39 @@ class Config_Compiler {
 		$file_path = realpath( $file_path );
 
 		return file_exists( $file_path ) ? $file_path : false;
+
+	}
+
+	/**
+	 * Merge the default parameters with the user defined parameters.
+	 * Only 2 levels deep.
+	 *
+	 * @param array $params   User defined parameters.
+	 * @param array $defaults Default parameters.
+	 *
+	 * @return array
+	 */
+	private function merge_parameters( $params, $defaults ) {
+
+		foreach ( $defaults as $key => $default ) {
+			if ( is_array( $default ) ) {
+				if ( array_key_exists( $key, $params ) ) {
+					foreach ( $default as $key2 => $default2 ) {
+						if ( ! array_key_exists( $key2, $params[ $key ] ) ) {
+							$params[ $key ][ $key2 ] = $default2;
+						}
+					}
+				} else {
+					$params[ $key ] = $default;
+				}
+			} else {
+				if ( ! array_key_exists( $key, $params ) ) {
+					$params[ $key ] = $default;
+				}
+			}
+		}
+
+		return $params;
 
 	}
 
