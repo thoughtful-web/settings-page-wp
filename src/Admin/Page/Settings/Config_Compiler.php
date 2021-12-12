@@ -29,6 +29,13 @@ class Config_Compiler {
 	private $params;
 
 	/**
+	 * The settings configuration defaults.
+	 *
+	 * @var array $defaults The settings configuration defaults.
+	 */
+	private $defaults;
+
+	/**
 	 * Constructor for the Compile class.
 	 *
 	 * @param array $params   The Settings page configuration parameters.
