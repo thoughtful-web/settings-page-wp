@@ -22,25 +22,16 @@ namespace Thoughtful_Web\Library_WP\Admin\Page\Settings;
 class Config {
 
 	/**
-	 * The settings configuration parameters.
-	 *
-	 * @var array $params The settings configuration parameters.
-	 */
-	private $params;
-
-	/**
-	 * The settings configuration defaults.
-	 *
-	 * @var array $defaults The settings configuration defaults.
-	 */
-	private $defaults;
-
-	/**
 	 * Constructor for the Compile class.
+	 *
+	 * @param array $params   The Settings page configuration parameters.
+	 * @param array $defaults The default Settings page configuration parameters.
 	 *
 	 * @return array
 	 */
-	public function construct() {}
+	public function construct( $params, $defaults ) {
+		return $this->compile( $params, $defaults );
+	}
 
 	/**
 	 * Get the compiler results.
@@ -66,8 +57,8 @@ class Config {
 		// Apply default values to the parameters.
 		$params = $this->merge_parameters( $params, $defaults );
 
-		// Configure fieldsets.
-		$params = $this->associate_fieldsets( $params );
+		// Configure sections.
+		$params = $this->associate_sections( $params );
 
 		return $params;
 
@@ -109,25 +100,7 @@ class Config {
 	}
 
 	/**
-	 * Configure parameters absent from both defaults and user defined parameters.
-	 *
-	 * @param array $params
-	 *
-	 * @return array
-	 */
-	private function configure_missing_parameters( $params ) {
-
-		// Configure the option_group name where database settings values will be stored.
-		if ( ! array_key_exists( 'option_group', $params ) ) {
-			$params['option_group'] = str_replace( '-', '_', sanitize_key( $params['method_args']['menu_slug'] ) );
-		}
-
-		return $params;
-
-	}
-
-	/**
-	 * Configure each fieldset in the fieldsets settings parameter.
+	 * Configure each fieldset in the sections settings parameter.
 	 *
 	 * @since 0.1.0
 	 *
@@ -135,16 +108,16 @@ class Config {
 	 *
 	 * @return array
 	 */
-	private function associate_fieldsets ( $params ) {
+	private function associate_sections( $params ) {
 
 		$results = array();
 
-		foreach ( $params['fieldsets'] as $fieldset ) {
+		foreach ( $params['sections'] as $fieldset ) {
 			$section_id = $fieldset['section'];
 			$results[ $section_id ] = $fieldset;
 		}
 
-		$params['fieldsets'] = $results;
+		$params['sections'] = $results;
 
 		return $params;
 

@@ -22,7 +22,7 @@ return array(
 	),
 	'description'  => 'A thoughtful settings page description.',
 	'network'      => false,
-	'fieldsets'    => array(
+	'sections'     => array(
 		array(
 			'section'     => 'unique-section-id-1',
 			'description' => '',

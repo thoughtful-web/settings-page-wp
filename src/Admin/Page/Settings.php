@@ -16,7 +16,7 @@ namespace Thoughtful_Web\Library_WP\Admin\Page;
 
 use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Field as TWPL_Settings_Field;
 use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Config as TWPL_Settings_Config;
-
+use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Section as TWPL_Settings_Section;
 /**
  * The Admin Settings Page Class.
  *
@@ -30,8 +30,9 @@ class Settings {
 	 * @var array defaults The default values for the settings page registration parameters.
 	 */
 	private $defaults = array(
-		'method'      => 'add_menu_page',
-		'method_args' => array(
+		'option_group' => 'options',
+		'method'       => 'add_menu_page',
+		'method_args'  => array(
 			'page_title' => 'A Thoughtful Settings Page',
 			'menu_title' => 'Thoughtful Settings',
 			'capability' => 'manage_options',
@@ -40,8 +41,17 @@ class Settings {
 			'icon_url'   => 'dashicons-admin-settings',
 			'position'   => 2,
 		),
-		'description' => 'A thoughtful settings page description.',
-		'network'     => false,
+		'description'  => 'A thoughtful settings page description.',
+		'network'      => false,
+	);
+
+	/**
+	 * Field type to class associations.
+	 *
+	 * @var array $field_classes The field types and their associated class names under the current fully qualified namespace plus the current class.
+	 */
+	private $field_classes = array(
+		'text' => 'Text_Field',
 	);
 
 	/**
@@ -63,7 +73,7 @@ class Settings {
 	 *
 	 * @var string $option_group The database option group name. Lowercase letters and underscores only. If not configured it will default  to the menu_slug method argument with hyphens replaced with underscores.
 	 */
-	private $option_group = 'my_option';
+	private $option_group = 'options';
 
 	/**
 	 * Admin settings class constructor.
@@ -75,13 +85,12 @@ class Settings {
 	public function __construct( $settings = array() ) {
 
 		// Store attributes from the compiled parameters.
-		$configurer = new TWPL_Settings_Config();
-		$compiled   = $configurer->compile( $settings, $this->defaults );
+		$config = new TWPL_Settings_Config( $settings, $this->defaults );
 
 		// Assign compiled values.
-		$this->config       = $compiled;
-		$this->capability   = $compiled['method_args']['capability'];
-		$this->option_group = $compiled['option_group'];
+		$this->config       = $config;
+		$this->capability   = $config['method_args']['capability'];
+		$this->option_group = $config['option_group'];
 
 		// Initialize.
 		$this->add_hooks();
@@ -148,7 +157,7 @@ class Settings {
 				<?php settings_errors(); ?>
 				<form method="POST" action="edit.php?action=<?php echo $this->option_group; ?>">
 					<?php
-						foreach ( $this->config['fieldsets'] as $fieldset ) {
+						foreach ( $this->config['sections'] as $fieldset ) {
 							settings_fields( $fieldset['section'] );
 						}
 						do_settings_sections( $method_args['menu_slug'] );
@@ -172,45 +181,9 @@ class Settings {
 
 		$menu_slug = $this->config['method_args']['menu_slug'];
 
-		foreach ( $this->config['fieldsets'] as $section_key => $fieldset ) {
-			add_settings_section(
-				$section_key,
-				$fieldset['title'],
-				array( $this, 'add_section_description' ),
-				$menu_slug
-			);
+		foreach ( $this->config['sections'] as $id => $section ) {
+			new TWPL_Settings_Section( $id, $section['title'], $section['description'], $menu_slug, $this->capability );
 		}
-
-	}
-
-	/**
-	 * Add a section description.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param array $args {
-	 *     The section arguments.
-	 *
-	 *     @key string $id       The section ID.
-	 *     @key string $title    The section title.
-	 *     @key string $callback This function's name.
-	 * }
-	 *
-	 * @return void
-	 */
-	public function add_section_description( $args ) {
-
-		if ( ! current_user_can( $this->capability ) ) {
-			return;
-		}
-
-		$section_desc = $this->config['fieldsets'][ $args['id'] ]['description'];
-
-		if ( empty( $section_desc ) ) {
-			return;
-		}
-
-		echo wp_kses_post( $section_desc );
 
 	}
 
@@ -223,16 +196,21 @@ class Settings {
 	 */
 	public function add_fields() {
 
-		$page = $this->config['method_args']['menu_slug'];
+		$page       = $this->config['method_args']['menu_slug'];
+		$base_class = '\Thoughtful_Web\Library_WP\Admin\Page\Settings';
 
-		foreach( $this->config['fieldsets'] as $fieldset ){
+		foreach ( $this->config['sections'] as $fieldset ) {
 
 			$section   = $fieldset['section'];
 			$fields    = $fieldset['fields'];
 
-			foreach ( $fields as $args ) {
+			foreach ( $fields as $field ) {
 
-				new TWPL_Settings_Field( $args, $page, $section, $this->option_group );
+				$type = $field['type'];
+				if ( array_key_exists( $type, $this->field_classes ) ) {
+					$class = $base_class . "\\" . $this->field_classes[ $type ];
+					new $class( $field, $page, $section, $this->option_group );
+				}
 
 			}
 

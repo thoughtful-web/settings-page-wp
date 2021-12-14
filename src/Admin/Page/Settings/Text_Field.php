@@ -1,6 +1,6 @@
 <?php
 /**
- * The file that extends WP_Error notification capabilities.
+ * The file that wraps the WordPress Settings API in a file-configurable framework.
  *
  * @package    Thoughtful_Web\Library_WP
  * @subpackage Field
