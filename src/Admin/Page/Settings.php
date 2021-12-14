@@ -57,7 +57,7 @@ class Settings {
 	/**
 	 * Settings page and field Parameters.
 	 *
-	 * @var array $fieldset The Settings page and fieldset parameters.
+	 * @var array $config The Settings page and fieldset parameters.
 	 */
 	private $config = array();
 
@@ -85,9 +85,10 @@ class Settings {
 	public function __construct( $settings = array() ) {
 
 		// Store attributes from the compiled parameters.
-		$config = new TWPL_Settings_Config( $settings, $this->defaults );
+		$config_obj = new TWPL_Settings_Config( $settings, $this->defaults );
 
 		// Assign compiled values.
+		$config             = $config_obj->get();
 		$this->config       = $config;
 		$this->capability   = $config['method_args']['capability'];
 		$this->option_group = $config['option_group'];
@@ -157,9 +158,8 @@ class Settings {
 				<?php settings_errors(); ?>
 				<form method="POST" action="edit.php?action=<?php echo $this->option_group; ?>">
 					<?php
-						foreach ( $this->config['sections'] as $fieldset ) {
-							settings_fields( $fieldset['section'] );
-						}
+						settings_fields( $this->option_group );
+
 						do_settings_sections( $method_args['menu_slug'] );
 						submit_button();
 					?>
@@ -199,10 +199,10 @@ class Settings {
 		$page       = $this->config['method_args']['menu_slug'];
 		$base_class = '\Thoughtful_Web\Library_WP\Admin\Page\Settings';
 
-		foreach ( $this->config['sections'] as $fieldset ) {
+		foreach ( $this->config['sections'] as $section ) {
 
-			$section   = $fieldset['section'];
-			$fields    = $fieldset['fields'];
+			$section = $section['section'];
+			$fields  = $section['fields'];
 
 			foreach ( $fields as $field ) {
 

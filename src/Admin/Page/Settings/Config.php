@@ -22,6 +22,13 @@ namespace Thoughtful_Web\Library_WP\Admin\Page\Settings;
 class Config {
 
 	/**
+	 * The configuration associative array.
+	 *
+	 * @var array $config The associative array storing the final configuration state.
+	 */
+	private $config;
+
+	/**
 	 * Constructor for the Compile class.
 	 *
 	 * @param array $params   The Settings page configuration parameters.
@@ -30,7 +37,20 @@ class Config {
 	 * @return array
 	 */
 	public function construct( $params, $defaults ) {
-		return $this->compile( $params, $defaults );
+
+		$this->build( $params, $defaults );
+
+	}
+
+	/**
+	 * Return the configuration array.
+	 *
+	 * @return array
+	 */
+	public function get() {
+
+		return $this->config;
+
 	}
 
 	/**
@@ -41,12 +61,12 @@ class Config {
 	 *
 	 * @return array
 	 */
-	public function compile( $params, $defaults ) {
+	private function build( $params, $defaults ) {
 
 		if ( is_string( $params ) ) {
-			$fieldset_file_path = $this->validate_file_path( $params );
-			if ( $fieldset_file_path ) {
-				$params = include $fieldset_file_path;
+			$config_path = $this->validate_file_path( $params );
+			if ( $config_path ) {
+				$params = include $config_path;
 			} else {
 				return array();
 			}
@@ -55,12 +75,14 @@ class Config {
 		}
 
 		// Apply default values to the parameters.
+		echo "
+merge";
 		$params = $this->merge_parameters( $params, $defaults );
 
 		// Configure sections.
 		$params = $this->associate_sections( $params );
 
-		return $params;
+		$this->config = $params;
 
 	}
 
@@ -112,9 +134,9 @@ class Config {
 
 		$results = array();
 
-		foreach ( $params['sections'] as $fieldset ) {
-			$section_id = $fieldset['section'];
-			$results[ $section_id ] = $fieldset;
+		foreach ( $params['sections'] as $section ) {
+			$section_id             = $section['section'];
+			$results[ $section_id ] = $section;
 		}
 
 		$params['sections'] = $results;
