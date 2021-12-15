@@ -55,6 +55,13 @@ class Settings {
 	private $option_group = 'options';
 
 	/**
+	 * The menu page slug.
+	 *
+	 * @var string $menu_slug The settings page slug for a URL.
+	 */
+	private $menu_slug;
+
+	/**
 	 * Admin settings class constructor.
 	 *
 	 * @since 0.1.0
@@ -67,10 +74,10 @@ class Settings {
 		$config_obj = new TWPL_Settings_Config( $settings );
 
 		// Assign compiled values.
-		$config             = $config_obj->get();
-		$this->config       = $config;
-		$this->capability   = $config['method_args']['capability'];
-		$this->option_group = $config['option_group'];
+		$this->config       = $config_obj->get();
+		$this->capability   = $this->config['method_args']['capability'];
+		$this->menu_slug    = $this->config['method_args']['menu_slug'];
+		$this->option_group = $this->config['option_group'];
 
 		// Initialize.
 		$this->add_hooks();
@@ -130,7 +137,7 @@ class Settings {
 	public function menu_page_content() {
 
 		$method_args = $this->config['method_args'];
-		if ( current_user_can( $method_args['capability'] ) ) {
+		if ( current_user_can( $this->capability ) ) {
 			?>
 			<div class="wrap">
 				<h1><?php $method_args['page_title']; ?></h1>
@@ -139,7 +146,7 @@ class Settings {
 					<?php
 						settings_fields( $this->option_group );
 
-						do_settings_sections( $method_args['menu_slug'] );
+						do_settings_sections( $this->menu_slug );
 						submit_button();
 					?>
 				</form>
@@ -158,10 +165,8 @@ class Settings {
 	 */
 	public function add_sections() {
 
-		$menu_slug = $this->config['method_args']['menu_slug'];
-
 		foreach ( $this->config['sections'] as $id => $section ) {
-			new TWPL_Settings_Section( $id, $section['title'], $section['description'], $menu_slug, $this->capability );
+			new TWPL_Settings_Section( $id, $section['title'], $section['description'], $this->menu_slug, $this->capability );
 		}
 
 	}
@@ -175,7 +180,6 @@ class Settings {
 	 */
 	public function add_fields() {
 
-		$page       = $this->config['method_args']['menu_slug'];
 		$base_class = '\Thoughtful_Web\Library_WP\Admin\Page\Settings';
 
 		foreach ( $this->config['sections'] as $section ) {
@@ -188,7 +192,7 @@ class Settings {
 				$type = $field['type'];
 				if ( array_key_exists( $type, $this->field_classes ) ) {
 					$class = $base_class . "\\" . $this->field_classes[ $type ];
-					new $class( $field, $page, $section, $this->option_group );
+					new $class( $field, $this->menu_slug, $section, $this->option_group );
 				}
 
 			}

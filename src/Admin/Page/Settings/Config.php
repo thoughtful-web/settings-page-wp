@@ -7,7 +7,7 @@
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/library-wp/blob/main/Admin/Page/Settings/Config_Compiler.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/main/Admin/Page/Settings/Config.php
  * @since      0.1.0
  */
 
@@ -58,6 +58,7 @@ class Config {
 	 */
 	public function construct( $config ) {
 
+		// Maybe retrieve in file format.
 		if ( is_string( $config ) ) {
 			$config_path = $this->validate_file_path( $config );
 			if ( $config_path ) {
@@ -79,7 +80,7 @@ class Config {
 	private function preprocess( $config ) {
 
 		// Apply default values to the parameters.
-		$config = $this->merge_parameters( $config );
+		$config = $this->merge_defaults( $config );
 
 		// Configure sections.
 		$config = $this->associate_sections( $config );
@@ -107,7 +108,7 @@ class Config {
 	 *
 	 * @return array
 	 */
-	private function merge_parameters( $params ) {
+	private function merge_defaults( $params ) {
 
 		foreach ( $this->defaults as $key => $default ) {
 			if ( is_array( $default ) ) {
@@ -127,33 +128,36 @@ class Config {
 			}
 		}
 
-		$params = $this->configure_missing_parameters( $params );
-
 		return $params;
 
 	}
 
 	/**
-	 * Configure each fieldset in the sections settings parameter.
+	 * Configure each section to be associated with a section ID key.
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param array $params The settings parameters.
+	 * @param array $config The settings configuration.
 	 *
 	 * @return array
 	 */
-	private function associate_sections( $params ) {
+	private function associate_sections( $config ) {
 
-		$results = array();
+		foreach ( $config['sections'] as $key => $section ) {
 
-		foreach ( $params['sections'] as $section ) {
-			$section_id             = $section['section'];
-			$results[ $section_id ] = $section;
+			// Get this section's ID.
+			$section_id = $section['section'];
+
+			// Create an associative key assignment for the section.
+			// This is done for succinct code elsewhere.
+			$config['sections'][ $section_id ] = $section;
+
+			// Remove the old numeric-indexed key assignment.
+			unset( $config['sections'][ $key ] );
+
 		}
 
-		$params['sections'] = $results;
-
-		return $params;
+		return $config;
 
 	}
 }

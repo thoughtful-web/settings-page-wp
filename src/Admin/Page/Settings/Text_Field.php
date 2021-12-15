@@ -43,6 +43,13 @@ class Text_Field {
 	private $field;
 
 	/**
+	 * The option group variable.
+	 *
+	 * @var string $option_group The option group identifier.
+	 */
+	private $option_group;
+
+	/**
 	 * Constructor for the Field class.
 	 *
 	 * @param array $field {
@@ -67,10 +74,14 @@ class Text_Field {
 	 *         @type string     $description       A description of the data attached to this setting. Only used for the REST API.
 	 *     }
 	 * }
-	 * @param string   $page     The slug-name of the settings page on which to show the section (general, reading, writing, ...).
-	 * @param string   $section  The slug-name of the section of the settings page in which to show the box.
+	 * @param string $page         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
+	 * @param string $section      The slug-name of the section of the settings page in which to show the box.
+	 * @param string $option_group The option group slug.
+	 * @param bool   $network      Whether the plugin is activated at the network level or not.
 	 */
-	public function __construct( $field, $page, $section, $option_group ) {
+	public function __construct( $field, $page, $section, $option_group, $network ) {
+
+		$this->option_group = $option_group;
 
 		// Apply default values for field registration parameters.
 		$field       = array_merge_recursive( $this->default_field, $field );
@@ -135,6 +146,39 @@ class Text_Field {
 		if ( isset( $args['after'] ) ) {
 			echo wp_kses_post( $args['after'] );
 		}
+
+	}
+
+	/**
+	 * Add action and filter hooks.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
+	private function add_hooks() {
+
+		if ( $this->network ) {
+			add_action( 'network_admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
+		} else {
+			add_action( 'admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
+		}
+
+	}
+
+	/**
+	 * Save the site option.
+	 *
+	 * @return void
+	 */
+	public function save_site_option() {
+
+		// Verify nonce.
+		wp_verify_nonce( $_POST['_wpnonce'], 'update' );
+
+		// Save the option.
+		$option = $_POST[ $this->option_key ];
+		update_site_option( $this->option_key, $option );
 
 	}
 }
