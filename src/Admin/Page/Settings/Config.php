@@ -22,6 +22,27 @@ namespace Thoughtful_Web\Library_WP\Admin\Page\Settings;
 class Config {
 
 	/**
+	 * Default parameters.
+	 *
+	 * @var array defaults The default values for the settings page registration parameters.
+	 */
+	private $defaults = array(
+		'method'       => 'add_menu_page',
+		'method_args'  => array(
+			'page_title' => 'A Thoughtful Settings Page',
+			'menu_title' => 'Thoughtful Settings',
+			'capability' => 'manage_options',
+			'menu_slug'  => 'thoughtful-settings',
+			'function'   => null,
+			'icon_url'   => 'dashicons-admin-settings',
+			'position'   => 2,
+		),
+		'description'  => 'A thoughtful settings page description.',
+		'option_group' => 'options',
+		'network'      => false,
+	);
+
+	/**
 	 * The configuration associative array.
 	 *
 	 * @var array $config The associative array storing the final configuration state.
@@ -31,14 +52,39 @@ class Config {
 	/**
 	 * Constructor for the Compile class.
 	 *
-	 * @param array $params   The Settings page configuration parameters.
-	 * @param array $defaults The default Settings page configuration parameters.
+	 * @param mixed $config The Settings page configuration parameters. Either a configuration file or an array.
 	 *
 	 * @return array
 	 */
-	public function construct( $params, $defaults ) {
+	public function construct( $config ) {
 
-		$this->build( $params, $defaults );
+		if ( is_string( $config ) ) {
+			$config_path = $this->validate_file_path( $config );
+			if ( $config_path ) {
+				$config = include $config_path;
+			}
+		}
+
+		$this->preprocess( $config );
+
+	}
+
+	/**
+	 * Get the compiler results.
+	 *
+	 * @param array $config   The Settings page configuration parameters.
+	 *
+	 * @return array
+	 */
+	private function preprocess( $config ) {
+
+		// Apply default values to the parameters.
+		$config = $this->merge_parameters( $config );
+
+		// Configure sections.
+		$config = $this->associate_sections( $config );
+
+		$this->config = $config;
 
 	}
 
@@ -54,50 +100,16 @@ class Config {
 	}
 
 	/**
-	 * Get the compiler results.
-	 *
-	 * @param array $params   The Settings page configuration parameters.
-	 * @param array $defaults The default Settings page configuration parameters.
-	 *
-	 * @return array
-	 */
-	private function build( $params, $defaults ) {
-
-		if ( is_string( $params ) ) {
-			$config_path = $this->validate_file_path( $params );
-			if ( $config_path ) {
-				$params = include $config_path;
-			} else {
-				return array();
-			}
-		} elseif ( empty( $params ) ) {
-			return array();
-		}
-
-		// Apply default values to the parameters.
-		echo "
-merge";
-		$params = $this->merge_parameters( $params, $defaults );
-
-		// Configure sections.
-		$params = $this->associate_sections( $params );
-
-		$this->config = $params;
-
-	}
-
-	/**
 	 * Merge the default parameters with the user defined parameters.
 	 * Only 2 levels deep.
 	 *
-	 * @param array $params   User defined parameters.
-	 * @param array $defaults Default parameters.
+	 * @param array $params User defined parameters.
 	 *
 	 * @return array
 	 */
-	private function merge_parameters( $params, $defaults ) {
+	private function merge_parameters( $params ) {
 
-		foreach ( $defaults as $key => $default ) {
+		foreach ( $this->defaults as $key => $default ) {
 			if ( is_array( $default ) ) {
 				if ( array_key_exists( $key, $params ) ) {
 					foreach ( $default as $key2 => $default2 ) {

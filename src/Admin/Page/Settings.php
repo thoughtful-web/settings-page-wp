@@ -25,27 +25,6 @@ use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Section as TWPL_Settings_Sect
 class Settings {
 
 	/**
-	 * Default parameters.
-	 *
-	 * @var array defaults The default values for the settings page registration parameters.
-	 */
-	private $defaults = array(
-		'option_group' => 'options',
-		'method'       => 'add_menu_page',
-		'method_args'  => array(
-			'page_title' => 'A Thoughtful Settings Page',
-			'menu_title' => 'Thoughtful Settings',
-			'capability' => 'manage_options',
-			'menu_slug'  => 'thoughtful-settings',
-			'function'   => null,
-			'icon_url'   => 'dashicons-admin-settings',
-			'position'   => 2,
-		),
-		'description'  => 'A thoughtful settings page description.',
-		'network'      => false,
-	);
-
-	/**
 	 * Field type to class associations.
 	 *
 	 * @var array $field_classes The field types and their associated class names under the current fully qualified namespace plus the current class.
@@ -85,7 +64,7 @@ class Settings {
 	public function __construct( $settings = array() ) {
 
 		// Store attributes from the compiled parameters.
-		$config_obj = new TWPL_Settings_Config( $settings, $this->defaults );
+		$config_obj = new TWPL_Settings_Config( $settings );
 
 		// Assign compiled values.
 		$config             = $config_obj->get();
@@ -134,7 +113,7 @@ class Settings {
 			$this->config['method_args']['menu_title'],
 			$this->config['method_args']['capability'],
 			$this->config['method_args']['menu_slug'],
-			array( $this, 'add_settings_content' ),
+			array( $this, 'menu_page_content' ),
 			$this->config['method_args']['icon_url'],
 			$this->config['method_args']['position']
 		);
@@ -148,7 +127,7 @@ class Settings {
 	 *
 	 * @return void
 	 */
-	public function add_settings_content() {
+	public function menu_page_content() {
 
 		$method_args = $this->config['method_args'];
 		if ( current_user_can( $method_args['capability'] ) ) {

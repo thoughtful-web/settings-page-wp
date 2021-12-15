@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 return array(
-	'option_group' => 'thoughtful_settings',
 	'method_args'  => array(
 		'page_title' => 'A Thoughtful Settings Page',
 		'menu_title' => 'Thoughtful Settings',
@@ -21,6 +20,7 @@ return array(
 		'position'   => 2,
 	),
 	'description'  => 'A thoughtful settings page description.',
+	'option_group' => 'thoughtful_settings',
 	'network'      => false,
 	'sections'     => array(
 		array(
