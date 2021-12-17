@@ -27,14 +27,7 @@ use \Thoughtful_Web\Library_WP\Monitor\WP_Err as TWL_Monitor_WP_Err;
  */
 class Activation {
 
-	/**
-	 * Plugin root file.
-	 *
-	 * @var string $file Placeholder until construction. The path to the root plugin file. A Class
-	 *                   variable cannot be defined using functions or variables so it is
-	 *                   incomplete until construction.
-	 */
-	private $file = __DIR__ . '../../../plugin-file.php';
+	private $file;
 
 	/**
 	 * Plugin requirements.
@@ -61,7 +54,7 @@ class Activation {
 	 *     }
 	 * }
 	 */
-	private $requirements = array();
+	private $requirements;
 
 	/**
 	 * Initialize the class
@@ -72,15 +65,14 @@ class Activation {
 	 * @see   https://developer.wordpress.org/reference/functions/register_activation_hook/
 	 * @since 0.1.0
 	 *
-	 * @param string       $file         The root plugin file.
 	 * @param string|array $requirements File path or array of activation requirements. Default empty string.
 	 *
 	 * @return void
 	 */
-	public function __construct( $file, $requirements = '' ) {
+	public function __construct( $requirements ) {
 
-		$this->file         = $file;
-		$this->requirements = $this->get_requirements_array( $requirements );
+		$this->requirements = $requirements;
+		$this->file         = $requirements['main'];
 
 		$this->get_plugin_data();
 		if ( is_array( $requirements ) && array_key_exists( 'plugins', $requirements ) ) {
@@ -90,26 +82,6 @@ class Activation {
 		// Register activation hook.
 		register_activation_hook( $this->file, array( $this, 'activate_plugin' ) );
 
-	}
-
-	/**
-	 * Sanitize and return array of requirements, maybe from a file.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param string|array $requirements File path or array of activation requirements. Default empty string.
-	 *
-	 * @return array
-	 */
-	private function get_requirements_array( $requirements ) {
-
-		if ( is_array( $requirements ) ) {
-			return $requirements;
-		} elseif ( is_string( $requirements ) && ! file_exists( $requirements ) ) {
-			return array();
-		} else {
-			return include $requirements;
-		}
 	}
 
 	/**
@@ -125,10 +97,10 @@ class Activation {
 
 		if ( is_admin() ) {
 			if ( ! function_exists( 'get_plugin_data' ) ) {
-				require_once ABSPATH . 'wp-admin/includes/plugin.php';
+				require_once ABSPATH . '/wp-admin/includes/plugin.php';
 			}
-			$plugin_data       = get_plugin_data( $this->file );
-			$this->plugin_data = $plugin_data;
+			error_log( $this->file );
+			$this->plugin_data = get_plugin_data( $this->file );
 		}
 	}
 
