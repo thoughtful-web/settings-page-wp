@@ -82,9 +82,11 @@ class Page_Template {
 	 * @see https://www.php.net/manual/en/function.is-string.php
 	 * @see https://developer.wordpress.org/reference/functions/plugin_dir_path/
 	 *
+	 * @todo Validate template file paths as part of the plugin's directory.
+	 *
 	 * @since  0.1.0
 	 *
-	 * @param  string $requirements {
+	 * @param  array $requirements {
 	 *     File path or array of activation requirements. Default empty array.
 	 *
 	 *     @type string $main    A path to the plugin's root file.
@@ -108,22 +110,19 @@ class Page_Template {
 	 * }
 	 * @return void
 	 */
-	public function __construct( $requirements = '' ) {
-
-		// Todo: validate as part of the plugin's directory.
-		$this->requirements = include $requirements;
+	public function __construct( $requirements ) {
 
 		// Store the $this->basedir value.
 		$this->basedir = plugin_dir_path( $requirements['main'] );
 
 		// Store template file paths and the plugin's base directory.
 		$this->template_headers = $this->get_file_data(
-			$this->requirements['templates'],
+			$requirements['templates'],
 			$this->default_headers
 		);
 
 		// Store template file paths The WordPress Way for use in Core filters.
-		$this->template_paths = $this->preprocess_template_paths( $this->template_headers );
+		$this->template_paths = $this->preprocess_template_paths( $requirements, $this->template_headers );
 
 		// Register templates.
 		$this->add_template_hooks();
@@ -158,13 +157,15 @@ class Page_Template {
 	 *
 	 * @since 0.1.0
 	 *
+	 * @param array $requirements The plugin's requirements configuration parameters.
+	 * @param array $template_headers The array of template file headers.
+	 *
 	 * @return void
 	 */
-	private function preprocess_template_paths() {
+	private function preprocess_template_paths( $requirements, $template_headers ) {
 
-		$template_headers = $this->template_headers;
 		$template_paths   = array();
-		foreach ( $this->requirements['templates'] as $key => $template ) {
+		foreach ( $requirements['templates'] as $key => $template ) {
 
 			$file = basename( $template['path'] );
 			$name = $template_headers[ $file ]['TemplateName'];
