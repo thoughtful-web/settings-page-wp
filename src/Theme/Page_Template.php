@@ -164,10 +164,10 @@ class Page_Template {
 	 */
 	private function preprocess_template_paths( $requirements, $template_headers ) {
 
-		$template_paths   = array();
-		foreach ( $requirements['templates'] as $key => $template ) {
+		$template_paths = array();
+		foreach ( $requirements['templates'] as $template ) {
 
-			$file = basename( $template['path'] );
+			$file = basename( $template );
 			$name = $template_headers[ $file ]['TemplateName'];
 
 			// Define the structure The WordPress Way.
