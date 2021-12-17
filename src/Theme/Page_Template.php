@@ -26,14 +26,6 @@ use \Thoughtful_Web\Library_WP\File\Load as TWL_File_Load;
 class Page_Template {
 
 	/**
-	 * Plugin activation file.
-	 *
-	 * @var string $file The root plugin file directory path. A Class variable cannot be defined using
-	 *                   functions or variables so it is incomplete until construction.
-	 */
-	private static $file = THOUGHTFULWEB_UTIL_PLUGIN_FILE;
-
-	/**
 	 * Plugin base directory.
 	 *
 	 * @var string $basedir The plugin base file directory.
@@ -92,10 +84,11 @@ class Page_Template {
 	 *
 	 * @since  0.1.0
 	 *
-	 * @param  array|string $requirements {
+	 * @param  string $requirements {
 	 *     File path or array of activation requirements. Default empty array.
 	 *
-	 *     @type array $plugins {
+	 *     @type string $main    A path to the plugin's root file.
+	 *     @type array  $plugins {
 	 *         Optional. Array of plugin clauses. Inspired by the WP_Meta_Query class constructor parameter.
 	 *
 	 *         @type string $relation Optional. The keyword used to compare the activation status
@@ -107,7 +100,7 @@ class Page_Template {
 	 *             @type string $path Required. Path to the plugin file relative to the plugins directory.
 	 *         }
 	 *     }
-	 *     @key array $templates {
+	 *     @key array  $templates {
 	 *         Page template data not able to be stored in the file header.
 	 *
 	 *         @key string $path The relative file path to the page template.
@@ -117,172 +110,44 @@ class Page_Template {
 	 */
 	public function __construct( $requirements = '' ) {
 
-		if (
-			is_array( $requirements )
-			&& array_key_exists( 'templates', $requirements )
-			&& ! empty( $requirements['templates'] )
-		) {
-			$this->requirements = $requirements;
-		} elseif (
-			is_string( $requirements )
-			&& file_exists( $requirements )
-		) {
-			$this->requirements = include $requirements;
-		} elseif ( is_string( $requirements ) && $requirements ) {
-			// File path to array of requirements.
-			$this->requirements = File_Helper::require( $requirements );
-		} else {
-			// Invalid parameter.
-			return;
-		}
+		// Todo: validate as part of the plugin's directory.
+		$this->requirements = include $requirements;
 
-		// Set up the true $this->basedir value.
-		$this->basedir = plugin_dir_path( self::$file );
+		// Store the $this->basedir value.
+		$this->basedir = plugin_dir_path( $requirements['main'] );
 
 		// Store template file paths and the plugin's base directory.
-		$this->template_headers = File_Helper::get_file_data(
+		$this->template_headers = $this->get_file_data(
 			$this->requirements['templates'],
 			$this->default_headers
 		);
 
-		// Store the template data.
-		$this->sanitize_required_template_meta();
+		// Store template file paths The WordPress Way for use in Core filters.
+		$this->template_paths = $this->preprocess_template_paths( $this->template_headers );
 
 		// Register templates.
-		$this->register_templates();
+		$this->add_template_hooks();
 
 	}
 
 	/**
-	 * Sanitize the template_meta variable.
+	 * Get all template file headers.
 	 *
-	 * @see    https://www.php.net/manual/en/function.array-keys.php
-	 * @see    https://www.php.net/manual/en/function.range.php
-	 * @see    https://www.php.net/manual/en/function.count.php
-	 * @see    https://www.php.net/manual/en/function.array-values.php
-	 * @see    https://www.php.net/manual/en/function.is-array.php
-	 * @see    https://www.php.net/manual/en/control-structures.foreach.php
+	 * @param array $templates {
+	 *     The page templates registered by this plugin.
 	 *
-	 * @since  0.1.0
-	 *
+	 *     @value string $path The path to the template file relative to the plugin's root directory.
+	 * }
+	 * @param array $default_headers The default page template file headers.
 	 * @return void
 	 */
-	public function sanitize_required_template_meta() {
+	private function get_file_data( $templates, $default_headers ) {
 
-		$template_meta = $this->requirements['templates'];
-
-		$result = true;
-
-		// Ensure template_meta is an array of arrays.
-		$is_numeric  = array_keys( $template_meta ) === range( 0, count( $template_meta ) - 1 );
-		$first_value = array_values( $template_meta )[0];
-		if ( ! $is_numeric && ! is_array( $first_value ) ) {
-			$template_meta = array( $template_meta );
+		$data = array();
+		foreach ( $templates as $key => $template ) {
+			$data[ $key ] = get_file_data( $template['path'], $default_headers );
 		}
-
-		$all_valid = true;
-		foreach ( $template_meta as $template ) {
-			// Confirm the page template file is valid.
-			$valid = $this->validate_template_path( $template );
-			if ( false === $valid ) {
-				$all_valid = false;
-				break;
-			}
-		}
-
-		$this->requirements['templates'] = $template_meta;
-
-	}
-
-	/**
-	 * Validate a relative file path in case of incorrect file path definition.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param array $template_meta {
-	 *     Accepts false or array. Template details provided by a plugin author. Default false.
-	 *
-	 *     @key string $path The relative path of a plugin's page template file.
-	 * }
-	 *
-	 * @throws \WP_Error Mixed.
-	 *
-	 * @return bool|void
-	 */
-	public function validate_template_path( $template_meta = array() ) {
-
-		$passed = false;
-
-		if ( false === is_array( $template_meta ) ) {
-
-			Error_Helper::display(
-				'plugin_template_meta_undefined',
-				__(
-					'The template_meta variable must be an array.',
-					'thoughtful_web'
-				),
-				array( 'back_link' => true )
-			);
-
-		} elseif ( ! array_key_exists( 'path', $template_meta ) || empty( $template_meta['path'] ) ) {
-
-			Error_Helper::display(
-				'plugin_template_path_undefined',
-				__(
-					'The template_meta "path" member must be defined and must be a relative path. Example: templates/example.php',
-					'thoughtful_web'
-				),
-				array( 'back_link' => true )
-			);
-
-		} else {
-
-			$full_path = $this->basedir . $template_meta['path'];
-			$file      = wp_basename( $template_meta['path'] );
-
-			if ( ! file_exists( $full_path ) ) {
-
-				Error_Helper::display(
-					'plugin_template_file_not_found',
-					sprintf(
-						/* translators: 1: Plugin defined page template file path 2: Full path */
-						__(
-							'The template file %1$s does not exist at the path %2$s.',
-							'thoughtful_web'
-						),
-						$template_meta['path'],
-						$full_path
-					),
-					array( 'back_link' => true )
-				);
-
-			} elseif ( 0 === strpos( $file, 'page-' ) ) {
-
-				/**
-				 * Possible issue with page template files that start with "page-".
-				 * https://developer.wordpress.org/themes/template-files-section/page-template-files/#creating-custom-page-templates-for-global-use
-				 */
-				Error_Helper::display(
-					'plugin_template_filename',
-					sprintf(
-						/* translators: %s: Plugin defined page template file path */
-						__(
-							'Hi, Zach here. I am unsure if this is the case for hook-based page template registration but there may be an issue with your page template name. The template file name "%s" cannot start with "page-" as a prefix, as WordPress may interpret the file as a specialized template meant to apply to only one page on your site. Source: https://developer.wordpress.org/themes/template-files-section/page-template-files/#creating-custom-page-templates-for-global-use',
-							'thoughtful_web'
-						),
-						$template_meta['path']
-					),
-					array( 'back_link' => true )
-				);
-
-			} else {
-
-				$passed = true;
-
-			}
-		}
-
-		return $passed;
+		return $data;
 
 	}
 
@@ -295,11 +160,10 @@ class Page_Template {
 	 *
 	 * @return void
 	 */
-	private function get_template_paths() {
+	private function preprocess_template_paths() {
 
-		$template_paths   = array();
 		$template_headers = $this->template_headers;
-
+		$template_paths   = array();
 		foreach ( $this->requirements['templates'] as $key => $template ) {
 
 			$file = basename( $template['path'] );
@@ -310,7 +174,7 @@ class Page_Template {
 
 		}
 
-		$this->template_paths = $template_paths;
+		return $template_paths;
 
 	}
 
@@ -330,10 +194,7 @@ class Page_Template {
 	 * @since  0.1.0
 	 * @return void
 	 */
-	private function register_templates() {
-
-		// Store template file paths The WordPress Way for use in Core filters.
-		$this->get_template_paths();
+	private function add_template_hooks() {
 
 		if ( version_compare( floatval( $GLOBALS['wp_version'] ), '4.7', '<' ) ) {
 			add_filter( 'page_attributes_dropdown_pages_args', array( $this, 'add_to_cache' ) );
