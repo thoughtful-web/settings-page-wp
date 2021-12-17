@@ -144,7 +144,7 @@ class Page_Template {
 
 		$data = array();
 		foreach ( $templates as $key => $template ) {
-			$data[ $key ] = get_file_data( $template['path'], $default_headers );
+			$data[ $key ] = get_file_data( $this->basedir . '/' . $template, $default_headers );
 		}
 		return $data;
 
