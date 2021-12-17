@@ -128,17 +128,6 @@ class Page_Template {
 			&& file_exists( $requirements )
 		) {
 			$this->requirements = include $requirements;
-		}
-			} else {
-				Error_Helper::display(
-					'plugin_requires_template',
-					__(
-						'The plugin requires one or more templates to activate but did not specify file paths to the templates.',
-						'thoughtful_web'
-					),
-					array( 'back_link' => true )
-				);
-			}
 		} elseif ( is_string( $requirements ) && $requirements ) {
 			// File path to array of requirements.
 			$this->requirements = File_Helper::require( $requirements );
