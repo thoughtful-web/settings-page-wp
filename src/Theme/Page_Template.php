@@ -143,8 +143,8 @@ class Page_Template {
 	private function get_file_data( $templates, $default_headers ) {
 
 		$data = array();
-		foreach ( $templates as $key => $template ) {
-			$data[ $key ] = get_file_data( $this->basedir . '/' . $template, $default_headers );
+		foreach ( $templates as $template ) {
+			$data[] = get_file_data( $this->basedir . '/' . $template, $default_headers );
 		}
 		return $data;
 
