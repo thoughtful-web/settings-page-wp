@@ -144,7 +144,8 @@ class Page_Template {
 
 		$data = array();
 		foreach ( $templates as $template ) {
-			$data[] = get_file_data( $this->basedir . '/' . $template, $default_headers );
+			$file = $template['path'];
+			$data[ $file ] = get_file_data( $this->basedir . '/' . $file, $default_headers );
 		}
 		return $data;
 
@@ -167,7 +168,7 @@ class Page_Template {
 		$template_paths = array();
 		foreach ( $requirements['templates'] as $template ) {
 
-			$file = basename( $template );
+			$file = $template['path'];
 			$name = $template_headers[ $file ]['TemplateName'];
 
 			// Define the structure The WordPress Way.
@@ -197,7 +198,7 @@ class Page_Template {
 	 */
 	private function add_template_hooks() {
 
-		if ( version_compare( floatval( $GLOBALS['wp_version'] ), '4.7', '<' ) ) {
+		if ( version_compare( $GLOBALS['wp_version'], '4.7', '<' ) ) {
 			add_filter( 'page_attributes_dropdown_pages_args', array( $this, 'add_to_cache' ) );
 		} else {
 			add_filter( 'theme_page_templates', array( $this, 'add_to_cache_templates' ) );
