@@ -25,40 +25,6 @@ namespace Thoughtful_Web\Library_WP\Plugin;
 class Requirements {
 
 	/**
-	 * Plugin requirements.
-	 *
-	 * @var array $requirements {
-	 *     File path or array of activation requirements. Default empty array.
-	 *
-	 *     @type array $plugins {
-	 *         Optional. Array of plugin clauses. Inspired by the WP_Meta_Query class constructor parameter.
-	 *
-	 *         @type string $relation Optional. The keyword used to compare the activation status
-	 *                                of the plugins. Accepts 'AND', or 'OR'. Default 'AND'.
-	 *         @type array  ...$0 {
-	 *             An array of a plugin's data.
-	 *
-	 *             @type string $name Required. Display name of the plugin.
-	 *             @type string $path Required. Path to the plugin file relative to the plugins directory.
-	 *         }
-	 *     }
-	 *     @key array $templates {
-	 *         Page template data not able to be stored in the file header.
-	 *
-	 *         @key string $path The relative file path to the page template.
-	 *     }
-	 * }
-	 */
-	private $requirements = array();
-
-	/**
-	 * Plugin requirements.
-	 *
-	 * @var array $plugin_queries The separately stored plugin array
-	 */
-	private $plugin_queries;
-
-	/**
 	 * Class constructor function.
 	 *
 	 * @since 0.1.0
@@ -68,41 +34,40 @@ class Requirements {
 	public function __construct() {}
 
 	/**
-	 * Apply plugin requirements from all relevant sources.
+	 * Get the activation status of plugin requirements.
 	 *
-	 * @since 0.1.0
+	 * Inspired by the meta_query parameter of WP_Meta_Query().
+	 * https://developer.wordpress.org/reference/classes/wp_meta_query/
 	 *
-	 * @param string|array $requirements The plugin requirements file path or array.
+	 * @author    Zachary Kendall Watkins <zachwatkins@tapfuel.io>
+	 * @copyright 2021 Zachary Kendall Watkins
+	 * @license   http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
 	 *
-	 * @return array
-	 */
-	public function query( $requirements ) {
-
-		if ( is_string( $requirements ) ) {
-			$requirements = include $requirements;
-		}
-		$this->requirements = $requirements;
-		$query_results      = $this->query_plugins( $requirements['plugins'] );
-
-		return $query_results;
-
-	}
-
-	/**
-	 * Validate required plugin[s] in a similar way to WP_Meta_Query().
-	 *
-	 * If the requirements are not satisfied then deactivate the plugin and
-	 * notify the user of the requirements they must meet first through an
-	 * admin notice.
-	 *
-	 * @see https://developer.wordpress.org/reference/classes/wp_meta_query/
-	 * @see https://developer.wordpress.org/reference/functions/is_plugin_active/
+	 * @link https://developer.wordpress.org/reference/functions/is_plugin_active/
 	 *
 	 * @since  0.1.0
+	 *
+	 * @param array|string $plugin_query {
+	 *     The 'plugins' value of the $requirements parameter passed to this class's query() method.
+	 *
+	 *     @type string $relation Optional. The keyword used to compare the activation status of the
+	 *                            plugins. Accepts 'AND' or 'OR'. Default 'AND'.
+	 *     @type array  ...$0 {
+	 *         An array of a plugin's data.
+	 *
+	 *         @type string $name Required. Display name of the plugin.
+	 *         @type string $path Required. Path to the plugin file relative to the plugins
+	 *                            directory.
+	 *     }
+	 * }
 	 *
 	 * @return array
 	 */
 	private function query_plugins( $plugin_query ) {
+
+		if ( is_string( $plugin_query ) ) {
+			$plugin_query = include $plugin_query;
+		}
 
 		/**
 		 * Results structure for this class's sole public function.
@@ -115,7 +80,7 @@ class Requirements {
 			'active'   => array(),
 			'inactive' => array(),
 			'notify'   => array(),
-			'message'  => false,
+			'message'  => '',
 		);
 
 		// Enforce a default value of 'AND' for $relation.
