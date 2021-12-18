@@ -187,7 +187,7 @@ class Requirements {
 		 */
 		$notify_plugins_phrase   = '';
 		$plural                  = 'OR' === $relation ? 1 : count( $results['notify'] );
-		$activation_order_phrase = 1 < $plural ? ' in that order' : '';
+		$activation_order_phrase = 1 < $plural ? ' and in this order' : '';
 		if ( 2 >= $plural ) {
 			$notify_plugins_phrase = implode( strtolower( " $relation " ), $results['inactive'] );
 		} else {
