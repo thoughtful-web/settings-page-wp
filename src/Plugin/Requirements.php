@@ -61,9 +61,9 @@ class Requirements {
 	/**
 	 * Class constructor function.
 	 *
-	 * @param string|array $requirements The requirement data.
+	 * @since 0.1.0
 	 *
-	 * @return array|WP_Error
+	 * @return void
 	 */
 	public function __construct() {}
 
