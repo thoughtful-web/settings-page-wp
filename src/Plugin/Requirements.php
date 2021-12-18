@@ -72,13 +72,15 @@ class Requirements {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param string $requirements The plugin requirements file path.
+	 * @param string|array $requirements The plugin requirements file path or array.
 	 *
 	 * @return array
 	 */
 	public function query( $requirements ) {
 
-		$requirements       = include $requirements;
+		if ( is_string( $requirements ) ) {
+			$requirements = include $requirements;
+		}
 		$this->requirements = $requirements;
 		$query_results      = $this->query_plugins( $requirements['plugins'] );
 
