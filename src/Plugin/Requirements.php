@@ -16,9 +16,6 @@
 declare(strict_types=1);
 namespace Thoughtful_Web\Library_WP\Plugin;
 
-use \Thoughtful_Web\Library_WP\File_Read as TWL_FileRead;
-use \Thoughtful_Web\Library_WP\Monitor\Incident as TWLM_Error;
-
 /**
  * The class that validates configuration requirements.
  *
@@ -26,13 +23,6 @@ use \Thoughtful_Web\Library_WP\Monitor\Incident as TWLM_Error;
  * @since 0.1.0
  */
 class Requirements {
-
-	/**
-	 * Default plugin requirements configuration file.
-	 *
-	 * @var config_file
-	 */
-	private $config_file = __DIR__ . '../../../activation-requirements.php';
 
 	/**
 	 * Plugin requirements.
@@ -75,16 +65,10 @@ class Requirements {
 	 *
 	 * @return array|WP_Error
 	 */
-	public function __construct( $requirements ) {
-
-
-		$this->requirements = $this->get( $requirements );
-		return $this->requirements;
-
-	}
+	public function __construct() {}
 
 	/**
-	 * Get plugin requirements from all relevant sources.
+	 * Apply plugin requirements from all relevant sources.
 	 *
 	 * @since 0.1.0
 	 *
@@ -92,108 +76,45 @@ class Requirements {
 	 *
 	 * @return array
 	 */
-	private function get( $requirements ) {
+	public function query( $requirements ) {
 
-		$results = is_array( $requirements ) ? $requirements : array();
+		$requirements       = include $requirements;
+		$this->requirements = $requirements;
+		$query_results      = $this->query_plugins( $requirements['plugins'] );
 
-		// Check for config file.
-		if ( file_exists( $this->config_file ) ) {
-			$config_data = new TWL_FileRead( $this->config_file );
-			if ( is_array( $config_data ) ) {
-				// Override config file options with those defined in the plugin's source code.
-				$results = array_merge( $config_data, $results );
-			}
-		}
+		return $query_results;
 
-		// Import unique config file.
-		if ( is_string( $requirements ) && ! empty( $requirements ) && file_exists( $this->config_file ) ) {
-			$config_data = new TWL_FileRead( $requirements );
-			if ( is_array( $config_data ) ) {
-				// Override config file options with those defined in the plugin's source code.
-				$results = array_merge( $config_data, $results );
-			}
-		}
+	}
+
+	/**
+	 * Validate required plugin[s] in a similar way to WP_Meta_Query().
+	 *
+	 * If the requirements are not satisfied then deactivate the plugin and
+	 * notify the user of the requirements they must meet first through an
+	 * admin notice.
+	 *
+	 * @see https://developer.wordpress.org/reference/classes/wp_meta_query/
+	 * @see https://developer.wordpress.org/reference/functions/is_plugin_active/
+	 *
+	 * @since  0.1.0
+	 *
+	 * @return array
+	 */
+	private function query_plugins( $plugin_query ) {
 
 		/**
-		 * Interpret and assign values.
+		 * Results structure for this class's sole public function.
+		 *
+		 * @var array $default_results The default results provided by this class to those calling the evaluate() function.
 		 */
-		if ( is_array( $results ) && array_key_exists( 'plugins', $results ) ) {
-			if ( ! empty( $results['plugins'] ) ) {
-				$this->plugin_queries = $results['plugins'];
-				$this->validate_required_plugins();
-			} else {
-				unset( $results['plugins'] );
-			}
-		}
-
-		// Return successful results.
-		return $results;
-
-	}
-
-	/**
-	 * Validate the requirements parameter passed to the constructor method of this class.
-	 *
-	 * @param string|array $requirements The requirements data.
-	 *
-	 * @return array|bool
-	 */
-	private function validate( $requirements ) {
-
-		$valid = true;
-
-		// Validation arguments.
-		$error  = new \WP_Error(
-			'plugin_config_undefined',
-			__(
-				'The plugin requirements are defined but not valid.',
-				'thoughtful-web-library',
-			)
+		$results = array(
+			'passed'   => true,
+			'results'  => array(),
+			'active'   => array(),
+			'inactive' => array(),
+			'notify'   => array(),
+			'message'  => false,
 		);
-
-		// The final configuration.
-		$config = empty( $this->requirements ) ? $this->get( $requirements ) : $this->requirements;
-
-		// Validate required plugins in the configuration.
-		if ( array_key_exists( 'plugins', $config, true ) ) {
-			$this->validate_required_plugins();
-		}
-
-		return $valid;
-
-	}
-
-	/**
-	 * Validate required plugin[s].
-	 *
-	 * @see    https://www.php.net/manual/en/function.is-array.php
-	 * @see    https://www.php.net/manual/en/function.isset.php
-	 * @see    https://www.php.net/manual/en/function.strtoupper.php
-	 * @see    https://www.php.net/manual/en/function.unset.php
-	 * @see    https://www.php.net/manual/en/control-structures.foreach.php
-	 * @see    https://www.php.net/manual/en/control-structures.break.php
-	 * @see    https://developer.wordpress.org/reference/functions/is_plugin_active/
-	 * @see    https://www.php.net/manual/en/function.array-key-exists.php
-	 * @see    https://www.php.net/manual/en/function.empty.php
-	 * @see    https://www.php.net/manual/en/function.in-array.php
-	 * @see    https://www.php.net/manual/en/function.array-keys.php
-	 * @see    https://www.php.net/manual/en/function.count.php
-	 * @see    https://www.php.net/manual/en/function.implode.php
-	 * @see    https://www.php.net/manual/en/function.array-pop.php
-	 * @see    https://www.php.net/manual/en/function.sprintf.php
-	 * @see    https://www.php.net/manual/en/function.strtolower.php
-	 * @see    https://developer.wordpress.org/reference/functions/_n/
-	 * @since  0.1.0
-	 * @return bool|string
-	 */
-	private function validate_required_plugins() {
-
-		$plugin_query = $this->plugin_queries;
-		$results      = true;
-
-		if ( ! is_array( $plugin_query ) ) {
-			return $results;
-		}
 
 		// Enforce a default value of 'AND' for $relation.
 		if ( isset( $plugin_query['relation'] ) && 'OR' === strtoupper( $plugin_query['relation'] ) ) {
@@ -206,71 +127,85 @@ class Requirements {
 		}
 
 		// Retrieve plugin active status.
-		$all_active = true;
 		foreach ( $plugin_query as $key => $plugin ) {
+			// Get active status.
 			$active = is_plugin_active( $plugin['file'] );
-			// Store active status.
+			// Store activation status.
 			$plugin_query[ $key ]['active'] = $active;
-			// Monitor overall plugin active status.
-			if ( ! $active ) {
-				$all_active = false;
+			// Assign active or inactive plugins to their own results.
+			if ( $active ) {
+				$results['active'] = $plugin;
+			} else {
+				$results['inactive'] = $plugin;
 			}
 		}
 		$this->plugin_queries = $plugin_query;
+		$results['status']    = $plugin_query;
 
-		// Evaluate results so far.
-		if ( 'AND' === $relation && $all_active ) {
-			return $results;
+		// Determine if the currently active and inactive plugins meet the requirements configuration.
+		if ( 'AND' === $relation ) {
+			if ( empty( $results['inactive'] ) ) {
+				$results['passed'] = true;
+			} else {
+				$results['passed'] = false;
+			}
+		} else {
+			if ( 1 === count( $results['active'] ) ) {
+				$results['passed'] = true;
+			} else {
+				$results['passed'] = false;
+			}
 		}
 
 		// Determine which plugins to report failure for.
-		$inactive_plugins = array();
 		if ( 'AND' === $relation ) {
-			foreach ( $plugin_query as $plugin ) {
-				if ( ! $plugin['active'] ) {
-					$inactive_plugins[] = $plugin['name'];
-				}
-			}
+
+			$results['notify'] = $results['inactive'];
+
 		} elseif ( 'OR' === $relation ) {
-			$found_active = false;
-			foreach ( $plugin_query as $plugin ) {
-				if ( $plugin['active'] ) {
-					$found_active = true;
-					break;
-				} else {
-					$inactive_plugins[] = $plugin['name'];
-				}
+
+			if ( 1 < count( $results['active'] ) ) {
+
+				$results['notify'] = $results['active'];
+
+			} elseif ( 0 === count( $results['active'] ) ) {
+
+				$results['notify'] = $results['inactive'];
+
 			}
+
 		}
 
-		// Exit if we still have not found plugins to report an error for.
-		if ( empty( $inactive_plugins ) ) {
-			return $results;
-		}
-
-		// Assemble all inactive plugins as a phrase using the relation parameter.
-		$inactive_plugins_phrase = '';
-		$plural                  = 'OR' === $relation ? 1 : count( $inactive_plugins );
+		/**
+		 * Assemble all inactive plugins as a phrase using the relation parameter.
+		 * Example 1: "Advanced Custom Fields"
+		 * Example 2: "Advanced Custom Fields or Advanced Custom Fields Pro"
+		 * Example 3: "Advanced Custom Fields and Admin Columns in that order"
+		 * Example 4: "Advanced Custom Fields, Admin Columns, and Gravity Forms in that order"
+		 */
+		$notify_plugins_phrase   = '';
+		$plural                  = 'OR' === $relation ? 1 : count( $results['notify'] );
+		$activation_order_phrase = 1 < $plural ? ' in that order' : '';
 		if ( 2 >= $plural ) {
-			$inactive_plugins_phrase = implode( strtolower( " $relation " ), $inactive_plugins );
+			$notify_plugins_phrase = implode( strtolower( " $relation " ), $results['inactive'] );
 		} else {
-			$plugin_last              = array_pop( $inactive_plugins );
-			$inactive_plugins_phrase  = implode( ', ', $inactive_plugins );
-			$inactive_plugins_phrase .= strtolower( ", $relation " ) . $plugin_last;
+			$plugin_last            = array_pop( $results['notify'] );
+			$notify_plugins_phrase  = implode( ', ', $results['notify'] );
+			$notify_plugins_phrase .= strtolower( ", $relation " ) . $plugin_last;
 		}
 
-		Error_Helper::display(
-			'thoughtful_web_plugin_activation_error',
-			sprintf(
-				/* translators: %s: Required plugin names. */
-				_n(
-					' It needs the %s plugin to be installed and activated first.',
-					' It needs the %s plugins to be installed and activated first.',
-					$plural,
-					'thoughtful_web'
-				),
-				$inactive_plugins_phrase
-			)
+		$results['message'] = sprintf(
+			/* translators: %s: Required plugin names. */
+			_n(
+				' It needs the %1$s plugin to be installed and activated first%2$s.',
+				' It needs the %1$s plugins to be installed and activated first%2$s.',
+				$plural,
+				'thoughtful-web-library-wp'
+			),
+			$notify_plugins_phrase,
+			$activation_order_phrase
 		);
+
+		return $results;
 	}
 }
