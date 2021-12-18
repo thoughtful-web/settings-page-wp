@@ -72,7 +72,7 @@ class Requirements {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param string|array $requirements The plugin requirements file path or data.
+	 * @param string $requirements The plugin requirements file path.
 	 *
 	 * @return array
 	 */
