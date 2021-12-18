@@ -185,28 +185,32 @@ class Requirements {
 		 * Example 3: "Advanced Custom Fields and Admin Columns in that order"
 		 * Example 4: "Advanced Custom Fields, Admin Columns, and Gravity Forms in that order"
 		 */
-		$notify_plugins_phrase   = '';
-		$plural                  = 'OR' === $relation ? 1 : count( $results['notify'] );
-		$activation_order_phrase = 1 < $plural ? ' and in this order' : '';
-		if ( 2 >= $plural ) {
-			$notify_plugins_phrase = implode( strtolower( " $relation " ), $results['inactive'] );
-		} else {
-			$plugin_last            = array_pop( $results['notify'] );
-			$notify_plugins_phrase  = implode( ', ', $results['notify'] );
-			$notify_plugins_phrase .= strtolower( ", $relation " ) . $plugin_last;
-		}
+		if ( 0 < count( $results['notify'] ) ) {
 
-		$results['message'] = sprintf(
-			/* translators: %s: Required plugin names. */
-			_n(
-				' It needs the %1$s plugin to be installed and activated first%2$s.',
-				' It needs the %1$s plugins to be installed and activated first%2$s.',
-				$plural,
-				'thoughtful-web-library-wp'
-			),
-			$notify_plugins_phrase,
-			$activation_order_phrase
-		);
+			$notify_plugins_phrase   = '';
+			$plural                  = 'OR' === $relation ? 1 : count( $results['notify'] );
+			$activation_order_phrase = 1 < $plural ? ' and in this order' : '';
+			if ( 2 >= $plural ) {
+				$notify_plugins_phrase = implode( strtolower( " $relation " ), $results['inactive'] );
+			} else {
+				$plugin_last            = array_pop( $results['notify'] );
+				$notify_plugins_phrase  = implode( ', ', $results['notify'] );
+				$notify_plugins_phrase .= strtolower( ", $relation " ) . $plugin_last;
+			}
+
+			$results['message'] = sprintf(
+				/* translators: %s: Required plugin names. */
+				_n(
+					' It needs the %1$s plugin to be installed and activated first%2$s.',
+					' It needs the %1$s plugins to be installed and activated first%2$s.',
+					$plural,
+					'thoughtful-web-library-wp'
+				),
+				$notify_plugins_phrase,
+				$activation_order_phrase
+			);
+
+		}
 
 		return $results;
 	}
