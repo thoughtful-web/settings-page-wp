@@ -15,6 +15,8 @@
 use Monolog\Logger as Logger;
 use Monolog\Handler\StreamHandler as StreamHandler;
 
+namespace Thoughtful_Web\Library_WP\Monitor;
+
 class Email {
 
 	private $log_stream;
