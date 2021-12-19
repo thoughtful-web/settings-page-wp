@@ -26,8 +26,8 @@ class Email {
 
 	public function __construct() {
 
-		require dirname( __FILE__, 5 ) . '/monolog/monolog/src/Logger.php';
-		require dirname( __FILE__, 5 ) . '/monolog/monolog/src/Handler/StreamHandler.php';
+		require dirname( __FILE__, 5 ) . '/monolog/monolog/src/Monolog/Logger.php';
+		require dirname( __FILE__, 5 ) . '/monolog/monolog/src/Monolog/Handler/StreamHandler.php';
 
 		// Create the email error logger.
 		$this->log_stream     = pushHandler(new StreamHandler( dirname( ABSPATH, 2 ) . 'wp.email.log', Logger::INFO));
