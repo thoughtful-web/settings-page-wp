@@ -25,6 +25,68 @@ class Email {
 		// add the action
 		add_action( 'wp_mail_failed', array( $this, 'action_wp_mail_failed' ), 10, 1 );
 		add_action( 'phpmailer_init', array( $this, 'action_phpmailer_init' ) );
+		add_action( 'init', function(){
+			if ( ! wp_doing_cron() && ! wp_doing_ajax() ) {
+				error_log('init');
+				// Error.
+				wp_mail( 'asdf@#.com', 'Test', 'This is a terrible test of monolog and email logging to a file.' );
+				// Success.
+				wp_mail( 'admin@homeandranch.local', 'Test', 'This is a terrible test of monolog and email logging to a file.' );
+			}
+		});
+	}
+
+	/**
+	 * Assemble email recipients string from array.
+	 *
+	 * @param array $recipients {
+	 *     Email recipients.
+	 *
+	 *     @key array $to  {
+	 *         The "To" recipients.
+	 *         @index string Required. The email address.
+	 *         @index string The email recipient name. Optional.
+	 *     }
+	 *     @key array $cc  {
+	 *         The "Cc" recipients.
+	 *         @index string Required. The email address.
+	 *         @index string The email recipient name. Optional.
+	 *     }
+	 *     @key array $bcc {
+	 *         The "Bcc" recipients.
+	 *         @index string Required. The email address.
+	 *         @index string The email recipient name. Optional.
+	 *     }
+	 * }
+	 * @return void
+	 */
+	private function assemble_recipient_str( $recipients ) {
+
+		$str     = '';
+		$message = array();
+		foreach ( $recipients as $type => $addresses ) {
+			$address_strings = array();
+			foreach ( $addresses as $address ) {
+				$address_strings[] = $address[1] ? "{$address[1]} <{$address[0]}>" : $address[0];
+			}
+			$message[] = ucwords( $type ) . ': ' . implode( ', ', $address_strings );
+		}
+		$str = implode( '; ', $message );
+
+		return $str;
+
+	}
+
+	private function get_email_log_str( $subject, $to, $cc, $bcc, $body ) {
+
+		$recipients_arr = array(
+			'to'  => $to,
+			'cc'  => $cc,
+			'bcc' => $bcc,
+		);
+		$recipients = assemble_recipient_str( $recipients_arr );
+		return "Subject: {$subject}; {$recipients}; Body: {$body}";
+
 	}
 
 	/**
@@ -72,28 +134,15 @@ class Email {
 		$log   = dirname( ABSPATH, 2 ) . '/wp-mail.log';
 		$alt_log = ABSPATH . '/wp-mail.log';
 
-		$template = array();
-		$template['subject']      = $phpmailer->Subject;
-		$template['body']         = $phpmailer->Body;
-
-		// Convert phpmailer recipients to array by receipt category.
-		$template['recipients'] = array(
-			'to'  => $phpmailer->getToAddresses(),
-			'cc'  => $phpmailer->getCcAddresses(),
-			'bcc' => $phpmailer->getBccAddresses(),
-		);
-		$message                = array();
-		foreach ( $template['recipients'] as $type => $addresses ) {
-			$address_strings = array();
-			foreach ( $addresses as $address ) {
-				$address_strings[] = $address[1] ? "{$address[1]} <{$address[0]}>" : $address[0];
-			}
-			$message[] = ucwords( $type ) . ': ' . implode( ', ', $address_strings );
-		}
-		$template['recipient_message'] = implode( '; ', $message );
-
 		$message  = '[' . $timestamp . '] ';
-		$message .= "Subject: {$template['subject']}; {$template['recipient_message']}; Body: {$template['body']}" . "\r\n";
+		$message .= get_email_log_str(
+			$phpmailer->Subject,
+			$phpmailer->getToAddresses(),
+			$phpmailer->getCcAddresses(),
+			$phpmailer->getBccAddresses(),
+			$phpmailer->Body
+		);
+		$message .= "\r\n";
 
 		if ( ! file_exists( $log ) ) {
 			if ( ! is_writable( $log ) ) {
