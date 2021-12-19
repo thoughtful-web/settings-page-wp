@@ -89,29 +89,41 @@ class Email {
 
 	}
 
-	/**
-	 * The wp_mail_failed callback.
-	 *
-	 * @param WP_Error $wp_error The WP_Error object.
-	 * @return void
-	 */
-	public function action_wp_mail_failed( $wp_error ) {
+	private function get_timestamp() {
 
 		$date = new \DateTime(strtotime(time()));
 		$date->setTimezone(new \DateTimeZone('America/Chicago'));
 		$timestamp = $date->format("F j, Y, g:i a");
+		return '[' . $timestamp . ']';
 
-		$log     = dirname( ABSPATH, 2 ) . '/error-wp-mail.log';
-		$alt_log = ABSPATH . '/error-wp-mail.log';
+	}
+
+	private function phpmailer_entry( $phpmailer ) {
+
+	}
+
+	private function wp_error_entry( $wp_error ) {
 
 		// Get error messages.
 		$error_messages = $wp_error->get_error_messages();
 		$error_data     = $wp_error->get_error_data( 'wp_mail_failed' );
 
-		$messages  = '[' . $timestamp . '] Delivery Failed: ';
-		$messages .= implode( '; ', $error_messages );
+		$messages = implode( '; ', $error_messages );
 		$messages .= '; ' . serialize( $error_data );
+
+		return $messages;
+
+	}
+
+	private function log_message( $message ) {
+
+		$messages  = $this->get_timestamp();
+		$messages .= ' [!] Failed: ';
+		$messages .= $message;
 		$messages .= "\r\n";
+
+		$log     = dirname( ABSPATH, 2 ) . '/error-wp-mail.log';
+		$alt_log = ABSPATH . '/error-wp-mail.log';
 
 		if ( ! file_exists( $log ) ) {
 			if ( ! is_writable( $log ) ) {
@@ -125,24 +137,35 @@ class Email {
 
 	}
 
-	public function action_phpmailer_init( $phpmailer ) {
+	/**
+	 * The wp_mail_failed callback.
+	 *
+	 * @param WP_Error $wp_error The WP_Error object.
+	 * @return void
+	 */
+	public function action_wp_mail_failed( $wp_error ) {
 
-		$date = new \DateTime(strtotime(time()));
-		$date->setTimezone(new \DateTimeZone('America/Chicago'));
-		$timestamp = $date->format("F j, Y, g:i a");
+		$message = $this->wp_error_entry( $wp_error );
+
+		$this->log_message( $message );
+
+	}
+
+	public function action_phpmailer_init( $phpmailer ) {
 
 		$log   = dirname( ABSPATH, 2 ) . '/wp-mail.log';
 		$alt_log = ABSPATH . '/wp-mail.log';
 
-		$message  = '[' . $timestamp . '] ';
-		$message .= get_email_log_str(
+		$messages  = $this->get_timestamp();
+		$messages .= ' [!] Sending: ';
+		$messages .= get_email_log_str(
 			$phpmailer->Subject,
 			$phpmailer->getToAddresses(),
 			$phpmailer->getCcAddresses(),
 			$phpmailer->getBccAddresses(),
 			$phpmailer->Body
 		);
-		$message .= "\r\n";
+		$messages .= "\r\n";
 
 		if ( ! file_exists( $log ) ) {
 			if ( ! is_writable( $log ) ) {
@@ -152,7 +175,7 @@ class Email {
 			fclose( $handle );
 		}
 
-		error_log( $message, 3, $log );
+		error_log( $messages, 3, $log );
 
 	}
 }
