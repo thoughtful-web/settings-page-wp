@@ -11,33 +11,13 @@
  * @uses       https://github.com/Seldaek/monolog
  * @since      0.1.0
  */
-
-use Monolog\Logger as Logger;
-use Monolog\Handler\StreamHandler as StreamHandler;
-
 namespace Thoughtful_Web\Library_WP\Monitor;
 
 class Email {
 
-	private $log_stream;
-	private $wp_mail_logger;
-	private $error_log_stream;
-	private $wp_mail_failed_logger;
-
 	public function __construct() {
 
-		require dirname( __FILE__, 5 ) . '/monolog/monolog/src/Monolog/Logger.php';
-		require dirname( __FILE__, 5 ) . '/monolog/monolog/src/Monolog/Handler/StreamHandler.php';
-
-		// Create the email error logger.
-		$this->log_stream     = pushHandler(new StreamHandler( dirname( ABSPATH, 2 ) . 'wp.email.log', Logger::INFO));
-		$this->wp_mail_logger = new Logger('wp_mail');
-		$this->wp_mail_logger->pushHandler( $this->log_stream );
-
-		// Create the email error logger.
-		$this->error_log_stream      = pushHandler(new StreamHandler( dirname( ABSPATH, 2 ) . 'error.wp.email.log', Logger::ERROR));
-		$this->wp_mail_failed_logger = new Logger('wp_mail_failed');
-		$this->wp_mail_failed_logger->pushHandler( $this->error_log_stream );
+		$this->add_hooks();
 
 	}
 
@@ -45,12 +25,6 @@ class Email {
 		// add the action
 		add_action( 'wp_mail_failed', array( $this, 'action_wp_mail_failed' ), 10, 1 );
 		add_action( 'phpmailer_init', array( $this, 'action_phpmailer_init' ) );
-		add_action( 'admin_init', function(){
-			// Error.
-			wp_mail( 'asdf@#.#', 'Test', 'This is a terrible test of monolog and email logging to a file.' );
-			// Success.
-			wp_mail( 'admin@' . $_SERVER['HTTP_HOST'], 'Test', 'This is a terrible test of monolog and email logging to a file.' );
-		});
 	}
 
 	/**
@@ -60,38 +34,76 @@ class Email {
 	 * @return void
 	 */
 	public function action_wp_mail_failed( $wp_error ) {
-		// create a log channel
-		$messages = implode( "\r\n", $wp_error->get_error_messages() );
-		$this->wp_mail_failed_logger->error( $messages );
+
+		$date = new \DateTime(strtotime(time()));
+		$date->setTimezone(new \DateTimeZone('America/Chicago'));
+		$timestamp = $date->format("F j, Y, g:i a");
+
+		$log     = dirname( ABSPATH, 2 ) . '/error-wp-mail.log';
+		$alt_log = ABSPATH . '/error-wp-mail.log';
+
+		// Get error messages.
+		$error_messages = $wp_error->get_error_messages();
+		$error_data     = $wp_error->get_error_data( 'wp_mail_failed' );
+
+		$messages  = '[' . $timestamp . '] Delivery Failed: ';
+		$messages .= implode( '; ', $error_messages );
+		$messages .= '; ' . serialize( $error_data );
+		$messages .= "\r\n";
+
+		if ( ! file_exists( $log ) ) {
+			if ( ! is_writable( $log ) ) {
+				$log = $alt_log;
+			}
+			$handle = fopen( $log, 'a' );
+			fclose( $handle );
+		}
+
+		error_log( $messages, 3, $log );
+
 	}
 
 	public function action_phpmailer_init( $phpmailer ) {
 
+		$date = new \DateTime(strtotime(time()));
+		$date->setTimezone(new \DateTimeZone('America/Chicago'));
+		$timestamp = $date->format("F j, Y, g:i a");
+
+		$log   = dirname( ABSPATH, 2 ) . '/wp-mail.log';
+		$alt_log = ABSPATH . '/wp-mail.log';
+
 		$template = array();
 		$template['subject']      = $phpmailer->Subject;
 		$template['body']         = $phpmailer->Body;
+
 		// Convert phpmailer recipients to array by receipt category.
-		$template['recipients']   = array();
-		foreach ( $phpmailer->RecipientsQueue as $address => $params ) {
-			$type    = $param[0];
-			$address = $param[1];
-			$name    = $param[2];
-			if ( ! array_key_exists( $type, $template['recipients'] ) ) {
-				$template['recipients'][ $type ] = array();
+		$template['recipients'] = array(
+			'to'  => $phpmailer->getToAddresses(),
+			'cc'  => $phpmailer->getCcAddresses(),
+			'bcc' => $phpmailer->getBccAddresses(),
+		);
+		$message                = array();
+		foreach ( $template['recipients'] as $type => $addresses ) {
+			$address_strings = array();
+			foreach ( $addresses as $address ) {
+				$address_strings[] = $address[1] ? "{$address[1]} <{$address[0]}>" : $address[0];
 			}
-			$full_address                      = $name ? "{$name} <{$address}>" : $address;
-			$template['recipients'][ $type ][] = $full_address;
+			$message[] = ucwords( $type ) . ': ' . implode( ', ', $address_strings );
 		}
-		// Create the recipient message string.
-		$recipient_messages = array();
-		foreach ( $template['recipients'] as $type => $subrecipients ) {
-			$recipient_messages[] = ucfirst( $type ) . ': ' . implode( ', ', $subrecipients );
+		$template['recipient_message'] = implode( '; ', $message );
+
+		$message  = '[' . $timestamp . '] ';
+		$message .= "Subject: {$template['subject']}; {$template['recipient_message']}; Body: {$template['body']}" . "\r\n";
+
+		if ( ! file_exists( $log ) ) {
+			if ( ! is_writable( $log ) ) {
+				$log = $altlog;
+			}
+			$handle = fopen( $log, 'a' );
+			fclose( $handle );
 		}
-		$template['recipient_message'] = implode( '; ', $recipient_messages );
 
-		$message = "Subject: \"$template['subject']\"; \"$template['recipient_message']\"; Body: $template['body']";
-
-		$this->wp_mail_logger->info( $message );
+		error_log( $message, 3, $log );
 
 	}
 }
