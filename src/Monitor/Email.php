@@ -87,6 +87,15 @@ class Email {
 
 	}
 
+	private function get_timestamp() {
+
+		$date = new \DateTime(strtotime(time()));
+		$date->setTimezone(new \DateTimeZone('America/Chicago'));
+		$timestamp = $date->format("F j, Y, g:i a");
+		return '[' . $timestamp . ']';
+
+	}
+
 	private function get_email_log_str( $subject, $to, $cc, $bcc, $body ) {
 
 		$recipients_arr = array(
@@ -99,26 +108,17 @@ class Email {
 
 	}
 
-	private function get_timestamp() {
+	private function phpmailer_message( $phpmailer ) {
 
-		$date = new \DateTime(strtotime(time()));
-		$date->setTimezone(new \DateTimeZone('America/Chicago'));
-		$timestamp = $date->format("F j, Y, g:i a");
-		return '[' . $timestamp . ']';
+		$message = $this->get_email_log_str(
+			$phpmailer->Subject,
+			$phpmailer->getToAddresses(),
+			$phpmailer->getCcAddresses(),
+			$phpmailer->getBccAddresses(),
+			$phpmailer->Body
+		);
 
-	}
-
-	private function phpmailer_entry( $phpmailer ) {
-
-		// Get error messages.
-		$error_messages = $wp_error->get_error_messages();
-		$error_data     = $wp_error->get_error_data( 'wp_mail_failed' );
-
-		$messages  = 'Errors: ';
-		$messages .= implode( '; ', $error_messages );
-		$messages .= '; ' . serialize( $error_data );
-
-		return $messages;
+		return $message;
 
 	}
 
@@ -149,7 +149,7 @@ class Email {
 		}
 
 		// Build the message output.
-		$message .= $this->get_email_log_str(
+		$message  = $this->get_email_log_str(
 			$subject,
 			$recipients['to'],
 			$recipients['cc'],
@@ -172,13 +172,13 @@ class Email {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param bool   $error   If the message is for an error or not.
+	 * @param bool   $code    If the message is for an error or not. 400+ is error, else is not.
 	 * @param string $message The message to add to the log file.
 	 * @param string $log     The log file path.
 	 *
 	 * @return bool
 	 */
-	private function log_message( $error, $message, $log ) {
+	private function log_message( $code, $message, $log ) {
 
 		if ( ! file_exists( $log ) ) {
 			if ( ! is_writable( $log ) ) {
@@ -192,7 +192,7 @@ class Email {
 		}
 
 		$messages  = $this->get_timestamp();
-		$messages .= $error ? ' [!] Failed: ' : ' [+] Sent: ';
+		$messages .= 400 <= $error ? ' [!] Failed: ' : ' [+] Sent: ';
 		$messages .= $message;
 		$messages .= PHP_EOL;
 
@@ -213,35 +213,15 @@ class Email {
 
 		$message = $this->wp_error_message( $wp_error );
 
-		$this->log_message( true, $message, $this->log );
+		$this->log_message( 400, $message, $this->log );
 
 	}
 
 	public function action_phpmailer_init( $phpmailer ) {
 
-		$log   = dirname( ABSPATH, 2 ) . '/wp-mail.log';
-		$alt_log = ABSPATH . '/wp-mail.log';
+		$message = $this->phpmailer_message( $phpmailer );
 
-		$messages  = $this->get_timestamp();
-		$messages .= ' [!] Sending: ';
-		$messages .= $this->get_email_log_str(
-			$phpmailer->Subject,
-			$phpmailer->getToAddresses(),
-			$phpmailer->getCcAddresses(),
-			$phpmailer->getBccAddresses(),
-			$phpmailer->Body
-		);
-		$messages .= "\r\n";
-
-		if ( ! file_exists( $log ) ) {
-			if ( ! is_writable( $log ) ) {
-				$log = $altlog;
-			}
-			$handle = fopen( $log, 'a' );
-			fclose( $handle );
-		}
-
-		error_log( $messages, 3, $log );
+		$this->log_message( 200, $message, $this->log );
 
 	}
 }
