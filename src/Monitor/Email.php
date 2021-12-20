@@ -1,6 +1,6 @@
 <?php
 /**
- * The file that sends WordPress Email activity to [a] log file[s].
+ * The file that sends WordPress Email activity to a log file.
  *
  * @package    Thoughtful_Web\Library_WP
  * @subpackage Monitor
@@ -8,7 +8,6 @@
  * @copyright  2021 Zachary Kendall Watkins
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
  * @link       https://github.com/thoughtful-web/library-wp/blob/master/src/monitor/email.php
- * @uses       https://github.com/Seldaek/monolog
  * @since      0.1.0
  */
 namespace Thoughtful_Web\Library_WP\Monitor;
@@ -25,25 +24,24 @@ class Email {
 
 	public function __construct() {
 
-		$this->log       = dirname( ABSPATH, 2 ) . '/' . $this->log;
+		$this->log = dirname( ABSPATH, 2 ) . '/' . $this->log;
 
 		$this->add_hooks();
 
 	}
 
+	/**
+	 * Add action hooks to use for monitoring attempted and failed email deliveries.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
 	public function add_hooks() {
-		// add the action
-		add_action( 'wp_mail_failed', array( $this, 'action_wp_mail_failed' ), 10, 1 );
+
+		add_action( 'wp_mail_failed', array( $this, 'action_wp_mail_failed' ) );
 		add_action( 'phpmailer_init', array( $this, 'action_phpmailer_init' ) );
-		add_action( 'init', function(){
-			if ( ! wp_doing_cron() && ! wp_doing_ajax() ) {
-				error_log('init');
-				// Error.
-				wp_mail( 'asdf@#.com', 'Test', 'This is a terrible test of monolog and email logging to a file.' );
-				// Success.
-				wp_mail( 'admin@homeandranch.local', 'Test', 'This is a terrible test of monolog and email logging to a file.' );
-			}
-		});
+
 	}
 
 	/**
@@ -87,6 +85,13 @@ class Email {
 
 	}
 
+	/**
+	 * Get the timestamp in a format acceptable for the error log.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return string
+	 */
 	private function get_timestamp() {
 
 		$date = new \DateTime(strtotime(time()));
@@ -96,6 +101,19 @@ class Email {
 
 	}
 
+	/**
+	 * Get the email log message string.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param string $subject The email subject.
+	 * @param string $to      The email to entry.
+	 * @param string $cc      The email cc entry.
+	 * @param string $bcc     The email bcc entry.
+	 * @param string $body    The email body.
+	 *
+	 * @return void
+	 */
 	private function get_email_log_str( $subject, $to, $cc, $bcc, $body ) {
 
 		$recipients_arr = array(
@@ -108,6 +126,15 @@ class Email {
 
 	}
 
+	/**
+	 * Get the PHPMailer object's log message.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param PHPMailer $phpmailer The PHPMailer object
+	 *
+	 * @return void
+	 */
 	private function phpmailer_message( $phpmailer ) {
 
 		$message = $this->get_email_log_str(
