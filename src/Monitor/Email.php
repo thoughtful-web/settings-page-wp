@@ -84,7 +84,7 @@ class Email {
 			'cc'  => $cc,
 			'bcc' => $bcc,
 		);
-		$recipients = assemble_recipient_str( $recipients_arr );
+		$recipients = $this->assemble_recipient_str( $recipients_arr );
 		return "Subject: {$subject}; {$recipients}; Body: {$body}";
 
 	}
@@ -158,7 +158,7 @@ class Email {
 
 		$messages  = $this->get_timestamp();
 		$messages .= ' [!] Sending: ';
-		$messages .= get_email_log_str(
+		$messages .= $this->get_email_log_str(
 			$phpmailer->Subject,
 			$phpmailer->getToAddresses(),
 			$phpmailer->getCcAddresses(),
