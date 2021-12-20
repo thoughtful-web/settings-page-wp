@@ -100,18 +100,60 @@ class Email {
 
 	private function phpmailer_entry( $phpmailer ) {
 
-	}
-
-	private function wp_error_entry( $wp_error ) {
-
 		// Get error messages.
 		$error_messages = $wp_error->get_error_messages();
 		$error_data     = $wp_error->get_error_data( 'wp_mail_failed' );
 
-		$messages = implode( '; ', $error_messages );
+		$messages  = 'Errors: ';
+		$messages .= implode( '; ', $error_messages );
 		$messages .= '; ' . serialize( $error_data );
 
 		return $messages;
+
+	}
+
+	/**
+	 * Create a log message entry for wp_error objects associated with failed email delivery.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param WP_Error $wp_error The WP_Error object.
+	 *
+	 * @return string
+	 */
+	private function wp_error_entry( $wp_error ) {
+
+		// Get variables for assembly into an error log message.
+		$error_data     = $wp_error->get_error_data( 'wp_mail_failed' )[0];
+		$subject        = $error_data['subject'];
+		$body           = $error_data['message'];
+		$recipients     = array(
+			'to' => '',
+			'cc' => '',
+			'bcc' => '',
+		);
+		foreach ( array_keys( $recipients ) as $type ) {
+			if ( array_key_exists( $type, $error_data ) ) {
+				$recipients[ $type ] = $error_data[ $type ];
+			}
+		}
+
+		// Build the message output.
+		$message .= $this->get_email_log_str(
+			$subject,
+			$recipients['to'],
+			$recipients['cc'],
+			$recipients['bcc'],
+			$body
+		);
+		$message .= '; ';
+		$message .= 'Errors: ';
+		$message .= implode( '; ', $wp_error->get_error_messages() );
+		if ( array_key_exists( 'phpmailer_exception_code', $error_data ) ) {
+			$message .= "PHPMailer Exception Code #{$error_data['phpmailer_exception_code']}";
+		}
+
+		return $message;
 
 	}
 
