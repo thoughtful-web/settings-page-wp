@@ -206,7 +206,10 @@ class Email {
 	/**
 	 * The wp_mail_failed callback.
 	 *
+	 * @since 0.1.0
+	 *
 	 * @param WP_Error $wp_error The WP_Error object.
+	 *
 	 * @return void
 	 */
 	public function action_wp_mail_failed( $wp_error ) {
@@ -217,6 +220,15 @@ class Email {
 
 	}
 
+	/**
+	 * The phpmailer_init callback.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param PHPMailer $phpmailer The PHPMailer object.
+	 *
+	 * @return void
+	 */
 	public function action_phpmailer_init( $phpmailer ) {
 
 		$message = $this->phpmailer_message( $phpmailer );
