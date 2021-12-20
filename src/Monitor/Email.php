@@ -15,7 +15,17 @@ namespace Thoughtful_Web\Library_WP\Monitor;
 
 class Email {
 
+	/**
+	 * The email log file.
+	 *
+	 * @var string $log The mail log file. This will be recalculated on class construction to point
+	 *                  to the ABSPATH parent directory.
+	 */
+	$log = 'wp-mail.log';
+
 	public function __construct() {
+
+		$this->log       = dirname( ABSPATH, 2 ) . '/' . $this->log;
 
 		$this->add_hooks();
 
@@ -121,7 +131,7 @@ class Email {
 	 *
 	 * @return string
 	 */
-	private function wp_error_entry( $wp_error ) {
+	private function wp_error_message( $wp_error ) {
 
 		// Get variables for assembly into an error log message.
 		$error_data     = $wp_error->get_error_data( 'wp_mail_failed' )[0];
@@ -157,23 +167,37 @@ class Email {
 
 	}
 
-	private function log_message( $message ) {
-
-		$messages  = $this->get_timestamp();
-		$messages .= ' [!] Failed: ';
-		$messages .= $message;
-		$messages .= "\r\n";
-
-		$log     = dirname( ABSPATH, 2 ) . '/error-wp-mail.log';
-		$alt_log = ABSPATH . '/error-wp-mail.log';
+	/**
+	 * Log an email-related message to an error log file.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param bool   $error   If the message is for an error or not.
+	 * @param string $message The message to add to the log file.
+	 * @param string $log     The log file path.
+	 *
+	 * @return bool
+	 */
+	private function log_message( $error, $message, $log ) {
 
 		if ( ! file_exists( $log ) ) {
 			if ( ! is_writable( $log ) ) {
 				$log = $alt_log;
+				if ( ! is_writable( $log ) ) {
+					return false;
+				}
 			}
 			$handle = fopen( $log, 'a' );
 			fclose( $handle );
 		}
+
+		$messages  = $this->get_timestamp();
+		$messages .= $error ? ' [!] Failed: ' : ' [+] Sent: ';
+		$messages .= $message;
+		$messages .= PHP_EOL;
+
+		$log_filename = basename( $log );
+		$alt_log = ABSPATH . '/' . $log_filename;
 
 		error_log( $messages, 3, $log );
 
@@ -187,9 +211,9 @@ class Email {
 	 */
 	public function action_wp_mail_failed( $wp_error ) {
 
-		$message = $this->wp_error_entry( $wp_error );
+		$message = $this->wp_error_message( $wp_error );
 
-		$this->log_message( $message );
+		$this->log_message( true, $message, $this->log );
 
 	}
 
