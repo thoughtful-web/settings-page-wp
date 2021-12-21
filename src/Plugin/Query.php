@@ -1,16 +1,15 @@
 <?php
 /**
- * The file that provides plugin activation requirement features via a configuration file or an array
- * passed to the ThoughtfulWeb\LibraryWP\Plugin_Activation constructor.
+ * The file that provides plugin activation status features via a configuration file or an array
+ * passed to the constructor.
  *
  * @package    Thoughtful_Web\Library_WP
  * @subpackage Plugin
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
- * @link       https://github.com/zachwatkins/wordpress-plugin-name/blob/master/twlibrary/validate/class-activation-requirements.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/src/plugin/query.php
  * @since      0.1.0
- * @todo       https://tommcfarlin.com/registry-pattern-in-wordpress/
  */
 
 declare(strict_types=1);
@@ -22,19 +21,10 @@ namespace Thoughtful_Web\Library_WP\Plugin;
  * @see   https://www.php.net/manual/en/language.oop5.basic.php
  * @since 0.1.0
  */
-class Requirements {
+class Query {
 
 	/**
-	 * Class constructor function.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return void
-	 */
-	public function __construct() {}
-
-	/**
-	 * Get the activation status of plugin requirements.
+	 * Get the activation status of plugins.
 	 *
 	 * Inspired by the meta_query parameter of WP_Meta_Query().
 	 * https://developer.wordpress.org/reference/classes/wp_meta_query/
@@ -48,7 +38,7 @@ class Requirements {
 	 * @since  0.1.0
 	 *
 	 * @param array|string $plugin_query {
-	 *     The 'plugins' value of the $requirements parameter passed to this class's query() method.
+	 *     The details for plugins which may or may not be present and/or active on the site.
 	 *
 	 *     @type string $relation Optional. The keyword used to compare the activation status of the
 	 *                            plugins. Accepts 'AND' or 'OR'. Default 'AND'.
@@ -63,7 +53,7 @@ class Requirements {
 	 *
 	 * @return array
 	 */
-	private function query_plugins( $plugin_query ) {
+	public function __construct( $plugin_query ) {
 
 		if ( is_string( $plugin_query ) ) {
 			$plugin_query = include $plugin_query;
