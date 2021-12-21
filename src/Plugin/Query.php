@@ -27,6 +27,20 @@ namespace Thoughtful_Web\Library_WP\Plugin;
 class Query {
 
 	/**
+	 * Query results.
+	 *
+	 * @var array $results The plugin query results.
+	 */
+	private $query_results = array(
+		'passed'   => true,
+		'results'  => array(),
+		'active'   => array(),
+		'inactive' => array(),
+		'notify'   => array(),
+		'message'  => '',
+	);
+
+	/**
 	 * Class constructor.
 	 *
 	 * @since  0.1.0
@@ -53,19 +67,8 @@ class Query {
 			$plugin_query = include $plugin_query;
 		}
 
-		/**
-		 * Results structure for this class's sole public function.
-		 *
-		 * @var array $default_results The default results provided by this class to those calling the evaluate() function.
-		 */
-		$results = array(
-			'passed'   => true,
-			'results'  => array(),
-			'active'   => array(),
-			'inactive' => array(),
-			'notify'   => array(),
-			'message'  => '',
-		);
+		// Results structure for this class's sole public function.
+		$results = $this->query_results;
 
 		// Enforce a default value of 'AND' for $relation.
 		if ( isset( $plugin_query['relation'] ) && 'OR' === strtoupper( $plugin_query['relation'] ) ) {
@@ -151,6 +154,17 @@ class Query {
 
 		}
 
-		return $results;
+		$this->query_results = $results;
+	}
+
+	/**
+	 * Return the query results.
+	 *
+	 * @return array
+	 */
+	public function results() {
+
+		return $this->query_results;
+
 	}
 }
