@@ -14,7 +14,7 @@
  */
 
 declare(strict_types=1);
-namespace Thoughtful_Web\Library_WP\Plugin;
+namespace Thoughtful_Web\Library_WP\Plugin\Activation;
 
 use \Thoughtful_Web\Library_WP\Plugin\Query as TWLP_Plugin_Query;
 
@@ -24,7 +24,7 @@ use \Thoughtful_Web\Library_WP\Plugin\Query as TWLP_Plugin_Query;
  * @see   https://www.php.net/manual/en/language.oop5.basic.php
  * @since 0.1.0
  */
-class Activation {
+class Requirements {
 
 	/**
 	 * The main plugin file.
