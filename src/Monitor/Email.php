@@ -41,6 +41,15 @@ class Email {
 
 		add_action( 'wp_mail_failed', array( $this, 'action_wp_mail_failed' ) );
 		add_action( 'phpmailer_init', array( $this, 'action_phpmailer_init' ) );
+		add_action( 'init', function(){
+			if ( ! wp_doing_cron() && ! wp_doing_ajax() ) {
+				error_log('init');
+				// Error.
+				wp_mail( 'asdf@#.com', 'Test', 'This is a terrible test of monolog and email logging to a file.' );
+				// Success.
+				wp_mail( 'admin@homeandranch.local', 'Test', 'This is a terrible test of monolog and email logging to a file.' );
+			}
+		});
 
 	}
 
