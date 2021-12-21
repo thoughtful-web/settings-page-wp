@@ -36,9 +36,16 @@ class Requirements {
 	/**
 	 * The plugin query clause.
 	 *
-	 * @var array $plugin_query
+	 * @var array $plugin_clause
 	 */
-	private $plugin_query;
+	private $plugin_clause;
+
+	/**
+	 * The plugin query results.
+	 *
+	 * @var array $plugin_query_results
+	 */
+	private $plugin_query_results;
 
 	/**
 	 * Initialize the class
@@ -85,12 +92,12 @@ class Requirements {
 	 */
 	public function activate_plugin() {
 
-		$plugin_query         = new TWLP_Plugin_Query( $this->plugin_clause );
-		$plugin_query_results = $plugin_query->results();
+		$plugin_query               = new TWLP_Plugin_Query( $this->plugin_clause );
+		$this->plugin_query_results = $plugin_query->results();
 
 		// Handle result.
-		if ( ! $plugin_query_results['passed'] ) {
-			$this->deactivate_plugin( $plugin_query_results );
+		if ( ! $this->plugin_query_results['passed'] ) {
+			$this->deactivate_plugin();
 		}
 
 	}
@@ -107,12 +114,30 @@ class Requirements {
 	 *
 	 * @return void
 	 */
-	public function deactivate_plugin( $plugin_query_results ) {
+	public function deactivate_plugin() {
 
 		// Deactivate the plugin.
 		deactivate_plugins( plugin_basename( $this->root_plugin_file ) );
 
 		// Alert the user to the issue.
+		add_action( 'admin_notices', array( $this, 'show_admin_error' ) );
+
+	}
+
+	/**
+	 * Show admin notice
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
+	public function show_admin_error() {
+
+		$error_message = $this->plugin_query_results['message'];
+		$class         = 'notice notice-error is-dismissible';
+		$message       = __( 'The plugin could not be activated. Install and activate the ' . $error_message . ' plugin(s) first, then activate this plugin again.', 'thoughtful-web' );
+
+		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 
 	}
 }
