@@ -45,7 +45,7 @@ class Query {
 	 *
 	 * @since  0.1.0
 	 *
-	 * @param array|string $plugin_query {
+	 * @param array|string $plugin_clause {
 	 *     The details for plugins which may or may not be present and/or active on the site.
 	 *
 	 *     @type string $relation Optional. The keyword used to compare the activation status of the
@@ -61,31 +61,31 @@ class Query {
 	 *
 	 * @return array
 	 */
-	public function __construct( $plugin_query ) {
+	public function __construct( $plugin_clause ) {
 
-		if ( is_string( $plugin_query ) ) {
-			$plugin_query = include $plugin_query;
+		if ( is_string( $plugin_clause ) ) {
+			$plugin_clause = include $plugin_clause;
 		}
 
 		// Results structure for this class's sole public function.
 		$results = $this->query_results;
 
 		// Enforce a default value of 'AND' for $relation.
-		if ( isset( $plugin_query['relation'] ) && 'OR' === strtoupper( $plugin_query['relation'] ) ) {
+		if ( isset( $plugin_clause['relation'] ) && 'OR' === strtoupper( $plugin_clause['relation'] ) ) {
 			$relation = 'OR';
 		} else {
 			$relation = 'AND';
 		}
-		if ( isset( $plugin_query['relation'] ) ) {
-			unset( $plugin_query['relation'] );
+		if ( isset( $plugin_clause['relation'] ) ) {
+			unset( $plugin_clause['relation'] );
 		}
 
 		// Retrieve plugin active status.
-		foreach ( $plugin_query as $key => $plugin ) {
+		foreach ( $plugin_clause as $key => $plugin ) {
 			// Get active status.
 			$active = is_plugin_active( $plugin['file'] );
 			// Store activation status.
-			$plugin_query[ $key ]['active'] = $active;
+			$plugin_clause[ $key ]['active'] = $active;
 			// Assign active or inactive plugins to their own results.
 			if ( $active ) {
 				$results['active'] = $plugin;
@@ -93,8 +93,7 @@ class Query {
 				$results['inactive'] = $plugin;
 			}
 		}
-		$this->plugin_queries = $plugin_query;
-		$results['status']    = $plugin_query;
+		$results['status'] = $plugin_clause;
 
 		// Determine if the currently active and inactive plugins meet the requirements configuration.
 		if ( 'AND' === $relation ) {
