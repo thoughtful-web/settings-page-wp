@@ -1,7 +1,10 @@
 <?php
 /**
- * The file that provides plugin activation status features via a configuration file or an array
+ * The file that provides plugin activation status detection via a configuration file or an array
  * passed to the constructor.
+ *
+ * Inspired by the meta_query parameter of WP_Meta_Query().
+ * https://developer.wordpress.org/reference/classes/wp_meta_query/
  *
  * @package    Thoughtful_Web\Library_WP
  * @subpackage Plugin
@@ -24,16 +27,7 @@ namespace Thoughtful_Web\Library_WP\Plugin;
 class Query {
 
 	/**
-	 * Get the activation status of plugins.
-	 *
-	 * Inspired by the meta_query parameter of WP_Meta_Query().
-	 * https://developer.wordpress.org/reference/classes/wp_meta_query/
-	 *
-	 * @author    Zachary Kendall Watkins <zachwatkins@tapfuel.io>
-	 * @copyright 2021 Zachary Kendall Watkins
-	 * @license   http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
-	 *
-	 * @link https://developer.wordpress.org/reference/functions/is_plugin_active/
+	 * Class constructor.
 	 *
 	 * @since  0.1.0
 	 *
