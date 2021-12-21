@@ -4,10 +4,7 @@
 			"path": "../"
 		},
 		{
-			"path": "../../../Local Sites/tapfuelio/app/public"
-		},
-		{
-			"path": "../../../Local Sites/wso/app/public/wp-content/plugins/cla-user-governance"
+			"path": "../../../Local Sites/tapfuelio/app/public/wp-content/plugins/wordpress-plugin-name"
 		}
 	],
 	"settings": {
