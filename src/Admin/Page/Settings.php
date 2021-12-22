@@ -14,9 +14,9 @@
 declare(strict_types=1);
 namespace Thoughtful_Web\Library_WP\Admin\Page;
 
-use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Field as TWPL_Settings_Field;
-use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Config as TWPL_Settings_Config;
-use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Section as TWPL_Settings_Section;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field as TWPL_Settings_Field;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Config as TWPL_Settings_Config;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section as TWPL_Settings_Section;
 /**
  * The Admin Settings Page Class.
  *
@@ -180,7 +180,7 @@ class Settings {
 	 */
 	public function add_fields() {
 
-		$base_class = '\Thoughtful_Web\Library_WP\Admin\Page\Settings';
+		$base_class = '\ThoughtfulWeb\LibraryWP\Admin\Page\Settings';
 
 		foreach ( $this->config['sections'] as $section ) {
 

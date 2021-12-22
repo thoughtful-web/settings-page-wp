@@ -2,20 +2,17 @@
 /**
  * The file that facilitates page template file registration.
  *
- * @package    Thoughtful_Web\Library_WP
+ * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Theme
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/library-wp/blob/master/theme/page_template.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/theme/pagetemplate.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace Thoughtful_Web\Library_WP\Theme;
-
-use \Thoughtful_Web\Library_WP\Error_Helper as Error_Helper;
-use \Thoughtful_Web\Library_WP\File\Load as TWL_File_Load;
+namespace ThoughtfulWeb\LibraryWP\Theme;
 
 /**
  * The class that registers page template file registration.
@@ -23,7 +20,7 @@ use \Thoughtful_Web\Library_WP\File\Load as TWL_File_Load;
  * @see   https://www.php.net/manual/en/language.oop5.basic.php
  * @since 0.1.0
  */
-class Page_Template {
+class PageTemplate {
 
 	/**
 	 * Plugin base directory.

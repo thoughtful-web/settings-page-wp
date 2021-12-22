@@ -2,21 +2,21 @@
 /**
  * The file that wraps the WordPress Settings API in a file-configurable framework.
  *
- * @package    Thoughtful_Web\Library_WP
+ * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Field
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/page/settings/field/text_input.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/page/settings/field/textfield.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace Thoughtful_Web\Library_WP\Admin\Page\Settings;
+namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
 
-use \Thoughtful_Web\Library_WP\Admin\Page\Settings\Sanitize as TWPL_Sanitize;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Sanitize as TWPL_Sanitize;
 
-class Text_Field {
+class TextField {
 
 	/**
 	 * The default values for required $field members.

@@ -16,7 +16,7 @@
 declare(strict_types=1);
 namespace Thoughtful_Web\Library_WP\Plugin\Activation;
 
-use \Thoughtful_Web\Library_WP\Plugin\Query as TWLP_Plugin_Query;
+use \ThoughtfulWeb\LibraryWP\Plugin\Query as TWLP_Plugin_Query;
 
 /**
  * The class that handles plugin activation and deactivation.
