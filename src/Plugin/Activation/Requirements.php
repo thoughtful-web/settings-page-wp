@@ -29,9 +29,9 @@ class Requirements {
 	/**
 	 * The main plugin file.
 	 *
-	 * @var string $root_plugin_file
+	 * @var string $root_plugin_path
 	 */
-	private $root_plugin_file;
+	private $root_plugin_path;
 
 	/**
 	 * The plugin query clause.
@@ -56,7 +56,7 @@ class Requirements {
 	 * @see   https://developer.wordpress.org/reference/functions/register_activation_hook/
 	 * @since 0.1.0
 	 *
-	 * @param string       $root_plugin_file     The main plugin file in the root directory of the plugin folder.
+	 * @param string       $root_plugin_path     The main plugin file in the root directory of the plugin folder.
 	 * @param array|string $plugin_clause {
 	 *     The details for plugins which may or may not be present and/or active on the site.
 	 *
@@ -73,13 +73,13 @@ class Requirements {
 	 *
 	 * @return void
 	 */
-	public function __construct( $root_plugin_file, $plugin_clause ) {
+	public function __construct( $root_plugin_path, $plugin_clause ) {
 
-		$this->root_plugin_file = $root_plugin_file;
+		$this->root_plugin_path = $root_plugin_path;
 		$this->plugin_clause    = $plugin_clause;
 
 		// Register activation hook.
-		register_activation_hook( $root_plugin_file, array( $this, 'activate_plugin' ) );
+		register_activation_hook( $root_plugin_path, array( $this, 'activate_plugin' ) );
 
 	}
 
@@ -97,7 +97,12 @@ class Requirements {
 
 		// Handle result.
 		if ( ! $this->plugin_query_results['passed'] ) {
+
 			$this->deactivate_plugin();
+
+			// Alert the user to the issue.
+			add_action( 'admin_notices', array( $this, 'show_admin_error' ) );
+
 		}
 
 	}
@@ -107,20 +112,21 @@ class Requirements {
 	 *
 	 * @see    https://developer.wordpress.org/reference/functions/deactivate_plugins/
 	 * @see    https://developer.wordpress.org/reference/functions/plugin_basename/
-	 * @see    https://developer.wordpress.org/reference/hooks/wp_die/
+	 * @see    https://developer.wordpress.org/reference/functions/is_plugin_active_for_network/
 	 * @since  0.1.0
-	 *
-	 * @param  WP_Error $wp_error The WP_Error object.
 	 *
 	 * @return void
 	 */
 	public function deactivate_plugin() {
 
-		// Deactivate the plugin.
-		deactivate_plugins( plugin_basename( $this->root_plugin_file ) );
-
-		// Alert the user to the issue.
-		add_action( 'admin_notices', array( $this, 'show_admin_error' ) );
+		// Deactivate the plugin in a multisite-friendly way.
+		if ( ! is_multisite() ) {
+			deactivate_plugins( $this->root_plugin_path );
+		} elseif ( is_network_admin() && is_plugin_active_for_network( $this->root_plugin_path ) ) {
+			deactivate_plugins( $this->root_plugin_path, false, true );
+		} else {
+			deactivate_plugins( $this->root_plugin_path, false, false );
+		}
 
 	}
 
