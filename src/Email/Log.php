@@ -20,8 +20,13 @@ class Log {
 	 * @var string $log The mail log file. This will be recalculated on class construction to point
 	 *                  to the ABSPATH parent directory.
 	 */
-	$log = 'wp-mail.log';
+	private $log = 'wp-mail.log';
 
+	/**
+	 * Class constructor.
+	 *
+	 * @return void
+	 */
 	public function __construct() {
 
 		$this->log = dirname( ABSPATH, 2 ) . '/' . $this->log;
