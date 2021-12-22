@@ -52,19 +52,11 @@ class Config {
 	/**
 	 * Constructor for the Compile class.
 	 *
-	 * @param mixed $config The Settings page configuration parameters. Either a configuration file or an array.
+	 * @param array $config The Settings page configuration parameters. Either a configuration file or an array.
 	 *
 	 * @return array
 	 */
 	public function construct( $config ) {
-
-		// Maybe retrieve in file format.
-		if ( is_string( $config ) ) {
-			$config_path = $this->validate_file_path( $config );
-			if ( $config_path ) {
-				$config = include $config_path;
-			}
-		}
 
 		$this->preprocess( $config );
 
