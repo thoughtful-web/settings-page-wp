@@ -23,6 +23,14 @@ class Log {
 	private $log = 'wp-mail.log';
 
 	/**
+	 * The alternate email log file.
+	 *
+	 * @var string $alt_log The mail log file. This will be recalculated on class construction to point
+	 *                      to the ABSPATH parent directory.
+	 */
+	private $alt_log = 'wp-mail.log';
+
+	/**
 	 * Class constructor.
 	 *
 	 * @return void
@@ -30,6 +38,8 @@ class Log {
 	public function __construct() {
 
 		$this->log = dirname( ABSPATH, 2 ) . '/' . $this->log;
+
+		$this->alt_log = ABSPATH . '/' . $this->log;
 
 		$this->add_hooks();
 
@@ -219,11 +229,12 @@ class Log {
 	 *
 	 * @return bool
 	 */
-	private function log_message( $code, $message, $log ) {
+	private function log_message( $code, $message ) {
 
+		$log = $this->log;
 		if ( ! file_exists( $log ) ) {
 			if ( ! is_writable( $log ) ) {
-				$log = $alt_log;
+				$log = $this->alt_log;
 				if ( ! is_writable( $log ) ) {
 					return false;
 				}
@@ -257,7 +268,7 @@ class Log {
 
 		$message = $this->wp_error_message( $wp_error );
 
-		$this->log_message( 400, $message, $this->log );
+		$this->log_message( 400, $message );
 
 	}
 
@@ -274,7 +285,7 @@ class Log {
 
 		$message = $this->phpmailer_message( $phpmailer );
 
-		$this->log_message( 200, $message, $this->log );
+		$this->log_message( 200, $message );
 
 	}
 }
