@@ -133,11 +133,25 @@ class Requirements {
 	 */
 	public function show_admin_error() {
 
-		$error_message = $this->plugin_query_results['message'];
 		$class         = 'notice notice-error is-dismissible';
-		$message       = __( 'The plugin could not be activated. Install and activate the ' . $error_message . ' plugin(s) first, then activate this plugin again.', 'thoughtful-web' );
+		$message_pre   =
+		$message_str   = sprintf(
+			/* translators: %s: Name or names of the plugins which did not meet requirements. */
+			__( 'The plugin could not be activated. Install and activate the %s plugin(s) first and then activate this plugin again.', 'thoughtful-web-library-wp' ),
+			esc_html( $this->plugin_query_results['message'] )
+		);
 
-		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+		// Display the notice element.
+		$message_output = sprintf(
+			/* translators: 1: The notice element class 2: The full notice message */
+			'<div class="%1$s"><p>%2$s</p></div>',
+			esc_attr( $class ),
+			esc_html( $message_str )
+		);
+
+		$message_output = apply_filters( 'twpl_activation_requirement_error', $message_output );
+
+		echo wp_kses_post( $message_output );
 
 	}
 }
