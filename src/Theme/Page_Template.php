@@ -120,8 +120,7 @@ class Page_Template {
 	private function get_file_data( $templates, $default_headers ) {
 
 		$data = array();
-		foreach ( $templates as $template ) {
-			$file = $template['path'];
+		foreach ( $templates as $file ) {
 			$data[ $file ] = get_file_data( $this->basedir . '/' . $file, $default_headers );
 		}
 		return $data;
@@ -143,9 +142,8 @@ class Page_Template {
 	private function preprocess_template_paths( $templates, $template_headers ) {
 
 		$template_paths = array();
-		foreach ( $templates as $template ) {
+		foreach ( $templates as $file ) {
 
-			$file = $template['path'];
 			$name = $template_headers[ $file ]['TemplateName'];
 
 			// Define the structure The WordPress Way.
