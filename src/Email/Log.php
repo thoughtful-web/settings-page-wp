@@ -185,7 +185,7 @@ class Log {
 	private function wp_error_message( $wp_error ) {
 
 		// Get variables for assembly into an error log message.
-		$error_data     = $wp_error->get_error_data( 'wp_mail_failed' )[0];
+		$error_data     = $wp_error->get_error_data( 'wp_mail_failed' );
 		$subject        = $error_data['subject'];
 		$body           = $error_data['message'];
 		$recipients     = array(
