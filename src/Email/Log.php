@@ -10,7 +10,7 @@
  * @link       https://github.com/thoughtful-web/library-wp/blob/master/src/monitor/email.php
  * @since      0.1.0
  */
-namespace Thoughtful_Web\Library_WP\Monitor;
+namespace Thoughtful_Web\Library_WP\Email\Log;
 
 class Email {
 
