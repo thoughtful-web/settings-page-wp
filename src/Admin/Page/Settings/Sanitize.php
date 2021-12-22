@@ -1,13 +1,13 @@
 <?php
 /**
- * The file that extends WP_Error notification capabilities.
+ * The file that provides sanitization functions to other classes.
  *
  * @package    Thoughtful_Web\Library_WP
  * @subpackage Field
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/page/settings/field/sanitize.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/page/settings/sanitize.php
  * @since      0.1.0
  */
 
