@@ -3,16 +3,16 @@
  * The file that sends WordPress Email activity to a log file.
  *
  * @package    Thoughtful_Web\Library_WP
- * @subpackage Monitor
+ * @subpackage Email
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/library-wp/blob/master/src/monitor/email.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/src/email/log.php
  * @since      0.1.0
  */
-namespace Thoughtful_Web\Library_WP\Email\Log;
+namespace Thoughtful_Web\Library_WP\Email;
 
-class Email {
+class Log {
 
 	/**
 	 * The email log file.
