@@ -66,13 +66,6 @@ class Page_Template {
 	private $template_paths;
 
 	/**
-	 * Requirements file contents.
-	 *
-	 * @var array $requirements The requirements file's contents.
-	 */
-	private $requirements;
-
-	/**
 	 * Construct the class.
 	 *
 	 * @see https://www.php.net/manual/en/function.is-array.php
@@ -86,43 +79,27 @@ class Page_Template {
 	 *
 	 * @since  0.1.0
 	 *
-	 * @param  array $requirements {
-	 *     File path or array of activation requirements. Default empty array.
+	 * @param string $root_file The full root plugin file path.
+	 * @param array  $templates {
+	 *     Page template data not able to be stored in the file header.
 	 *
-	 *     @type string $main    A path to the plugin's root file.
-	 *     @type array  $plugins {
-	 *         Optional. Array of plugin clauses. Inspired by the WP_Meta_Query class constructor parameter.
-	 *
-	 *         @type string $relation Optional. The keyword used to compare the activation status
-	 *                                of the plugins. Accepts 'AND', or 'OR'. Default 'AND'.
-	 *         @type array  ...$0 {
-	 *             An array of a plugin's data.
-	 *
-	 *             @type string $name Required. Display name of the plugin.
-	 *             @type string $path Required. Path to the plugin file relative to the plugins directory.
-	 *         }
-	 *     }
-	 *     @key array  $templates {
-	 *         Page template data not able to be stored in the file header.
-	 *
-	 *         @key string $path The relative file path to the page template.
-	 *     }
+	 *     @key string $path The relative file path to the page template.
 	 * }
 	 * @return void
 	 */
-	public function __construct( $requirements ) {
+	public function __construct( $root_file, $templates ) {
 
 		// Store the $this->basedir value.
-		$this->basedir = plugin_dir_path( $requirements['main'] );
+		$this->basedir = plugin_dir_path( $root_file );
 
 		// Store template file paths and the plugin's base directory.
 		$this->template_headers = $this->get_file_data(
-			$requirements['templates'],
+			$templates,
 			$this->default_headers
 		);
 
 		// Store template file paths The WordPress Way for use in Core filters.
-		$this->template_paths = $this->preprocess_template_paths( $requirements, $this->template_headers );
+		$this->template_paths = $this->preprocess_template_paths( $templates, $this->template_headers );
 
 		// Register templates.
 		$this->add_template_hooks();
@@ -158,15 +135,15 @@ class Page_Template {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param array $requirements The plugin's requirements configuration parameters.
+	 * @param array $templates The plugin's template paths.
 	 * @param array $template_headers The array of template file headers.
 	 *
 	 * @return void
 	 */
-	private function preprocess_template_paths( $requirements, $template_headers ) {
+	private function preprocess_template_paths( $templates, $template_headers ) {
 
 		$template_paths = array();
-		foreach ( $requirements['templates'] as $template ) {
+		foreach ( $templates as $template ) {
 
 			$file = $template['path'];
 			$name = $template_headers[ $file ]['TemplateName'];
