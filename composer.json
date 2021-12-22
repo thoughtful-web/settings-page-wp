@@ -27,7 +27,7 @@
 	"readme": "README.md",
 	"autoload": {
 		"psr-4": {
-			"ThoughtfulWeb\\LibraryWP\\": "src"
+			"ThoughtfulWeb\\LibraryWP\\": "src/"
 		}
 	},
 	"require-dev": {
