@@ -30,9 +30,4 @@ return array(
 			'file' => 'advanced-custom-fields-pro/acf.php',
 		),
 	),
-	'templates' => array(
-		array(
-			'path' => 'templates/example.php'
-		),
-	),
 );
