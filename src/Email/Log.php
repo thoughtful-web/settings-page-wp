@@ -96,13 +96,25 @@ class Log {
 
 		$str     = '';
 		$message = array();
+		$recipients['to'][] = 'asdf@local.dev';
+
 		foreach ( $recipients as $type => $addresses ) {
+
+			$message[ $type] = ucwords( $type ) . ': ';
+
+			if ( empty ( $addresses ) ) {
+				continue;
+			}
+
 			$address_strings = array();
+
 			foreach ( $addresses as $address ) {
 				$address_strings[] = $address[1] ? "{$address[1]} <{$address[0]}>" : $address[0];
 			}
-			$message[] = ucwords( $type ) . ': ' . implode( ', ', $address_strings );
+
+			$message[ $type ] = implode( ', ', $address_strings );
 		}
+
 		$str = implode( '; ', $message );
 
 		return $str;
