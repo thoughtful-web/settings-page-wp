@@ -179,6 +179,8 @@ class Settings {
 	 */
 	public function add_fields() {
 
+		$network = $this->config['network'];
+
         foreach ( $this->config['sections'] as $section ) {
 
             $section_id = $section['section'];
@@ -188,7 +190,7 @@ class Settings {
 
                 switch( $field['type'] ) {
                     case 'text':
-                        new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField( $field, $this->menu_slug, $section_id, $this->option_group );
+                        new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField( $field, $this->menu_slug, $section_id, $this->option_group, $network );
                         break;
                     default:
                         break;

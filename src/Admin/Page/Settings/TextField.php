@@ -73,13 +73,14 @@ class TextField {
 	 *     }
 	 * }
 	 * @param string $page         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
-	 * @param string $section      The slug-name of the section of the settings page in which to show the box.
+	 * @param string $section_id   The slug-name of the section of the settings page in which to show the box.
 	 * @param string $option_group The option group slug.
 	 * @param bool   $network      Whether the plugin is activated at the network level or not.
 	 */
-	public function __construct( $field, $page, $section, $option_group, $network ) {
+	public function __construct( $field, $page, $section_id, $option_group, $network ) {
 
 		$this->option_group = $option_group;
+		$this->network      = $network;
 
 		// Apply default values for field registration parameters.
 		$field       = array_merge_recursive( $this->default_field, $field );
