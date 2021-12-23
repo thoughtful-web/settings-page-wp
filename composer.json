@@ -1,12 +1,19 @@
 {
     "name": "thoughtful-web/library-wp",
     "description": "Helpful WordPress scripts released as free open source software under GNU GPL-2.0+ License",
+	"version": "0.1.0",
     "type": "library",
 	"keywords": ["WordPress"],
 	"require": {
 		"php": ">=7.3.5"
 	},
     "license": "GPL-2.0-or-later",
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/thoughtful-web/library-wp"
+		}
+	],
     "authors": [
         {
             "name": "Zachary Kendall Watkins",
