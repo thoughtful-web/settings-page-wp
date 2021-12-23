@@ -6,7 +6,7 @@
  * Inspired by the meta_query parameter of WP_Meta_Query().
  * https://developer.wordpress.org/reference/classes/wp_meta_query/
  *
- * @package    Thoughtful_Web\Library_WP
+ * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Plugin
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
@@ -16,7 +16,7 @@
  */
 
 declare(strict_types=1);
-namespace Thoughtful_Web\Library_WP\Plugin;
+namespace ThoughtfulWeb\LibraryWP\Plugin;
 
 /**
  * The class that validates configuration requirements.

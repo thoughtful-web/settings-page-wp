@@ -4,7 +4,7 @@
  *
  * Links to PHP core documentation are included but this file will not be easy to grasp for beginners.
  *
- * @package    Thoughtful_Web\Library_WP
+ * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Plugin
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
@@ -14,7 +14,7 @@
  */
 
 declare(strict_types=1);
-namespace Thoughtful_Web\Library_WP\Plugin\Activation;
+namespace ThoughtfulWeb\LibraryWP\Plugin\Activation;
 
 use \ThoughtfulWeb\LibraryWP\Plugin\Query;
 

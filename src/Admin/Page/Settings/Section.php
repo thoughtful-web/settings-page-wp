@@ -2,7 +2,7 @@
 /**
  * The file that creates a Settings page section.
  *
- * @package    Thoughtful_Web\Library_WP
+ * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Section
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
@@ -12,7 +12,7 @@
  */
 
 declare(strict_types=1);
-namespace Thoughtful_Web\Library_WP\Admin\Page\Settings;
+namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
 
 class Section {
 

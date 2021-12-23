@@ -2,7 +2,7 @@
 /**
  * The file that sends WordPress Email activity to a log file.
  *
- * @package    Thoughtful_Web\Library_WP
+ * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Email
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
@@ -10,7 +10,7 @@
  * @link       https://github.com/thoughtful-web/library-wp/blob/master/src/email/log.php
  * @since      0.1.0
  */
-namespace Thoughtful_Web\Library_WP\Email;
+namespace ThoughtfulWeb\LibraryWP\Email;
 
 class Log {
 
