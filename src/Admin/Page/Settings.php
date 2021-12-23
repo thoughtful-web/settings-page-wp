@@ -186,7 +186,7 @@ class Settings {
 
             foreach ( $fields as $field ) {
 
-                switch( $field ) {
+                switch( $field['type'] ) {
                     case 'text':
                         new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField( $field, $this->menu_slug, $section_id, $this->option_group );
                         break;
