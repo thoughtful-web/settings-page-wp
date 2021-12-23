@@ -14,8 +14,6 @@
 declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
 
-use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Sanitize as TWPL_Sanitize;
-
 class TextField {
 
 	/**

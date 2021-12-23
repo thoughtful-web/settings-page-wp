@@ -16,7 +16,7 @@
 declare(strict_types=1);
 namespace Thoughtful_Web\Library_WP\Plugin\Activation;
 
-use \ThoughtfulWeb\LibraryWP\Plugin\Query as TWLP_Plugin_Query;
+use \ThoughtfulWeb\LibraryWP\Plugin\Query;
 
 /**
  * The class that handles plugin activation and deactivation.
@@ -92,7 +92,7 @@ class Requirements {
 	 */
 	public function activate_plugin() {
 
-		$plugin_query               = new TWLP_Plugin_Query( $this->plugin_clause );
+		$plugin_query               =( $this->plugin_clause );
 		$this->plugin_query_results = $plugin_query->results();
 
 		// Handle result.

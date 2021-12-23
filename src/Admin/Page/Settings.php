@@ -14,9 +14,6 @@
 declare(strict_types=1);
 namespace Thoughtful_Web\Library_WP\Admin\Page;
 
-use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field as TWPL_Settings_Field;
-use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Config as TWPL_Settings_Config;
-use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section as TWPL_Settings_Section;
 /**
  * The Admin Settings Page Class.
  *
@@ -71,7 +68,7 @@ class Settings {
 	public function __construct( $settings = array() ) {
 
 		// Store attributes from the compiled parameters.
-		$config_obj = new TWPL_Settings_Config( $settings );
+		$config_obj =( $settings );
 
 		// Assign compiled values.
 		$this->config       = $config_obj->get();
@@ -165,8 +162,7 @@ class Settings {
 	 */
 	public function add_sections() {
 
-		foreach ( $this->config['sections'] as $id => $section ) {
-			new TWPL_Settings_Section( $id, $section['title'], $section['description'], $this->menu_slug, $this->capability );
+		foreach ( $this->config['sections'] as $id => $section ) {( $id, $section['title'], $section['description'], $this->menu_slug, $this->capability );
 		}
 
 	}
