@@ -1,149 +1,78 @@
 <?php
 /**
- * The file that wraps the WordPress Settings API in a file-configurable framework.
+ * The file that extends WP_Error notification capabilities.
  *
  * @package    ThoughtfulWeb\LibraryWP
- * @subpackage Field
+ * @subpackage Settings
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/page/settings/field/textfield.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/Admin/Page/Settings.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
+namespace ThoughtfulWeb\LibraryWP\Admin\Page;
 
-class TextField {
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Config;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField;
+
+/**
+ * The Admin Settings Page Class.
+ *
+ * @since 0.1.0
+ */
+class Settings {
 
 	/**
-	 * The default values for required $field members.
+	 * Settings page and field Parameters.
 	 *
-	 * @var array $default The default field parameter member values.
+	 * @var array $config The Settings page and fieldset parameters.
 	 */
-	private $default_field = array(
-		'desc'        => '',
-		'placeholder' => '',
-		'data_args'   => array(
-			'default'           => '',
-			'sanitize_callback' => 'sanitize_text_field',
-			'show_in_rest'      => false,
-			'type'              => 'string',
-			'description'       => '',
-		)
-	);
+	private $config = array();
 
 	/**
-	 * Stored field value.
+	 * User capability requirement for accessing the settings page.
 	 *
-	 * @var array $field The registered field arguments.
+	 * @var string $capability The user capability string.
 	 */
-	private $field;
+	private $capability = 'manage_options';
 
 	/**
-	 * The option group variable.
+	 * Name the group of database options which the fields represent.
 	 *
-	 * @var string $option_group The option group identifier.
+	 * @var string $option_group The database option group name. Lowercase letters and underscores only. If not configured it will default  to the menu_slug method argument with hyphens replaced with underscores.
 	 */
-	private $option_group;
+	private $option_group = 'options';
 
 	/**
-	 * Constructor for the Field class.
+	 * The menu page slug.
 	 *
-	 * @param array $field {
-	 *     The field registration arguments.
-	 *
-	 *     @type string $label       Formatted title of the field. Shown as the label for the field during output. Required.
-	 *     @type string $id          Slug-name to identify the field. Used in the 'id' attribute of tags. Required.
-	 *     @type string $type        The type attribute. Required.
-	 *     @type string $desc        The description. Optional.
-	 *     @type mixed  $placeholder The placeholder text, if applicable. Optional.
-	 *     @type string $default     The default value. Optional.
-	 *     @type mixed  $label_for   When supplied, the setting title will be wrapped in a `<label>` element, its `for` attribute populated with this value. Optional.
-	 *     @type mixed  $class       CSS Class to be added to the `<tr>` element when the field is output. Optional.
-	 *     @type array  $data_args {
-	 *         Data used to describe the setting when registered. Required.
-	 *
-	 *         @type string     $option_name       The option name. If not provided, will default to the ID attribute of the HTML element. Optional.
-	 *         @type mixed      $default           Default value when calling `get_option()`. Optional.
-	 *         @type callable   $sanitize_callback A callback function that sanitizes the option's value. Optional.
-	 *         @type bool|array $show_in_rest      Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key.
-	 *         @type string     $type              The type of data associated with this setting. Only used for the REST API. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'.
-	 *         @type string     $description       A description of the data attached to this setting. Only used for the REST API.
-	 *     }
-	 * }
-	 * @param string $page         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
-	 * @param string $section      The slug-name of the section of the settings page in which to show the box.
-	 * @param string $option_group The option group slug.
-	 * @param bool   $network      Whether the plugin is activated at the network level or not.
+	 * @var string $menu_slug The settings page slug for a URL.
 	 */
-	public function __construct( $field, $page, $section, $option_group, $network ) {
-
-		$this->option_group = $option_group;
-
-		// Apply default values for field registration parameters.
-		$field       = array_merge_recursive( $this->default_field, $field );
-		$this->field = $field;
-
-		// Register the settings field output.
-		add_settings_field( $field['id'], $field['label'], array( $this, 'output' ), $page, $section, $field );
-
-		// Register the settings field database entry.
-		register_setting( $option_group, $field['id'], $field['data_args'] );
-
-	}
+	private $menu_slug;
 
 	/**
-	 * Sanitizes a text field string.
+	 * Admin settings class constructor.
 	 *
-	 * @param string $value          The unsanitized option value.
-	 * @param string $option         The option name.
-	 * @param string $original_value The original value passed to the function.
+	 * @since 0.1.0
 	 *
-	 * @return string
+	 * @param array|string $settings The settings page parameters array or file path relative to the root directory.
 	 */
-	public function sanitize( $value, $option, $original_value ) {
+	public function __construct( $settings = array() ) {
 
-		$value = sanitize_text_field( $value );
-		if ( ! $value || $value !== $original_value ) {
-			$value = get_site_option( $option );
-			if ( ! $value ) {
-				$value = $this->field['data_args']['default'];
-			}
-		}
+		// Store attributes from the compiled parameters.
+		$config_obj = new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Config( $settings );
 
-		return $value;
+		// Assign compiled values.
+		$this->config       = $config_obj->get();
+		$this->capability   = $this->config['method_args']['capability'];
+		$this->menu_slug    = $this->config['method_args']['menu_slug'];
+		$this->option_group = $this->config['option_group'];
 
-	}
-
-	/**
-	* Get the settings option array and print one of its values.
-	*
-	* @param array $args The arguments needed to render the setting field.
-	*
-	* @return void
-	*/
-	public function text_field( $args ) {
-
-		$option_name   = $args['option_name'];
-		$field_name    = $args['field_name'];
-		$default_value = $this->field['data_args']['default'];
-		$placeholder   = isset( $args['placeholder'] ) ? $args['placeholder'] : '';
-		$option        = get_site_option( $option_name );
-		$value         = isset( $option[ $field_name ] ) ? $option[ $field_name ] : $default_value;
-		$output        = sprintf(
-			'<input type="text" name="%1$s[%2$s]" id="%3$s[%4$s]" class="settings-text" data-lpignore="true" size="40" placeholder="%6$s" value="%5$s" />',
-			$option_name,
-			$field_name,
-			$option_name,
-			$field_name,
-			$value,
-			$placeholder
-		);
-		echo $output;
-		if ( isset( $args['after'] ) ) {
-			echo wp_kses_post( $args['after'] );
-		}
+		// Initialize.
+		$this->add_hooks();
 
 	}
 
@@ -156,19 +85,114 @@ class TextField {
 	 */
 	private function add_hooks() {
 
-		if ( $this->network ) {
+		if ( isset( $this->config['network'] ) && $this->config['network'] ) {
+			add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
 			add_action( 'network_admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
 		} else {
+			add_action( 'admin_menu', array( $this, 'add_settings' ) );
 			add_action( 'admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
+		}
+		add_action( 'admin_init', array( $this, 'add_sections' ) );
+		add_action( 'admin_init', array( $this, 'add_fields' ) );
+
+		// add_action( 'admin_init', array( $this, 'settings_init' ) );
+	}
+
+	/**
+	 * Add the settings page to the Admin navigation menu.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
+	public function add_settings() {
+
+		add_menu_page(
+			$this->config['method_args']['page_title'],
+			$this->config['method_args']['menu_title'],
+			$this->config['method_args']['capability'],
+			$this->config['method_args']['menu_slug'],
+			array( $this, 'menu_page_content' ),
+			$this->config['method_args']['icon_url'],
+			$this->config['method_args']['position']
+		);
+
+	}
+
+	/**
+	 * Add content to the Admin settings page.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
+	public function menu_page_content() {
+
+		$method_args = $this->config['method_args'];
+		if ( current_user_can( $this->capability ) ) {
+			?>
+			<div class="wrap">
+				<h1><?php $method_args['page_title']; ?></h1>
+				<?php settings_errors(); ?>
+				<form method="POST" action="edit.php?action=<?php echo $this->option_group; ?>">
+					<?php
+						settings_fields( $this->option_group );
+
+						do_settings_sections( $this->menu_slug );
+						submit_button();
+					?>
+				</form>
+			</div>
+			<?php
 		}
 
 	}
 
 	/**
-	 * Save the site option.
+	 * Add settings sections.
+	 *
+	 * @since 0.1.0
 	 *
 	 * @return void
 	 */
+	public function add_sections() {
+
+		foreach ( $this->config['sections'] as $id => $section ) {
+			new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section( $id, $section['title'], $section['description'], $this->menu_slug, $this->capability );
+		}
+
+	}
+
+	/**
+	 * Add each settings field to the page.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
+	public function add_fields() {
+
+		foreach ( $this->config['sections'] as $section ) {
+
+			$section = $section['section'];
+			$fields  = $section['fields'];
+
+			foreach ( $fields as $field ) {
+
+				switch( $field ) {
+					case 'text':
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField( $field, $this->menu_slug, $section, $this->option_group );
+						break;
+					default:
+						break;
+				}
+
+			}
+
+		}
+
+	}
+
 	public function save_site_option() {
 
 		// Verify nonce.
@@ -177,6 +201,18 @@ class TextField {
 		// Save the option.
 		$option = $_POST[ $this->option_key ];
 		update_site_option( $this->option_key, $option );
+
+		// Redirect to settings page.
+		wp_redirect(
+			add_query_arg(
+				array(
+					'page'    => $this->config['method_args']['menu_slug'],
+					'updated' => 'true',
+				),
+				( is_multisite() ? network_admin_url( 'admin.php' ) : admin_url( 'admin.php' ) )
+			)
+		);
+		exit;
 
 	}
 }
