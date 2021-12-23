@@ -83,8 +83,11 @@ class TextField {
 		$this->network      = $network;
 
 		// Apply default values for field registration parameters.
-		$field       = array_merge_recursive( $this->default_field, $field );
-		$this->field = $field;
+		$field                         = array_merge_recursive( $this->default_field, $field );
+		$field['desc']                 = array_filter( $field['desc'] );
+		$field['placeholder']          = array_filter( $field['placeholder'] );
+		$field['data_args']['default'] = array_filter( $field['data_args']['default'] );
+		$this->field                   = $field;
 
 		// Register the settings field output.
 		add_settings_field( $field['id'], $field['label'], array( $this, 'output' ), $page, $section_id, $field );
@@ -126,20 +129,21 @@ class TextField {
 	*/
 	public function output( $args ) {
 
-		$option_name   = $args['option_name'];
-		$field_name    = $args['field_name'];
-		$default_value = $this->field['data_args']['default'];
+		$field_name    = $args['id'];
+		$default_value = $this->field['data_args']['default'][1];
 		$placeholder   = isset( $args['placeholder'] ) ? $args['placeholder'] : '';
-		$option        = get_site_option( $option_name );
+		$option        = get_site_option( $this->option_group );
 		$value         = isset( $option[ $field_name ] ) ? $option[ $field_name ] : $default_value;
+		$option_value_attr = sprintf(
+			'%1$s[%2$s]',
+			$this->option_group,
+			$field_name,
+		);
 		$output        = sprintf(
-			'<input type="text" name="%1$s[%2$s]" id="%3$s[%4$s]" class="settings-text" data-lpignore="true" size="40" placeholder="%6$s" value="%5$s" />',
-			$option_name,
-			$field_name,
-			$option_name,
-			$field_name,
+			'<input type="text" name="%1$s" id="%1$s" class="settings-text" data-lpignore="true" size="40" placeholder="%2$s" value="%3$s" />',
+			$option_value_attr,
+			$placeholder[1],
 			$value,
-			$placeholder
 		);
 		echo $output;
 		if ( isset( $args['after'] ) ) {
