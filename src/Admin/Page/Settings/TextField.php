@@ -87,7 +87,7 @@ class TextField {
 		$this->field = $field;
 
 		// Register the settings field output.
-		add_settings_field( $field['id'], $field['label'], array( $this, 'output' ), $page, $section, $field );
+		add_settings_field( $field['id'], $field['label'], array( $this, 'output' ), $page, $section_id, $field );
 
 		// Register the settings field database entry.
 		register_setting( $option_group, $field['id'], $field['data_args'] );
