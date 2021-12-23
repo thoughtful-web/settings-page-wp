@@ -16,14 +16,13 @@ namespace ThoughtfulWeb\LibraryWP\Admin\Page;
 
 use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section;
 use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Config;
-use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField;
 
 /**
  * The Admin Settings Page Class.
  *
  * @since 0.1.0
  */
-class Settings {
+class TextField {
 
 	/**
 	 * Settings page and field Parameters.
