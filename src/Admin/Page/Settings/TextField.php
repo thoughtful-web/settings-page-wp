@@ -14,6 +14,11 @@
 declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
 
+/**
+ * The TextField class.
+ *
+ * @since 0.1.0
+ */
 class TextField {
 
 	/**
