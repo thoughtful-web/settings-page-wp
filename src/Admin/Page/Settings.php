@@ -79,13 +79,7 @@ class Settings {
 		$this->option_group = $this->config['option_group'];
 
 		// Initialize.
-		if ( isset( $this->config['network'] ) && $this->config['network'] ) {
-			add_action( 'network_admin_menu', array( $this, 'add_menu_page' ) );
-		} else {
-			add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
-		}
-
-		add_action( 'admin_init', array( $this, 'twlwp_settings_init' ) );
+		$this->add_hooks();
 
 	}
 
@@ -96,11 +90,19 @@ class Settings {
 	 *
 	 * @return void
 	 */
-	public function twlwp_settings_init() {
+	private function add_hooks() {
 
-		$this->add_sections();
-		$this->add_fields();
+		if ( isset( $this->config['network'] ) && $this->config['network'] ) {
+			add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
+			add_action( 'network_admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
+		} else {
+			add_action( 'admin_menu', array( $this, 'add_settings' ) );
+			add_action( 'admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
+		}
+		add_action( 'admin_init', array( $this, 'add_sections' ) );
+		add_action( 'admin_init', array( $this, 'add_fields' ) );
 
+		// add_action( 'admin_init', array( $this, 'settings_init' ) );
 	}
 
 	/**
@@ -110,7 +112,7 @@ class Settings {
 	 *
 	 * @return void
 	 */
-	public function add_menu_page() {
+	public function add_settings() {
 
 		add_menu_page(
 			$this->config['method_args']['page_title'],
@@ -133,38 +135,23 @@ class Settings {
 	 */
 	public function menu_page_content() {
 
-		// Check user capabilities.
-		if ( ! current_user_can( $this->capability ) ) {
-			return;
-		}
-
-		// add error/update messages
-
-		// check if the user have submitted the settings
-		// WordPress will add the "settings-updated" $_GET parameter to the url
-		if ( isset( $_GET['settings-updated'] ) ) {
-			// add settings saved message with the class of "updated"
-			add_settings_error( "{$this->option_group}_messages", "{$this->option_group}_message", __( 'Settings Saved', 'thoughtful-web-library-wp' ), 'updated' );
-		}
-
-		// show error/update messages
-		settings_errors( "{$this->option_group}_messages" );
-
 		$method_args = $this->config['method_args'];
-		?>
-		<div class="wrap">
-			<h1><?php $method_args['page_title']; ?></h1>
-			<?php settings_errors(); ?>
-			<form method="post" action="options.php">
-				<?php
-					settings_fields( $this->option_group );
+		if ( current_user_can( $this->capability ) ) {
+			?>
+			<div class="wrap">
+				<h1><?php $method_args['page_title']; ?></h1>
+				<?php settings_errors(); ?>
+				<form method="POST" action="edit.php?action=<?php echo $this->option_group; ?>">
+					<?php
+						settings_fields( $this->option_group );
 
-					do_settings_sections( $this->menu_slug );
-					submit_button( 'Save Settings' );
-				?>
-			</form>
-		</div>
-		<?php
+						do_settings_sections( $this->menu_slug );
+						submit_button();
+					?>
+				</form>
+			</div>
+			<?php
+		}
 
 	}
 
@@ -175,7 +162,7 @@ class Settings {
 	 *
 	 * @return void
 	 */
-	private function add_sections() {
+	public function add_sections() {
 
 		foreach ( $this->config['sections'] as $id => $section ) {
 			new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section( $id, $section['title'], $section['description'], $this->menu_slug, $this->capability );
@@ -190,28 +177,57 @@ class Settings {
 	 *
 	 * @return void
 	 */
-	private function add_fields() {
+	public function add_fields() {
 
 		$network = $this->config['network'];
 
-        foreach ( $this->config['sections'] as $section ) {
+		foreach ( $this->config['sections'] as $section ) {
 
-            $section_id = $section['section'];
-            $fields     = $section['fields'];
+			$section_id = $section['section'];
+			$fields     = $section['fields'];
 
-            foreach ( $fields as $field ) {
+			foreach ( $fields as $field ) {
 
-                switch( $field['type'] ) {
-                    case 'text':
-                        new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField( $field, $this->menu_slug, $section_id, $this->option_group, $network );
-                        break;
-                    default:
-                        break;
-                }
+				switch( $field['type'] ) {
+					case 'text':
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField( $field, $this->menu_slug, $section_id, $this->option_group, $network );
+						break;
+					default:
+						break;
+					}
 
-            }
+			}
 
-        }
+		}
 
-    }
+	}
+
+	public function save_site_option() {
+
+		// Verify nonce.
+		wp_verify_nonce( $_POST['_wpnonce'], 'update' );
+
+		// Save the option.
+		// Todo: filtering?
+		$option = $_POST[ $this->config['option_group'] ];
+		update_site_option( $this->config['option_group'], $option );
+
+		// Get the site or network admin URL.
+		$admin_url = admin_url( 'admin.php' );
+		if ( is_multisite() && is_super_admin() && $this->config['network'] ) {
+			$admin_url = network_admin_url( 'admin.php' );
+		}
+		// Redirect to settings page.
+		wp_redirect(
+			add_query_arg(
+				array(
+					'page'    => $this->config['method_args']['menu_slug'],
+					'updated' => 'true',
+				),
+				$admin_url
+			)
+		);
+		exit;
+
+	}
 }
