@@ -56,7 +56,7 @@ class Config {
 	 *
 	 * @return array
 	 */
-	public function construct( $config ) {
+	public function __construct( $config ) {
 
 		$this->preprocess( $config );
 
