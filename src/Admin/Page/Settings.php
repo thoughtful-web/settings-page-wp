@@ -179,26 +179,26 @@ class Settings {
 	 */
 	public function add_fields() {
 
-		$base_class = '\ThoughtfulWeb\LibraryWP\Admin\Page\Settings';
+        foreach ( $this->config['sections'] as $section ) {
 
-		foreach ( $this->config['sections'] as $section ) {
+            $section = $section['section'];
+            $fields  = $section['fields'];
 
-			$section = $section['section'];
-			$fields  = $section['fields'];
+            foreach ( $fields as $field ) {
 
-			foreach ( $fields as $field ) {
+                switch( $field ) {
+                    case 'text':
+                        new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField( $field, $this->menu_slug, $section, $this->option_group );
+                        break;
+                    default:
+                        break;
+                }
 
-				$type = $field['type'];
-				if ( array_key_exists( $type, $this->field_classes ) ) {
-					$class = $base_class . "\\" . $this->field_classes[ $type ];
-					new $class( $field, $this->menu_slug, $section, $this->option_group );
-				}
+            }
 
-			}
+        }
 
-		}
-
-	}
+    }
 
 	public function save_site_option() {
 
