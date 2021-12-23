@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page;
 
 use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Config;
 /**
  * The Admin Settings Page Class.
  *
@@ -69,7 +70,7 @@ class Settings {
 	public function __construct( $settings = array() ) {
 
 		// Store attributes from the compiled parameters.
-		$config_obj =( $settings );
+		$config_obj = new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Config( $settings );
 
 		// Assign compiled values.
 		$this->config       = $config_obj->get();
