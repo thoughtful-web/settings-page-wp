@@ -181,14 +181,14 @@ class Settings {
 
         foreach ( $this->config['sections'] as $section ) {
 
-            $section = $section['section'];
-            $fields  = $section['fields'];
+            $section_id = $section['section'];
+            $fields     = $section['fields'];
 
             foreach ( $fields as $field ) {
 
                 switch( $field ) {
                     case 'text':
-                        new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField( $field, $this->menu_slug, $section, $this->option_group );
+                        new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField( $field, $this->menu_slug, $section_id, $this->option_group );
                         break;
                     default:
                         break;
