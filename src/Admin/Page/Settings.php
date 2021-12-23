@@ -79,7 +79,13 @@ class Settings {
 		$this->option_group = $this->config['option_group'];
 
 		// Initialize.
-		$this->add_hooks();
+		if ( isset( $this->config['network'] ) && $this->config['network'] ) {
+			add_action( 'network_admin_menu', array( $this, 'add_menu_page' ) );
+		} else {
+			add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
+		}
+
+		add_action( 'admin_init', array( $this, 'twlwp_settings_init' ) );
 
 	}
 
@@ -90,19 +96,11 @@ class Settings {
 	 *
 	 * @return void
 	 */
-	private function add_hooks() {
+	private function twlwp_settings_init() {
 
-		if ( isset( $this->config['network'] ) && $this->config['network'] ) {
-			add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
-			add_action( 'network_admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
-		} else {
-			add_action( 'admin_menu', array( $this, 'add_settings' ) );
-			add_action( 'admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
-		}
-		add_action( 'admin_init', array( $this, 'add_sections' ) );
-		add_action( 'admin_init', array( $this, 'add_fields' ) );
+		$this->add_sections();
+		$this->add_fields();
 
-		// add_action( 'admin_init', array( $this, 'settings_init' ) );
 	}
 
 	/**
@@ -112,7 +110,7 @@ class Settings {
 	 *
 	 * @return void
 	 */
-	public function add_settings() {
+	public function add_menu_page() {
 
 		add_menu_page(
 			$this->config['method_args']['page_title'],
@@ -135,23 +133,38 @@ class Settings {
 	 */
 	public function menu_page_content() {
 
-		$method_args = $this->config['method_args'];
-		if ( current_user_can( $this->capability ) ) {
-			?>
-			<div class="wrap">
-				<h1><?php $method_args['page_title']; ?></h1>
-				<?php settings_errors(); ?>
-				<form method="POST" action="edit.php?action=<?php echo $this->option_group; ?>">
-					<?php
-						settings_fields( $this->option_group );
-
-						do_settings_sections( $this->menu_slug );
-						submit_button();
-					?>
-				</form>
-			</div>
-			<?php
+		// Check user capabilities.
+		if ( ! current_user_can( $this->capability ) ) {
+			return;
 		}
+
+		// add error/update messages
+
+		// check if the user have submitted the settings
+		// WordPress will add the "settings-updated" $_GET parameter to the url
+		if ( isset( $_GET['settings-updated'] ) ) {
+			// add settings saved message with the class of "updated"
+			add_settings_error( "{$this->option_group}_messages", "{$this->option_group}_message", __( 'Settings Saved', 'thoughtful-web-library-wp' ), 'updated' );
+		}
+
+		// show error/update messages
+		settings_errors( "{$this->option_group}_messages" );
+
+		$method_args = $this->config['method_args'];
+		?>
+		<div class="wrap">
+			<h1><?php $method_args['page_title']; ?></h1>
+			<?php settings_errors(); ?>
+			<form method="post" action="options.php">
+				<?php
+					settings_fields( $this->option_group );
+
+					do_settings_sections( $this->menu_slug );
+					submit_button( 'Save Settings' );
+				?>
+			</form>
+		</div>
+		<?php
 
 	}
 
@@ -162,7 +175,7 @@ class Settings {
 	 *
 	 * @return void
 	 */
-	public function add_sections() {
+	private function add_sections() {
 
 		foreach ( $this->config['sections'] as $id => $section ) {
 			new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section( $id, $section['title'], $section['description'], $this->menu_slug, $this->capability );
@@ -177,7 +190,7 @@ class Settings {
 	 *
 	 * @return void
 	 */
-	public function add_fields() {
+	private function add_fields() {
 
 		$network = $this->config['network'];
 
@@ -201,27 +214,4 @@ class Settings {
         }
 
     }
-
-	public function save_site_option() {
-
-		// Verify nonce.
-		wp_verify_nonce( $_POST['_wpnonce'], 'update' );
-
-		// Save the option.
-		$option = $_POST[ $this->option_key ];
-		update_site_option( $this->option_key, $option );
-
-		// Redirect to settings page.
-		wp_redirect(
-			add_query_arg(
-				array(
-					'page'    => $this->config['method_args']['menu_slug'],
-					'updated' => 'true',
-				),
-				( is_multisite() ? network_admin_url( 'admin.php' ) : admin_url( 'admin.php' ) )
-			)
-		);
-		exit;
-
-	}
 }

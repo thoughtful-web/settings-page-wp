@@ -22,6 +22,7 @@ class TextField {
 	 * @var array $default The default field parameter member values.
 	 */
 	private $default_field = array(
+		'type'        => 'text',
 		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
@@ -94,13 +95,15 @@ class TextField {
 				$field[ $key ] = $default_value;
 			}
 		}
-		$this->field = $field;
 
-		// Register the settings field output.
-		add_settings_field( $field['id'], $field['label'], array( $this, 'output' ), $page, $section_id, $field );
+		// Assign the new merged field value.
+		$this->field = $field;
 
 		// Register the settings field database entry.
 		register_setting( $option_group, $field['id'], $field['data_args'] );
+
+		// Register the settings field output.
+		add_settings_field( $field['id'], $field['label'], array( $this, 'output' ), $page, $section_id, $field );
 
 	}
 
@@ -152,39 +155,6 @@ class TextField {
 		if ( isset( $args['after'] ) ) {
 			echo wp_kses_post( $args['after'] );
 		}
-
-	}
-
-	/**
-	 * Add action and filter hooks.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return void
-	 */
-	private function add_hooks() {
-
-		if ( $this->network ) {
-			add_action( 'network_admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
-		} else {
-			add_action( 'admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
-		}
-
-	}
-
-	/**
-	 * Save the site option.
-	 *
-	 * @return void
-	 */
-	public function save_site_option() {
-
-		// Verify nonce.
-		wp_verify_nonce( $_POST['_wpnonce'], 'update' );
-
-		// Save the option.
-		$option = $_POST[ $this->option_key ];
-		update_site_option( $this->option_key, $option );
 
 	}
 }
