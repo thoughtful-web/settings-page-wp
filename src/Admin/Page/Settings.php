@@ -96,7 +96,7 @@ class Settings {
 	 *
 	 * @return void
 	 */
-	private function twlwp_settings_init() {
+	public function twlwp_settings_init() {
 
 		$this->add_sections();
 		$this->add_fields();
