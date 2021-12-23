@@ -24,15 +24,6 @@ use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Config;
 class Settings {
 
 	/**
-	 * Field type to class associations.
-	 *
-	 * @var array $field_classes The field types and their associated class names under the current fully qualified namespace plus the current class.
-	 */
-	private $field_classes = array(
-		'text' => 'Text_Field',
-	);
-
-	/**
 	 * Settings page and field Parameters.
 	 *
 	 * @var array $config The Settings page and fieldset parameters.
@@ -79,78 +70,48 @@ class Settings {
 		$this->option_group = $this->config['option_group'];
 
 		// Initialize.
-		$this->add_hooks();
-
-	}
-
-	/**
-	 * Add action and filter hooks.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return void
-	 */
-	private function add_hooks() {
-
-		if ( isset( $this->config['network'] ) && $this->config['network'] ) {
-			add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
-			add_action( 'network_admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
-		} else {
+		if ( ! isset( $this->config['network'] ) || ! $this->config['network'] ) {
 			add_action( 'admin_menu', array( $this, 'add_settings' ) );
-			add_action( 'admin_edit_' . $this->option_group, array( $this, 'save_site_option' ) );
+		} else {
+			add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
+			add_action( 'network_admin_edit_' . $this->menu_slug, array( $this, 'save_network_option' ) );
 		}
-		add_action( 'admin_init', array( $this, 'add_sections' ) );
-		add_action( 'admin_init', array( $this, 'add_fields' ) );
+		add_action( 'admin_init', array( $this, 'settings_init' ) );
 
-		// add_action( 'admin_init', array( $this, 'settings_init' ) );
 	}
 
 	/**
-	 * Add the settings page to the Admin navigation menu.
+	 * Register settings, add sections, and add fields to those sections.
 	 *
 	 * @since 0.1.0
 	 *
 	 * @return void
 	 */
-	public function add_settings() {
+	public function settings_init() {
 
-		add_menu_page(
-			$this->config['method_args']['page_title'],
-			$this->config['method_args']['menu_title'],
-			$this->config['method_args']['capability'],
-			$this->config['method_args']['menu_slug'],
-			array( $this, 'menu_page_content' ),
-			$this->config['method_args']['icon_url'],
-			$this->config['method_args']['position']
-		);
+		$this->register_settings();
+		$this->add_sections();
+		$this->add_fields();
 
 	}
 
 	/**
-	 * Add content to the Admin settings page.
-	 *
-	 * @since 0.1.0
+	 * Register all new database settings.
 	 *
 	 * @return void
 	 */
-	public function menu_page_content() {
+	private function register_settings() {
 
-		$method_args = $this->config['method_args'];
-		if ( current_user_can( $this->capability ) ) {
-			?>
-			<div class="wrap">
-				<h1><?php $method_args['page_title']; ?></h1>
-				<?php settings_errors(); ?>
-				<form method="POST" action="edit.php?action=<?php echo $this->option_group; ?>">
-					<?php
-						settings_fields( $this->option_group );
+		foreach ( $this->config['sections'] as $section ) {
 
-						do_settings_sections( $this->menu_slug );
-						submit_button();
-					?>
-				</form>
-			</div>
-			<?php
+			foreach ( $section['fields'] as $field ) {
+
+				$data_args = isset( $field['data_args'] ) ? $field['data_args'] : array();
+				// Register the settings field database entry.
+				register_setting( $this->option_group, $field['id'], $data_args );
+
+			}
+
 		}
 
 	}
@@ -202,7 +163,88 @@ class Settings {
 
 	}
 
-	public function save_site_option() {
+	/**
+	 * Add the settings page to the Admin navigation menu.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
+	public function add_settings() {
+
+		$options_form = $this->config['network'] ? 'network_options_form' : 'site_options_form';
+
+		add_menu_page(
+			$this->config['method_args']['page_title'],
+			$this->config['method_args']['menu_title'],
+			$this->config['method_args']['capability'],
+			$this->config['method_args']['menu_slug'],
+			array( $this, $options_form ),
+			$this->config['method_args']['icon_url'],
+			$this->config['method_args']['position']
+		);
+
+	}
+
+	/**
+	 * Add content to the Admin settings page.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
+	public function site_options_form() {
+
+		if ( ! current_user_can( $this->capability ) ) {
+			return;
+		}
+
+		?>
+		<div class="wrap">
+			<h1><?php $this->config['method_args']['page_title']; ?></h1>
+			<?php settings_errors(); ?>
+			<form method="POST" action="options.php">
+				<?php
+					settings_fields( $this->option_group );
+					do_settings_sections( $this->menu_slug );
+					submit_button( 'Save Settings' );
+				?>
+			</form>
+		</div>
+		<?php
+
+	}
+
+	/**
+	 * Add content to the Admin settings page.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
+	public function network_options_form() {
+
+		if ( ! current_user_can( $this->capability ) ) {
+			return;
+		}
+
+		?>
+		<div class="wrap">
+			<h1><?php $this->config['method_args']['page_title']; ?></h1>
+			<?php settings_errors(); ?>
+			<form method="POST" action="edit.php?action=<?php echo $this->menu_slug ?>">
+				<?php
+					settings_fields( $this->option_group );
+					do_settings_sections( $this->menu_slug );
+					submit_button( 'Save Settings' );
+				?>
+			</form>
+		</div>
+		<?php
+
+	}
+
+	public function save_network_option() {
 
 		// Verify nonce.
 		wp_verify_nonce( $_POST['_wpnonce'], 'update' );
@@ -218,7 +260,7 @@ class Settings {
 			$admin_url = network_admin_url( 'admin.php' );
 		}
 		// Redirect to settings page.
-		wp_redirect(
+		wp_safe_redirect(
 			add_query_arg(
 				array(
 					'page'    => $this->config['method_args']['menu_slug'],

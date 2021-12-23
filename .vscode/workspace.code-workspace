@@ -5,6 +5,12 @@
 		},
 		{
 			"path": "../../../Local Sites/tapfuelio/app/public/wp-content/plugins/wordpress-plugin-name"
+		},
+		{
+			"path": "../../../Local Sites/tapfuelio/app/public/wp-content/plugins/wp-user-governance/cla-user-governance"
+		},
+		{
+			"path": "../../../Local Sites/tapfuelio/app/public"
 		}
 	],
 	"settings": {
