@@ -14,6 +14,7 @@
 declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page;
 
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section;
 /**
  * The Admin Settings Page Class.
  *
@@ -162,7 +163,8 @@ class Settings {
 	 */
 	public function add_sections() {
 
-		foreach ( $this->config['sections'] as $id => $section ) {( $id, $section['title'], $section['description'], $this->menu_slug, $this->capability );
+		foreach ( $this->config['sections'] as $id => $section ) {
+			\ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section( $id, $section['title'], $section['description'], $this->menu_slug, $this->capability );
 		}
 
 	}
