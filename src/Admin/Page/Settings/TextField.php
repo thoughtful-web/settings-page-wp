@@ -124,7 +124,7 @@ class TextField {
 	*
 	* @return void
 	*/
-	public function text_field( $args ) {
+	public function output( $args ) {
 
 		$option_name   = $args['option_name'];
 		$field_name    = $args['field_name'];
