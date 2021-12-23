@@ -82,12 +82,19 @@ class TextField {
 		$this->option_group = $option_group;
 		$this->network      = $network;
 
-		// Apply default values for field registration parameters.
-		$field                         = array_merge_recursive( $this->default_field, $field );
-		$field['desc']                 = array_filter( $field['desc'] );
-		$field['placeholder']          = array_filter( $field['placeholder'] );
-		$field['data_args']['default'] = array_filter( $field['data_args']['default'] );
-		$this->field                   = $field;
+		// Merge user-defined field values with default values.
+		foreach ( $this->default_field as $key => $default_value ) {
+			if ( 'data_args' === $key ) {
+				foreach( $default_value as $data_key => $default_data_value ) {
+					if ( ! array_key_exists( $data_key, $field[ $key ] ) ) {
+						$field[ $key ][ $data_key ] = $default_data_value;
+					}
+				}
+			} elseif ( ! array_key_exists( $key, $field ) ) {
+				$field[ $key ] = $default_value;
+			}
+		}
+		$this->field = $field;
 
 		// Register the settings field output.
 		add_settings_field( $field['id'], $field['label'], array( $this, 'output' ), $page, $section_id, $field );
@@ -130,19 +137,15 @@ class TextField {
 	public function output( $args ) {
 
 		$field_name    = $args['id'];
-		$default_value = $this->field['data_args']['default'][1];
+		$default_value = $this->field['data_args']['default'];
 		$placeholder   = isset( $args['placeholder'] ) ? $args['placeholder'] : '';
 		$option        = get_site_option( $this->option_group );
 		$value         = isset( $option[ $field_name ] ) ? $option[ $field_name ] : $default_value;
-		$option_value_attr = sprintf(
-			'%1$s[%2$s]',
+		$output        = sprintf(
+			'<input type="text" name="%1$s[%2$s]" id="%1$s[%2$s]" class="settings-text" data-lpignore="true" size="40" placeholder="%3$s" value="%4$s" />',
 			$this->option_group,
 			$field_name,
-		);
-		$output        = sprintf(
-			'<input type="text" name="%1$s" id="%1$s" class="settings-text" data-lpignore="true" size="40" placeholder="%2$s" value="%3$s" />',
-			$option_value_attr,
-			$placeholder[1],
+			$placeholder,
 			$value,
 		);
 		echo $output;
