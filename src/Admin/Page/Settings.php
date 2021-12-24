@@ -78,6 +78,12 @@ class Settings {
 		}
 		add_action( 'admin_init', array( $this, 'settings_init' ) );
 
+		add_action( 'add_option', function( $option, $value ){
+			error_log( 'add_site_option: ' . $option . ':' . $value );
+		});
+
+		add_action( 'update_option_')
+
 	}
 
 	/**
@@ -126,7 +132,13 @@ class Settings {
 	private function add_sections() {
 
 		foreach ( $this->config['sections'] as $id => $section ) {
-			new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section( $id, $section['title'], $section['description'], $this->menu_slug, $this->capability );
+			new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section(
+				$id,
+				$section['title'],
+				$section['description'],
+				$this->menu_slug,
+				$this->capability
+			);
 		}
 
 	}
@@ -207,10 +219,14 @@ class Settings {
 		<div class="wrap">
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<?php settings_errors(); ?>
-			<form method="POST" action="options.php">
+			<form action="options.php" method="post">
 				<?php
+					// output security fields for the registered setting
 					settings_fields( $this->option_group );
+					// output setting sections and their fields
+					// (sections are registered for "$this->menu_slug", each field is registered to a specific section)
 					do_settings_sections( $this->menu_slug );
+					// output save settings button
 					submit_button( 'Save Settings' );
 				?>
 			</form>

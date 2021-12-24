@@ -78,15 +78,16 @@ class TextField {
 	 *         @type string     $description       A description of the data attached to this setting. Only used for the REST API.
 	 *     }
 	 * }
-	 * @param string $page         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
+	 * @param string $menu_slug         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
 	 * @param string $section_id   The slug-name of the section of the settings page in which to show the box.
 	 * @param string $option_group The option group slug.
 	 * @param bool   $network      Whether the plugin is activated at the network level or not.
 	 */
-	public function __construct( $field, $page, $section_id, $option_group, $network ) {
+	public function __construct( $field, $menu_slug, $section_id, $option_group, $network ) {
 
 		$this->option_group = $option_group;
 		$this->network      = $network;
+		$this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
 
 		// Merge user-defined field values with default values.
 		foreach ( $this->default_field as $key => $default_value ) {
@@ -105,7 +106,14 @@ class TextField {
 		$this->field = $field;
 
 		// Register the settings field output.
-		add_settings_field( $field['id'], $field['label'], array( $this, 'output' ), $page, $section_id, $field );
+		add_settings_field(
+			$field['id'],
+			$field['label'],
+			array( $this, 'output' ),
+			$menu_slug,
+			$section_id,
+			$field
+		);
 
 	}
 
@@ -120,12 +128,17 @@ class TextField {
 	 */
 	public function sanitize( $value, $option, $original_value ) {
 
-		$value = sanitize_text_field( $value );
-		if ( ! $value || $value !== $original_value ) {
-			$value = get_site_option( $option );
-			if ( ! $value ) {
-				$value = $this->field['data_args']['default'];
+		$default_value = '';
+		$value         = sanitize_text_field( $value );
+		if ( ! $value ) {
+			if (
+				isset( $this->field['data_args'] )
+				&& isset( $this->field['data_args']['default'] )
+			) {
+				$default_value = $this->field['data_args']['default'];
 			}
+
+			$value = get_site_option( $option, $default_value );
 		}
 
 		return $value;
@@ -141,21 +154,38 @@ class TextField {
 	*/
 	public function output( $args ) {
 
-		$field_name    = $args['id'];
+		// Assemble the variables necessary to output the form field from settings.
+		$data_args     = $args['data_args'];
 		$default_value = $this->field['data_args']['default'];
 		$placeholder   = isset( $args['placeholder'] ) ? $args['placeholder'] : '';
 		$option        = get_site_option( $this->option_group );
-		$value         = isset( $option[ $field_name ] ) ? $option[ $field_name ] : $default_value;
-		$output        = sprintf(
-			'<input type="text" name="%1$s[%2$s]" id="%1$s[%2$s]" class="settings-text" data-lpignore="true" size="40" placeholder="%3$s" value="%4$s" />',
+		$value         = isset( $option[ $data_args['label_for'] ] ) ? $option[ $data_args['label_for'] ] : $default_value;
+		$allowed_html  = array(
+			'input' => array(
+				'type' => 'text',
+				'id'   => true,
+				'name' => true,
+				'class' => true,
+				'data-lpignore' => true,
+				'size' => true,
+				'placeholder' => true,
+				'value' => true,
+			),
+		);
+
+		// Render the form field output.
+		$output = sprintf(
+			'<input type="text" id="%1$s" name="%2$s[%1$s]" class="settings-text" data-lpignore="true" size="40" placeholder="%3$s" value="%4$s" />',
+			esc_attr( $data_args['label_for'] ),
 			$this->option_group,
-			$field_name,
 			$placeholder,
 			$value,
 		);
-		echo $output;
-		if ( isset( $args['after'] ) ) {
-			echo wp_kses_post( $args['after'] );
+		echo wp_kses( $output, $allowed_html );
+
+		// Render the description text.
+		if ( isset( $data_args['description'] ) && $data_args['description'] ) {
+			echo wp_kses_post( "<p class=\"description\">{$data_args['description']}</p>" );
 		}
 
 	}
