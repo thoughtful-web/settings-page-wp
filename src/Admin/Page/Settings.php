@@ -140,8 +140,6 @@ class Settings {
 	 */
 	public function add_fields() {
 
-		$network = $this->config['network'];
-
 		foreach ( $this->config['sections'] as $section ) {
 
 			$section_id = $section['section'];
