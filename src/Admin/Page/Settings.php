@@ -123,7 +123,7 @@ class Settings {
 	 *
 	 * @return void
 	 */
-	public function add_sections() {
+	private function add_sections() {
 
 		foreach ( $this->config['sections'] as $id => $section ) {
 			new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section( $id, $section['title'], $section['description'], $this->menu_slug, $this->capability );
