@@ -151,7 +151,13 @@ class Settings {
 
 				switch( $field['type'] ) {
 					case 'text':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField( $field, $this->menu_slug, $section_id, $this->option_group, $network );
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField(
+							$field,
+							$this->menu_slug,
+							$section_id,
+							$this->option_group,
+							$this->config['network']
+						);
 						break;
 					default:
 						break;
