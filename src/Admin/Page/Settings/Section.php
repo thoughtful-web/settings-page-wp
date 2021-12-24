@@ -56,10 +56,7 @@ class Section {
 	 */
 	public function description( $args ) {
 
-		if (
-			! empty( $this->description )
-			&& current_user_can( $this->capability )
-		) {
+		if ( current_user_can( $this->capability ) ) {
 			echo wp_kses_post( $this->description );
 		}
 
