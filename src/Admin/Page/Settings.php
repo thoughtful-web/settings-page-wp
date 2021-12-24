@@ -201,7 +201,7 @@ class Settings {
 
 		?>
 		<div class="wrap">
-			<h1><?php $this->config['method_args']['page_title']; ?></h1>
+			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<?php settings_errors(); ?>
 			<form method="POST" action="options.php">
 				<?php
@@ -230,7 +230,7 @@ class Settings {
 
 		?>
 		<div class="wrap">
-			<h1><?php $this->config['method_args']['page_title']; ?></h1>
+        	<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<?php settings_errors(); ?>
 			<form method="POST" action="edit.php?action=<?php echo $this->menu_slug ?>">
 				<?php
