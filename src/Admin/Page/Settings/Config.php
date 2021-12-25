@@ -77,6 +77,9 @@ class Config {
 		// Configure sections.
 		$config = $this->associate_sections( $config );
 
+		// Associate labels.
+		$config = $this->associate_label_for( $config );
+
 		$this->config = $config;
 
 	}
@@ -147,6 +150,33 @@ class Config {
 			// Remove the old numeric-indexed key assignment.
 			unset( $config['sections'][ $key ] );
 
+		}
+
+		return $config;
+
+	}
+
+	/**
+	 * Configure each missing label_for value to be populated by the ID value.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param array $config The settings configuration.
+	 *
+	 * @return array
+	 */
+	private function associate_label_for( $config ) {
+
+		foreach ( $config['sections'] as $section_key => $section ) {
+			foreach( $section['fields'] as $field_key => $field ) {
+				if ( ! array_key_exists( 'data_args', $field ) ) {
+					$field['data_args'] = array(
+						'label_for' => $field['id'],
+					);
+				} elseif ( ! array_key_exists( 'label_for', $field['data_args'] ) ) {
+					$config[ $section_key ]['fields'][ $field_key ]['data_args']['label_for'] = $field['id'];
+				}
+			}
 		}
 
 		return $config;
