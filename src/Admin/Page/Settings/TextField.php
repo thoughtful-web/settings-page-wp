@@ -32,7 +32,7 @@ class TextField {
 		'placeholder' => '',
 		'data_args'   => array(
 			'default'           => '',
-			'sanitize_callback' => 'sanitize_text_field',
+			// 'sanitize_callback' => 'sanitize_text_field',
 			'show_in_rest'      => false,
 			'type'              => 'string',
 			'description'       => '',
@@ -87,7 +87,7 @@ class TextField {
 
 		$this->option_group = $option_group;
 		$this->network      = $network;
-		$this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
+		// $this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
 
 		// Merge user-defined field values with default values.
 		foreach ( $this->default_field as $key => $default_value ) {
@@ -155,11 +155,9 @@ class TextField {
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
-		$data_args     = $args['data_args'];
-		$default_value = $this->field['data_args']['default'];
+		$default_value = $args['data_args']['default'];
 		$placeholder   = isset( $args['placeholder'] ) ? $args['placeholder'] : '';
-		$option        = get_site_option( $this->option_group );
-		$value         = isset( $option[ $data_args['label_for'] ] ) ? $option[ $data_args['label_for'] ] : $default_value;
+		$value         = get_site_option( $args['id'], $default_value );
 		$allowed_html  = array(
 			'input' => array(
 				'type' => 'text',
@@ -175,16 +173,16 @@ class TextField {
 
 		// Render the form field output.
 		$output = sprintf(
-			'<input type="text" id="%1$s" name="%2$s[%1$s]" class="settings-text" data-lpignore="true" size="40" placeholder="%3$s" value="%4$s" />',
-			esc_attr( $data_args['label_for'] ),
-			$this->option_group,
-			$placeholder,
-			$value,
+			'<input type="text" id="%1$s" name="%2$s" class="settings-text" data-lpignore="true" size="40" placeholder="%3$s" value="%4$s" />',
+			esc_attr( $args['id'] ),
+			esc_attr( $args['data_args']['label_for'] ),
+			esc_attr( $placeholder ),
+			esc_attr( $value ),
 		);
 		echo wp_kses( $output, $allowed_html );
 
 		// Render the description text.
-		if ( isset( $data_args['description'] ) && $data_args['description'] ) {
+		if ( isset( $args['data_args']['description'] ) && $args['data_args']['description'] ) {
 			echo wp_kses_post( "<p class=\"description\">{$data_args['description']}</p>" );
 		}
 
