@@ -32,7 +32,7 @@ class TextField {
 		'placeholder' => '',
 		'data_args'   => array(
 			'default'           => '',
-			// 'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => 'sanitize_text_field',
 			'show_in_rest'      => false,
 			'type'              => 'string',
 			'description'       => '',
@@ -147,6 +147,7 @@ class TextField {
 
 	/**
 	* Get the settings option array and print one of its values.
+	* @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/text
 	*
 	* @param array $args The arguments needed to render the setting field.
 	*
@@ -160,24 +161,50 @@ class TextField {
 		$value         = get_site_option( $args['id'], $default_value );
 		$allowed_html  = array(
 			'input' => array(
-				'type' => 'text',
-				'id'   => true,
-				'name' => true,
-				'class' => true,
+				'class'         => true,
 				'data-lpignore' => true,
-				'size' => true,
-				'placeholder' => true,
-				'value' => true,
+				'autocomplete'  => true,
+				'disabled'      => true,
+				'id'            => true,
+				'list'          => true,
+				'maxlength'     => true,
+				'minlength'     => true,
+				'name'          => true,
+				'pattern'       => true,
+				'placeholder'   => true,
+				'readonly'      => true,
+				'required'      => true,
+				'size'          => true,
+				'spellcheck'    => true,
+				'type'          => 'text',
+				'value'         => true,
 			),
 		);
+		$disallowed_data_args_as_attrs = array(
+			'type',
+		);
+
+		// Determine additional HTML attributes to append to the element.
+		$extra_attrs = array();
+		if ( array_key_exists( 'placeholder', $args ) && ! empty( $args['placeholder'] ) ) {
+			$extra_attrs['placeholder']  = 'placeholder="' . esc_attr( $args['placeholder'] ) . '"';
+		}
+
+		foreach ( $args['data_args'] as $attr => $attr_value ) {
+			if ( array_key_exists( $attr, $allowed_html['input'] ) && ! in_array( $attr, $disallowed_data_args_as_attrs ) ) {
+				$extra_attrs[ $attr ] = $attr . '="' . esc_attr( $attr_value ) . '"';
+			}
+		}
+
+		$extra_attrs = implode( ' ', $extra_attrs );
 
 		// Render the form field output.
 		$output = sprintf(
-			'<input type="text" id="%1$s" name="%2$s" class="settings-text" data-lpignore="true" size="40" placeholder="%3$s" value="%4$s" />',
+			'<input type="text" id="%1$s" name="%2$s" class="settings-text" value="%3$s" %4$s/>',
 			esc_attr( $args['id'] ),
 			esc_attr( $args['data_args']['label_for'] ),
-			esc_attr( $placeholder ),
 			esc_attr( $value ),
+			$extra_attrs
 		);
 		echo wp_kses( $output, $allowed_html );
 
