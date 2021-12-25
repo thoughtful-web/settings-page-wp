@@ -78,12 +78,6 @@ class Settings {
 		}
 		add_action( 'admin_init', array( $this, 'settings_init' ) );
 
-		add_action( 'add_option', function( $option, $value ){
-			error_log( 'add_site_option: ' . $option . ':' . $value );
-		});
-
-		add_action( 'update_option_')
-
 	}
 
 	/**
