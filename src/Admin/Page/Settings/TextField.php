@@ -162,7 +162,7 @@ class TextField {
 		$allowed_html  = array(
 			'input' => array(
 				'class'         => true,
-				'data-lpignore' => true,
+				'data-*'        => true,
 				'autocomplete'  => true,
 				'disabled'      => true,
 				'id'            => true,
