@@ -40,18 +40,45 @@ class TextField {
 	);
 
 	/**
+	 * Allowed HTML.
+	 *
+	 * @var array $allowed_html The allowed HTML for the element produced by this class.
+	 */
+	private $allowed_html = array(
+		'input' => array(
+			'class'         => true,
+			'data-*'        => true,
+			'autocomplete'  => true,
+			'disabled'      => true,
+			'id'            => true,
+			'list'          => true,
+			'maxlength'     => true,
+			'minlength'     => true,
+			'name'          => true,
+			'pattern'       => true,
+			'placeholder'   => true,
+			'readonly'      => true,
+			'required'      => true,
+			'size'          => true,
+			'spellcheck'    => true,
+			'type'          => 'text',
+			'value'         => true,
+		),
+	);
+
+	/**
+	 * Default text field value from data_args.
+	 *
+	 * @var string $default_value The default text field value from data_args.
+	 */
+	private $default_value = '';
+
+	/**
 	 * Stored field value.
 	 *
 	 * @var array $field The registered field arguments.
 	 */
 	private $field;
-
-	/**
-	 * The option group variable.
-	 *
-	 * @var string $option_group The option group identifier.
-	 */
-	private $option_group;
 
 	/**
 	 * Constructor for the Field class.
@@ -80,14 +107,12 @@ class TextField {
 	 * }
 	 * @param string $menu_slug         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
 	 * @param string $section_id   The slug-name of the section of the settings page in which to show the box.
-	 * @param string $option_group The option group slug.
 	 * @param bool   $network      Whether the plugin is activated at the network level or not.
 	 */
-	public function __construct( $field, $menu_slug, $section_id, $option_group, $network ) {
+	public function __construct( $field, $menu_slug, $section_id, $network ) {
 
-		$this->option_group = $option_group;
 		$this->network      = $network;
-		// $this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
+		$this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
 
 		// Merge user-defined field values with default values.
 		foreach ( $this->default_field as $key => $default_value ) {
@@ -104,6 +129,7 @@ class TextField {
 
 		// Assign the new merged field value.
 		$this->field = $field;
+		$this->default_value = $this->field['data_args']['default'];
 
 		// Register the settings field output.
 		add_settings_field(
@@ -126,19 +152,11 @@ class TextField {
 	 *
 	 * @return string
 	 */
-	public function sanitize( $value, $option, $original_value ) {
+	public static function sanitize( $value, $option, $original_value ) {
 
-		$default_value = '';
-		$value         = sanitize_text_field( $value );
-		if ( ! $value ) {
-			if (
-				isset( $this->field['data_args'] )
-				&& isset( $this->field['data_args']['default'] )
-			) {
-				$default_value = $this->field['data_args']['default'];
-			}
-
-			$value = get_site_option( $option, $default_value );
+		$value = sanitize_text_field( $value );
+		if ( empty( $value ) ) {
+			$value = get_site_option( $option, $this->default_value );
 		}
 
 		return $value;
@@ -159,29 +177,11 @@ class TextField {
 		$default_value = $args['data_args']['default'];
 		$placeholder   = isset( $args['placeholder'] ) ? $args['placeholder'] : '';
 		$value         = get_site_option( $args['id'], $default_value );
-		$allowed_html  = array(
-			'input' => array(
-				'class'         => true,
-				'data-*'        => true,
-				'autocomplete'  => true,
-				'disabled'      => true,
-				'id'            => true,
-				'list'          => true,
-				'maxlength'     => true,
-				'minlength'     => true,
-				'name'          => true,
-				'pattern'       => true,
-				'placeholder'   => true,
-				'readonly'      => true,
-				'required'      => true,
-				'size'          => true,
-				'spellcheck'    => true,
-				'type'          => 'text',
-				'value'         => true,
-			),
-		);
 		$disallowed_data_args_as_attrs = array(
 			'type',
+			'value',
+			'name',
+			'id',
 		);
 
 		// Determine additional HTML attributes to append to the element.
@@ -191,7 +191,7 @@ class TextField {
 		}
 
 		foreach ( $args['data_args'] as $attr => $attr_value ) {
-			if ( array_key_exists( $attr, $allowed_html['input'] ) && ! in_array( $attr, $disallowed_data_args_as_attrs ) ) {
+			if ( array_key_exists( $attr, $this->allowed_html['input'] ) && ! in_array( $attr, $disallowed_data_args_as_attrs ) ) {
 				$extra_attrs[ $attr ] = $attr . '="' . esc_attr( $attr_value ) . '"';
 			}
 		}
@@ -200,13 +200,13 @@ class TextField {
 
 		// Render the form field output.
 		$output = sprintf(
-			'<input type="text" id="%1$s" name="%2$s" class="settings-text" value="%3$s" %4$s/>',
+			'<input type="text" id="%1$s" name="%2$s" value="%3$s" %4$s/>',
 			esc_attr( $args['id'] ),
 			esc_attr( $args['data_args']['label_for'] ),
 			esc_attr( $value ),
 			$extra_attrs
 		);
-		echo wp_kses( $output, $allowed_html );
+		echo wp_kses( $output, $this->allowed_html );
 
 		// Render the description text.
 		if ( isset( $args['data_args']['description'] ) && $args['data_args']['description'] ) {

@@ -14,8 +14,9 @@
 declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page;
 
-use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section;
 use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Config;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField;
 /**
  * The Admin Settings Page Class.
  *
@@ -159,7 +160,6 @@ class Settings {
 							$field,
 							$this->menu_slug,
 							$section_id,
-							$this->option_group,
 							$this->config['network']
 						);
 						break;
