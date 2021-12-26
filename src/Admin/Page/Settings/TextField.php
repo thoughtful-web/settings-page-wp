@@ -103,6 +103,7 @@ class TextField {
 	 */
 	public function __construct( $field, $menu_slug, $section_id ) {
 
+		// Define the option value sanitization callback method.
 		$this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
 
 		// Merge user-defined field values with default values.
@@ -118,10 +119,10 @@ class TextField {
 			}
 		}
 
-		// Assign the new merged field value.
+		// Store the merged field.
 		$this->field = $field;
 
-		// Register the settings field output.
+		// Register the field.
 		add_settings_field(
 			$field['id'],
 			$field['label'],
@@ -134,7 +135,7 @@ class TextField {
 	}
 
 	/**
-	 * Sanitizes a text field string.
+	 * Sanitize the text field value.
 	 *
 	 * @param string $value          The unsanitized option value.
 	 * @param string $option         The option name.
@@ -165,7 +166,6 @@ class TextField {
 
 		// Assemble the variables necessary to output the form field from settings.
 		$default_value = $args['data_args']['default'];
-		$placeholder   = isset( $args['placeholder'] ) ? $args['placeholder'] : '';
 		$value         = get_site_option( $args['id'], $default_value );
 		$disallowed_data_args_as_attrs = array(
 			'type',
