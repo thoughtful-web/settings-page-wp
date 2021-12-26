@@ -180,7 +180,7 @@ class TextareaField {
 		}
 
 		foreach ( $args['data_args'] as $attr => $attr_value ) {
-			if ( array_key_exists( $attr, $this->allowed_html['input'] ) && ! in_array( $attr, $disallowed_data_args_as_attrs ) ) {
+			if ( array_key_exists( $attr, $this->allowed_html[0] ) && ! in_array( $attr, $disallowed_data_args_as_attrs ) ) {
 				$extra_attrs[ $attr ] = $attr . '="' . esc_attr( $attr_value ) . '"';
 			}
 		}
