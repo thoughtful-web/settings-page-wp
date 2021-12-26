@@ -180,8 +180,8 @@ class TextField {
 		echo wp_kses( $output, $this->allowed_html );
 
 		// Render the description text.
-		if ( isset( $args['data_args']['description'] ) && $args['data_args']['description'] ) {
-			echo wp_kses_post( $data_args['description'] );
+		if ( isset( $args['desc'] ) && $args['desc'] ) {
+			echo wp_kses_post( '<br />' . $args['desc'] );
 		}
 
 	}
