@@ -31,11 +31,10 @@ class CheckboxField {
 		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
-			'default'           => '',
-			'sanitize_callback' => 'sanitize_textarea_field',
-			'show_in_rest'      => false,
-			'type'              => 'string',
-			'description'       => '',
+			'default'      => array(),
+			'show_in_rest' => false,
+			'type'         => 'string',
+			'description'  => '',
 		)
 	);
 
@@ -142,19 +141,21 @@ class CheckboxField {
 	 */
 	public static function sanitize( $value, $option, $original_value ) {
 
-		// if ( in_array( $value, array( 'on', 'off' ) ) ) {
-		// 	$value = 'on' === $value ? 1 : 0;
-		// } else {
-		// 	$value = intval( $value );
-		// }
-		// if ( 1 !== $value && 0 !== $value ) {
-		// 	$default_value = $this->field['data_args']['default'];
-		// 	$value = (int) get_site_option( $option, $default_value );
-		// 	if ( 1 !== $value && 0 !== $value ) {
-		// 		$value = 0;
-		// 	}
-		// }
-		error_log( $value );
+		$choices  = array_keys( $this->field['choices'] );
+		$default  = isset( $this->field['data_args']['default'] ) ? $this->field['data_args']['default'] : array();
+		$fallback = get_site_option( $option, $default );
+		foreach ( $value as $key => $choice ) {
+			if ( ! in_array( $choice, $choices, true ) ) {
+				// Value is bogus, fall back to first the database value and then the default configured value.
+				if ( array_key_exists( $key, $db_value ) ) {
+					$value[ $key ] = $db_value[ $key ];
+				} elseif ( array_key_exists( $key, $fallback ) ) {
+					$value[ $key ] = $fallback[ $key ];
+				} else {
+					unset( $value[ $key ] );
+				}
+			}
+		}
 
 		return $value;
 
@@ -169,31 +170,22 @@ class CheckboxField {
 	* @return void
 	*/
 	public function output( $args ) {
-		echo '<pre>';
-		// delete_site_option( $args['id'] );
-		print_r( get_site_option( $args['id'], array() ) ) . PHP_EOL;
-		print_r($args['choices']);
-		echo '</pre>';
 
 		// Assemble the variables necessary to output the form field from settings.
-		$default_value = $args['data_args']['default'];
-		$db_value      = get_site_option( $args['id'], array() );
-		$extra_attrs   = $this->get_optional_attributes( $args );
+		$value       = get_site_option( $args['id'], $args['data_args']['default'] );
+		$extra_attrs = $this->get_optional_attributes( $args );
 
 		// Render the form field output.
-		if ( ! is_array( $args['choices'] ) ) {
-			$args['choices'] = isset( $args['data_args']['value'] ) ? array( $args['data_args']['value'] => '' ) : array( '1' => '' );
-		}
 		$output = array();
 		foreach ( $args['choices'] as $choice_value => $choice_label ) {
 			$checked = '';
-			if ( is_array( $db_value ) && in_array( $choice_value, $db_value, true ) ) {
+			if ( $value && in_array( $choice_value, $value, true ) ) {
 				$checked = 'checked ';
-			} elseif ( is_string( $db_value ) && $db_value === $choice_value ) {
+			} elseif ( is_string( $value ) && $value === $choice_value ) {
 				$checked = 'checked ';
 			}
 			$output[] = sprintf(
-				'<input type="checkbox" id="%1$s__%2$s" name="%1$s[%2$s]" value="%2$s" %3$s%4$s/> <label for="%1$s__%2$s" />%5$s</label>',
+				'<input type="checkbox" id="%1$s__%2$s" name="%1$s[]" value="%2$s" %3$s%4$s/> <label for="%1$s__%2$s" />%5$s</label>',
 				esc_attr( $args['id'] ),
 				$choice_value,
 				$checked,
