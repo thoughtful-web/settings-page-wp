@@ -155,7 +155,7 @@ class TextareaField {
 
 	/**
 	* Get the settings option array and print one of its values.
-	* @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/text
+	* @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea
 	*
 	* @param array $args The arguments needed to render the setting field.
 	*
