@@ -7,7 +7,7 @@
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/page/settings/field/textfield.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/page/settings/field/textareafield.php
  * @since      0.1.0
  */
 
