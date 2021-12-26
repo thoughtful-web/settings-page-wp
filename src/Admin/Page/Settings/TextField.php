@@ -167,26 +167,7 @@ class TextField {
 		// Assemble the variables necessary to output the form field from settings.
 		$default_value = $args['data_args']['default'];
 		$value         = get_site_option( $args['id'], $default_value );
-		$disallowed_data_args_as_attrs = array(
-			'type',
-			'value',
-			'name',
-			'id',
-		);
-
-		// Determine additional HTML attributes to append to the element.
-		$extra_attrs = array();
-		if ( array_key_exists( 'placeholder', $args ) && ! empty( $args['placeholder'] ) ) {
-			$extra_attrs['placeholder']  = 'placeholder="' . esc_attr( $args['placeholder'] ) . '"';
-		}
-
-		foreach ( $args['data_args'] as $attr => $attr_value ) {
-			if ( array_key_exists( $attr, $this->allowed_html['input'] ) && ! in_array( $attr, $disallowed_data_args_as_attrs ) ) {
-				$extra_attrs[ $attr ] = $attr . '="' . esc_attr( $attr_value ) . '"';
-			}
-		}
-
-		$extra_attrs = implode( ' ', $extra_attrs );
+		$extra_attrs   = $this->get_optional_attributes( $args );
 
 		// Render the form field output.
 		$output = sprintf(
@@ -200,8 +181,46 @@ class TextField {
 
 		// Render the description text.
 		if ( isset( $args['data_args']['description'] ) && $args['data_args']['description'] ) {
-			echo wp_kses_post( "<p class=\"description\">{$data_args['description']}</p>" );
+			echo wp_kses_post( $data_args['description'] );
 		}
+
+	}
+
+	/**
+	 * Get optional attributes of the output element.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param array $field The field parameters.
+	 *
+	 * @return string
+	 */
+	private function get_optional_attributes( $field ) {
+
+		// Determine additional HTML attributes to append to the element.
+		$extra_attrs = array();
+		// First choose those among the top-level array members.
+		$disallowed_data_args_as_attrs = array(
+			'type',
+			'value',
+			'name',
+			'id',
+		);
+		if ( array_key_exists( 'placeholder', $field ) && ! empty( $field['placeholder'] ) ) {
+			$extra_attrs['placeholder']  = 'placeholder="' . esc_attr( $field['placeholder'] ) . '"';
+		}
+		// Then choose those among the data_args array members.
+		$field_allowed_html_key = array_keys( $this->allowed_html )[0];
+		$field_allowed_html     = $this->allowed_html[ $field_allowed_html_key ];
+		foreach ( $field['data_args'] as $attr => $attr_value ) {
+			if ( array_key_exists( $attr, $field_allowed_html ) && ! in_array( $attr, $disallowed_data_args_as_attrs ) ) {
+				$extra_attrs[ $attr ] = $attr . '="' . esc_attr( $attr_value ) . '"';
+			}
+		}
+		// Then combine the results into a string.
+		$extra_attrs = ! empty( $extra_attrs ) ? implode( ' ', $extra_attrs ) . ' ' : '';
+
+		return $extra_attrs;
 
 	}
 }
