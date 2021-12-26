@@ -19,7 +19,7 @@ namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
  *
  * @since 0.1.0
  */
-class TextareaField {
+class CheckboxField {
 
 	/**
 	 * The default values for required $field members.
@@ -27,14 +27,14 @@ class TextareaField {
 	 * @var array $default The default field parameter member values.
 	 */
 	private $default_field = array(
-		'type'        => 'textarea',
+		'type'        => 'checkbox',
 		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
 			'default'           => '',
-			'type'              => 'string',
 			'sanitize_callback' => 'sanitize_textarea_field',
 			'show_in_rest'      => false,
+			'type'              => 'string',
 			'description'       => '',
 		)
 	);
@@ -45,23 +45,17 @@ class TextareaField {
 	 * @var array $allowed_html The allowed HTML for the element produced by this class.
 	 */
 	private $allowed_html = array(
-		'textarea' => array(
+		'input' => array(
+			'checked'       => true,
 			'class'         => true,
-			'cols'          => true,
 			'data-*'        => true,
 			'disabled'      => true,
-			'autocomplete'  => true,
-			'disabled'      => true,
 			'id'            => true,
-			'maxlength'     => true,
-			'minlength'     => true,
 			'name'          => true,
-			'placeholder'   => true,
 			'readonly'      => true,
 			'required'      => true,
-			'rows'          => true,
-			'spellcheck'    => true,
-			'wrap'          => true,
+			'type'          => 'checkbox',
+			'value'         => true,
 		),
 	);
 
@@ -144,9 +138,17 @@ class TextareaField {
 	 */
 	public static function sanitize( $value, $option, $original_value ) {
 
-		$value = sanitize_textarea_field( $value );
-		if ( empty( $value ) ) {
-			$value = get_site_option( $option, $this->field['data_args']['default'] );
+		if ( in_array( $value, array( 'on', 'off' ) ) ) {
+			$value = 'on' === $value ? 1 : 0;
+		} else {
+			$value = intval( $value );
+		}
+		if ( 1 !== $value && 0 !== $value ) {
+			$default_value = $this->field['data_args']['default'];
+			$value = (int) get_site_option( $option, $default_value );
+			if ( 1 !== $value && 0 !== $value ) {
+				$value = 0;
+			}
 		}
 
 		return $value;
@@ -164,16 +166,18 @@ class TextareaField {
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
-		$default_value = $args['data_args']['default'];
-		$value         = get_site_option( $args['id'], $default_value );
-		$extra_attrs   = $this->get_optional_attributes( $args );
+		$value       = $args['data_args']['value'];
+		$db_value    = get_site_option( $args['id'] );
+		$extra_attrs = (int) $this->get_optional_attributes( $args );
+		$checked     = ! empty( $db_value ) ? 'checked ' : '';
 
 		// Render the form field output.
 		$output = sprintf(
-			'<textarea id="%1$s" name="%2$s" %4$s>%3$s</textarea>',
+			'<input type="checkbox" id="%1$s" name="%2$s" value="%3$b" %4$s%5$s/>',
 			esc_attr( $args['id'] ),
 			esc_attr( $args['data_args']['label_for'] ),
-			esc_textarea( $value ),
+			$value,
+			$checked,
 			$extra_attrs
 		);
 		echo wp_kses( $output, $this->allowed_html );
@@ -212,7 +216,7 @@ class TextareaField {
 		$field_allowed_html_key = array_keys( $this->allowed_html )[0];
 		$field_allowed_html     = $this->allowed_html[ $field_allowed_html_key ];
 		foreach ( $field['data_args'] as $attr => $attr_value ) {
-			if ( array_key_exists( $attr, $field_allowed_html ) && ! in_array( $attr, $disallowed_data_args_as_attrs ) ) {
+			if ( array_key_exists( $attr, $field_allowed_html ) && ! in_array( $attr, $disallowed_data_args_as_attrs, true ) ) {
 				$extra_attrs[ $attr ] = $attr . '="' . esc_attr( $attr_value ) . '"';
 			}
 		}

@@ -169,6 +169,13 @@ class Settings {
 							$section_id
 						);
 						break;
+					case 'checkbox':
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\CheckboxField(
+							$field,
+							$this->menu_slug,
+							$section_id
+						);
+						break;
 					default:
 						break;
 					}
