@@ -67,13 +67,6 @@ class TextField {
 	);
 
 	/**
-	 * Default text field value from data_args.
-	 *
-	 * @var string $default_value The default text field value from data_args.
-	 */
-	private $default_value = '';
-
-	/**
 	 * Stored field value.
 	 *
 	 * @var array $field The registered field arguments.
@@ -107,11 +100,9 @@ class TextField {
 	 * }
 	 * @param string $menu_slug         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
 	 * @param string $section_id   The slug-name of the section of the settings page in which to show the box.
-	 * @param bool   $network      Whether the plugin is activated at the network level or not.
 	 */
-	public function __construct( $field, $menu_slug, $section_id, $network ) {
+	public function __construct( $field, $menu_slug, $section_id ) {
 
-		$this->network      = $network;
 		$this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
 
 		// Merge user-defined field values with default values.
@@ -129,7 +120,6 @@ class TextField {
 
 		// Assign the new merged field value.
 		$this->field = $field;
-		$this->default_value = $this->field['data_args']['default'];
 
 		// Register the settings field output.
 		add_settings_field(
@@ -156,7 +146,7 @@ class TextField {
 
 		$value = sanitize_text_field( $value );
 		if ( empty( $value ) ) {
-			$value = get_site_option( $option, $this->default_value );
+			$value = get_site_option( $option, $this->field['data_args']['default'] );
 		}
 
 		return $value;

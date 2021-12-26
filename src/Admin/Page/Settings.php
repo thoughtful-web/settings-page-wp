@@ -159,8 +159,7 @@ class Settings {
 						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField(
 							$field,
 							$this->menu_slug,
-							$section_id,
-							$this->config['network']
+							$section_id
 						);
 						break;
 					default:
