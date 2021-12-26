@@ -45,7 +45,7 @@ class TextareaField {
 	 * @var array $allowed_html The allowed HTML for the element produced by this class.
 	 */
 	private $allowed_html = array(
-		'input' => array(
+		'textarea' => array(
 			'class'         => true,
 			'cols'          => true,
 			'data-*'        => true,
