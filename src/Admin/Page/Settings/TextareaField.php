@@ -173,7 +173,7 @@ class TextareaField {
 			'<textarea id="%1$s" name="%2$s" %4$s>%3$s</textarea>',
 			esc_attr( $args['id'] ),
 			esc_attr( $args['data_args']['label_for'] ),
-			esc_attr( $value ),
+			esc_textarea( $value ),
 			$extra_attrs
 		);
 		echo wp_kses( $output, $this->allowed_html );
