@@ -108,17 +108,7 @@ class Text {
 		$this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
 
 		// Merge user-defined field values with default values.
-		foreach ( $this->default_field as $key => $default_value ) {
-			if ( 'data_args' === $key ) {
-				foreach( $default_value as $data_key => $default_data_value ) {
-					if ( ! array_key_exists( $data_key, $field[ $key ] ) ) {
-						$field[ $key ][ $data_key ] = $default_data_value;
-					}
-				}
-			} elseif ( ! array_key_exists( $key, $field ) ) {
-				$field[ $key ] = $default_value;
-			}
-		}
+		$field = $this->apply_defaults( $field );
 
 		// Store the merged field.
 		$this->field = $field;
@@ -135,6 +125,33 @@ class Text {
 			$section_id,
 			$field
 		);
+
+	}
+
+	/**
+	 * Merge user-defined field values with default values.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param array $field The field registration arguments.
+	 *
+	 * @return array
+	 */
+	private function apply_defaults( $field ) {
+
+		foreach ( $this->default_field as $key => $default_value ) {
+			if ( 'data_args' === $key ) {
+				foreach( $default_value as $data_key => $default_data_value ) {
+					if ( ! array_key_exists( $data_key, $field[ $key ] ) ) {
+						$field[ $key ][ $data_key ] = $default_data_value;
+					}
+				}
+			} elseif ( ! array_key_exists( $key, $field ) ) {
+				$field[ $key ] = $default_value;
+			}
+		}
+
+		return $field;
 
 	}
 
@@ -183,10 +200,26 @@ class Text {
 		echo wp_kses( $output, $this->allowed_html );
 
 		// Render the description text.
-		if ( isset( $args['desc'] ) && $args['desc'] ) {
-			echo wp_kses_post( '<br />' . $args['desc'] );
-		}
+		$this->output_description( $args );
 
+	}
+
+	/**
+	 * Echo the Field description.
+	 *
+	 * @param array $args {
+	 *     The arguments needed to render the setting field.
+	 *
+	 *     @key string $desc The field description.
+	 * }
+	 *
+	 * @return string
+	 */
+	private function output_description( $args ) {
+		if ( isset( $args['desc'] ) && $args['desc'] ) {
+			$desc = '<br />' . $args['desc'];
+			echo wp_kses_post( $desc );
+		}
 	}
 
 	/**
