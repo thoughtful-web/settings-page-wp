@@ -31,11 +31,10 @@ class Checkbox {
 		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
-			'default'           => array(),
-			'sanitize_callback' => 'intval',
-			'show_in_rest'      => false,
-			'type'              => 'string',
-			'description'       => '',
+			'default'      => array(),
+			'show_in_rest' => false,
+			'type'         => 'string',
+			'description'  => '',
 		)
 	);
 
@@ -57,6 +56,10 @@ class Checkbox {
 			'type'          => 'checkbox',
 			'value'         => true,
 		),
+		'label' => array(
+			'for' => true,
+		),
+		'br' => true,
 	);
 
 	/**
@@ -142,20 +145,18 @@ class Checkbox {
 	 */
 	public static function sanitize( $value, $option, $original_value ) {
 
-		if ( in_array( $value, array( 'on', 'off' ) ) ) {
-			$value = 'on' === $value ? 1 : 0;
-		} else {
-			$value = intval( $value );
-		}
-		if ( 1 !== $value && 0 !== $value ) {
-			$default_value = $this->field['data_args']['default'];
-			$value = (int) get_site_option( $option, $default_value );
-			if ( 1 !== $value && 0 !== $value ) {
-				$value = 0;
-			}
+		// Get the predefined choice from the configuration variable.
+		$config_choice = array_keys( $this->field['choice'] );
+		// If the choice value is present in the configuration, continue.
+		if ( ! in_array( $value[0], $config_choice, true ) ) {
+			// Value is falsified.
+			// Get the default choice values.
+			$default = isset( $this->field['data_args']['default'] ) ? $this->field['data_args']['default'] : array();
+			// Get the database choice and fall back to the default configured value.
+			$value = get_site_option( $option, $default );
 		}
 
-		return $value;
+		return $value[0];
 
 	}
 
@@ -170,25 +171,36 @@ class Checkbox {
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
-		$value       = $args['data_args']['value'];
-		$db_value    = get_site_option( $args['id'] );
-		$extra_attrs = (int) $this->get_optional_attributes( $args );
-		$checked     = ! empty( $db_value ) ? 'checked ' : '';
+		$value       = get_site_option( $args['id'], $args['data_args']['default'] );
+		$extra_attrs = $this->get_optional_attributes( $args );
 
 		// Render the form field output.
-		$output = sprintf(
-			'<input type="checkbox" id="%1$s" name="%2$s" value="%3$b" %4$s%5$s/>',
-			esc_attr( $args['id'] ),
-			esc_attr( $args['data_args']['label_for'] ),
-			$value,
-			$checked,
-			$extra_attrs
-		);
+		$output = array();
+		foreach ( $args['choice'] as $choice_value => $choice_label ) {
+			$checked = '';
+			if ( $value && in_array( $choice_value, $value, true ) ) {
+				$checked = 'checked ';
+			} elseif ( is_string( $value ) && $value === $choice_value ) {
+				$checked = 'checked ';
+			}
+			$output[] = sprintf(
+				'<input type="checkbox" id="%1$s__%2$s" name="%1$s[]" value="%2$s" %3$s%4$s/> <label for="%1$s__%2$s" />%5$s</label>',
+				esc_attr( $args['id'] ),
+				$choice_value,
+				$checked,
+				$extra_attrs,
+				$choice_label
+			);
+
+		}
+		$output = implode( '<br />', $output );
 		echo wp_kses( $output, $this->allowed_html );
 
 		// Render the description text.
 		if ( isset( $args['desc'] ) && $args['desc'] ) {
-			echo wp_kses_post( '<br />' . $args['desc'] );
+			$desc  = count( $args['choice'] ) > 1 ? '<br />' : '&nbsp;';
+			$desc .= $args['desc'];
+			echo wp_kses_post( $desc );
 		}
 
 	}

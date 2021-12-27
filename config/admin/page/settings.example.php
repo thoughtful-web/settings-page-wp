@@ -52,8 +52,13 @@ return array(
 					'id'      => 'unique_checkbox_field',
 					'type'    => 'checkbox',
 					'desc'    => 'My checkbox field description',
-					'choices' => array(
-						'1' => '',
+					'choice' => array(
+						'1' => 'My Choice',
+					),
+					'data_args' => array(
+						'default' => array(
+							'1' => 'My Choice',
+						)
 					),
 				),
 				array(
@@ -67,7 +72,6 @@ return array(
 						'option_three' => 'Option 3',
 					),
 					'data_args' => array(
-						'value'   => 'option_one',
 						'default' => array(
 							'option_one',
 							'option_two',
