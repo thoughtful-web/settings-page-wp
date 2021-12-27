@@ -183,9 +183,8 @@ class Checkboxes {
 		$output = array();
 		foreach ( $args['choices'] as $choice_value => $choice_label ) {
 			$checked = '';
-			if ( $value && in_array( $choice_value, $value, true ) ) {
-				$checked = 'checked ';
-			} elseif ( is_string( $value ) && $value === $choice_value ) {
+			if ( $value && in_array( $choice_value, $value, true )
+				|| is_string( $value ) && $value === $choice_value ) {
 				$checked = 'checked ';
 			}
 			$output[] = sprintf(
