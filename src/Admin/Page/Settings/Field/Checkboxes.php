@@ -203,8 +203,7 @@ class Checkboxes {
 
 		// Render the description text.
 		if ( isset( $args['desc'] ) && $args['desc'] ) {
-			$desc  = count( $args['choices'] ) > 1 ? '<br />' : '&nbsp;';
-			$desc .= $args['desc'];
+			$desc = '<br />' . $args['desc'];
 			echo wp_kses_post( $desc );
 		}
 
