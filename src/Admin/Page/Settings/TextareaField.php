@@ -99,8 +99,9 @@ class TextareaField {
 	 * }
 	 * @param string $menu_slug         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
 	 * @param string $section_id   The slug-name of the section of the settings page in which to show the box.
+	 * @param string $option_group Name the group of database options which the fields represent.
 	 */
-	public function __construct( $field, $menu_slug, $section_id ) {
+	public function __construct( $field, $menu_slug, $section_id, $option_group ) {
 
 		// Define the option value sanitization callback method.
 		$this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
@@ -120,6 +121,9 @@ class TextareaField {
 
 		// Store the merged field.
 		$this->field = $field;
+
+		// Register the setting.
+		register_setting( $option_group, $field['id'], $field['data_args'] );
 
 		// Register the field.
 		add_settings_field(

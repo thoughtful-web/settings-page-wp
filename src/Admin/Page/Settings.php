@@ -90,30 +90,8 @@ class Settings {
 	 */
 	public function settings_init() {
 
-		$this->register_settings();
 		$this->add_sections();
 		$this->add_fields();
-
-	}
-
-	/**
-	 * Register all new database settings.
-	 *
-	 * @return void
-	 */
-	private function register_settings() {
-
-		foreach ( $this->config['sections'] as $section ) {
-
-			foreach ( $section['fields'] as $field ) {
-
-				$data_args = isset( $field['data_args'] ) ? $field['data_args'] : array();
-				// Register the settings field database entry.
-				register_setting( $this->option_group, $field['id'], $data_args );
-
-			}
-
-		}
 
 	}
 
@@ -159,21 +137,24 @@ class Settings {
 						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField(
 							$field,
 							$this->menu_slug,
-							$section_id
+							$section_id,
+							$this->option_group
 						);
 						break;
 					case 'textarea':
 						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextareaField(
 							$field,
 							$this->menu_slug,
-							$section_id
+							$section_id,
+							$this->option_group
 						);
 						break;
 					case 'checkbox':
 						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\CheckboxField(
 							$field,
 							$this->menu_slug,
-							$section_id
+							$section_id,
+							$this->option_group
 						);
 						break;
 					default:
