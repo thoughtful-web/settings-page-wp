@@ -12,14 +12,14 @@
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
+namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
 
 /**
  * The TextField class.
  *
  * @since 0.1.0
  */
-class TextareaField {
+class Textarea {
 
 	/**
 	 * The default values for required $field members.

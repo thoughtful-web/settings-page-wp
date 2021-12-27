@@ -7,19 +7,19 @@
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/page/settings/field/textfield.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/page/settings/field/textareafield.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
+namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
 
 /**
  * The TextField class.
  *
  * @since 0.1.0
  */
-class TextField {
+class Checkbox {
 
 	/**
 	 * The default values for required $field members.
@@ -27,12 +27,12 @@ class TextField {
 	 * @var array $default The default field parameter member values.
 	 */
 	private $default_field = array(
-		'type'        => 'text',
+		'type'        => 'checkbox',
 		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
-			'default'           => '',
-			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => array(),
+			'sanitize_callback' => 'intval',
 			'show_in_rest'      => false,
 			'type'              => 'string',
 			'description'       => '',
@@ -46,22 +46,15 @@ class TextField {
 	 */
 	private $allowed_html = array(
 		'input' => array(
+			'checked'       => true,
 			'class'         => true,
 			'data-*'        => true,
-			'autocomplete'  => true,
 			'disabled'      => true,
 			'id'            => true,
-			'list'          => true,
-			'maxlength'     => true,
-			'minlength'     => true,
 			'name'          => true,
-			'pattern'       => true,
-			'placeholder'   => true,
 			'readonly'      => true,
 			'required'      => true,
-			'size'          => true,
-			'spellcheck'    => true,
-			'type'          => 'text',
+			'type'          => 'checkbox',
 			'value'         => true,
 		),
 	);
@@ -149,9 +142,17 @@ class TextField {
 	 */
 	public static function sanitize( $value, $option, $original_value ) {
 
-		$value = sanitize_text_field( $value );
-		if ( empty( $value ) ) {
-			$value = get_site_option( $option, $this->field['data_args']['default'] );
+		if ( in_array( $value, array( 'on', 'off' ) ) ) {
+			$value = 'on' === $value ? 1 : 0;
+		} else {
+			$value = intval( $value );
+		}
+		if ( 1 !== $value && 0 !== $value ) {
+			$default_value = $this->field['data_args']['default'];
+			$value = (int) get_site_option( $option, $default_value );
+			if ( 1 !== $value && 0 !== $value ) {
+				$value = 0;
+			}
 		}
 
 		return $value;
@@ -160,7 +161,7 @@ class TextField {
 
 	/**
 	* Get the settings option array and print one of its values.
-	* @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/text
+	* @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea
 	*
 	* @param array $args The arguments needed to render the setting field.
 	*
@@ -169,16 +170,18 @@ class TextField {
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
-		$default_value = $args['data_args']['default'];
-		$value         = get_site_option( $args['id'], $default_value );
-		$extra_attrs   = $this->get_optional_attributes( $args );
+		$value       = $args['data_args']['value'];
+		$db_value    = get_site_option( $args['id'] );
+		$extra_attrs = (int) $this->get_optional_attributes( $args );
+		$checked     = ! empty( $db_value ) ? 'checked ' : '';
 
 		// Render the form field output.
 		$output = sprintf(
-			'<input type="text" id="%1$s" name="%2$s" value="%3$s" %4$s/>',
+			'<input type="checkbox" id="%1$s" name="%2$s" value="%3$b" %4$s%5$s/>',
 			esc_attr( $args['id'] ),
 			esc_attr( $args['data_args']['label_for'] ),
-			esc_attr( $value ),
+			$value,
+			$checked,
 			$extra_attrs
 		);
 		echo wp_kses( $output, $this->allowed_html );
@@ -217,7 +220,7 @@ class TextField {
 		$field_allowed_html_key = array_keys( $this->allowed_html )[0];
 		$field_allowed_html     = $this->allowed_html[ $field_allowed_html_key ];
 		foreach ( $field['data_args'] as $attr => $attr_value ) {
-			if ( array_key_exists( $attr, $field_allowed_html ) && ! in_array( $attr, $disallowed_data_args_as_attrs ) ) {
+			if ( array_key_exists( $attr, $field_allowed_html ) && ! in_array( $attr, $disallowed_data_args_as_attrs, true ) ) {
 				$extra_attrs[ $attr ] = $attr . '="' . esc_attr( $attr_value ) . '"';
 			}
 		}

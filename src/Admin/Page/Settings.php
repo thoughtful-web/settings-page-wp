@@ -134,7 +134,7 @@ class Settings {
 
 				switch( $field['type'] ) {
 					case 'text':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField(
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\TextField(
 							$field,
 							$this->menu_slug,
 							$section_id,
@@ -142,7 +142,7 @@ class Settings {
 						);
 						break;
 					case 'textarea':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextareaField(
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\TextareaField(
 							$field,
 							$this->menu_slug,
 							$section_id,
@@ -150,7 +150,7 @@ class Settings {
 						);
 						break;
 					case 'checkbox':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\CheckboxField(
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\CheckboxField(
 							$field,
 							$this->menu_slug,
 							$section_id,
