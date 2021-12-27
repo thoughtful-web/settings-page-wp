@@ -141,19 +141,19 @@ class CheckboxField {
 	 */
 	public static function sanitize( $value, $option, $original_value ) {
 
-		$choices  = array_keys( $this->field['choices'] );
-		$default  = isset( $this->field['data_args']['default'] ) ? $this->field['data_args']['default'] : array();
-		$fallback = get_site_option( $option, $default );
+		// Get the predefined choices from the configuration variable.
+		$config_choices = array_keys( $this->field['choices'] );
 		foreach ( $value as $key => $choice ) {
-			if ( ! in_array( $choice, $choices, true ) ) {
-				// Value is bogus, fall back to first the database value and then the default configured value.
-				if ( array_key_exists( $key, $db_value ) ) {
-					$value[ $key ] = $db_value[ $key ];
-				} elseif ( array_key_exists( $key, $fallback ) ) {
-					$value[ $key ] = $fallback[ $key ];
-				} else {
-					unset( $value[ $key ] );
-				}
+			// If the choice value is present in the configuration, continue.
+			if ( in_array( $choice, $config_choices, true ) ) {
+				continue;
+			} else {
+				// Value is falsified.
+				// Get the default choice values.
+				$default = isset( $this->field['data_args']['default'] ) ? $this->field['data_args']['default'] : array();
+				// Get the database choices and fall back to the default configured value.
+				$value = get_site_option( $option, $default );
+				break;
 			}
 		}
 
