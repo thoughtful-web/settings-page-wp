@@ -38,7 +38,7 @@ class Text extends Field {
 			'show_in_rest'      => false,
 			'type'              => 'string',
 			'description'       => '',
-		)
+		),
 	);
 
 	/**
@@ -71,9 +71,7 @@ class Text extends Field {
 	/**
 	 * Sanitize the text field value.
 	 *
-	 * @param string $value          The unsanitized option value.
-	 * @param string $option         The option name.
-	 * @param string $original_value The original value passed to the function.
+	 * @param string $value The unsanitized option value.
 	 *
 	 * @return string
 	 */
@@ -89,13 +87,14 @@ class Text extends Field {
 	}
 
 	/**
-	* Get the settings option array and print one of its values.
-	* @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/text
-	*
-	* @param array $args The arguments needed to render the setting field.
-	*
-	* @return void
-	*/
+	 * Get the settings option array and print one of its values.
+	 *
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/text
+	 *
+	 * @param array $args The arguments needed to render the setting field.
+	 *
+	 * @return void
+	 */
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
