@@ -25,8 +25,8 @@ return array(
 	'sections'     => array(
 		array(
 			'section'     => 'unique-section-id-1',
-			'description' => 'Section One',
-			'title'       => 'A description for Section One',
+			'title'       => 'Section One',
+			'description' => 'A description for Section One',
 			'fields'      => array(
 				array(
 					'label'       => 'My Text Field',
@@ -62,10 +62,10 @@ return array(
 					),
 				),
 				array(
-					'label'   => 'My Checkbox Field',
-					'id'      => 'unique_checkbox_field',
+					'label'   => 'My Checkbox Fields',
+					'id'      => 'unique_checkbox_fields',
 					'type'    => 'checkbox',
-					'desc'    => 'My checkbox field description',
+					'desc'    => 'My checkbox fields description',
 					'choices' => array(
 						'option_one'   => 'Option 1',
 						'option_two'   => 'Option 2',
