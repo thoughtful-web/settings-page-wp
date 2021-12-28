@@ -25,8 +25,8 @@ return array(
 	'sections'     => array(
 		array(
 			'section'     => 'unique-section-id-1',
-			'description' => '',
-			'title'       => '',
+			'description' => 'Section One',
+			'title'       => 'A description for Section One',
 			'fields'      => array(
 				array(
 					'label'       => 'My Text Field',
@@ -86,11 +86,11 @@ return array(
 			'description' => 'Section Two description text',
 			'fields'      => array(
 				array(
-					'label'       => 'My Editor Field',
-					'id'          => 'unique_editor_field',
-					'type'        => 'wp_editor',
-					'desc'        => 'My editor field description',
-					'placeholder' => 'my placeholder',
+					'label'   => 'My WP Editor Field',
+					'id'      => 'unique_wp_editor_field',
+					'type'    => 'wp_editor',
+					'desc'    => 'My WP Editor field description',
+					'default' => 'my placeholder',
 				),
 				array(
 					'label'       => 'My Decimal Number Field',
