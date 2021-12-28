@@ -93,6 +93,30 @@ return array(
 					'placeholder' => 'my placeholder',
 				),
 				array(
+					'label'       => 'My Text Field',
+					'id'          => 'unique_number_field',
+					'type'        => 'number',
+					'desc'        => 'My number field description',
+					'placeholder' => 'Multiple of 0.1',
+					'data_args'   => array(
+						'step' => '0.1',
+						'min'  => '0',
+						'max'  => '10',
+					)
+				),
+				array(
+					'label'       => 'My Text Field',
+					'id'          => 'unique_number_field',
+					'type'        => 'number',
+					'desc'        => 'My number field description',
+					'placeholder' => 'Multiple of -1',
+					'data_args'   => array(
+						'step' => '1',
+						'min'  => '-10',
+						'max'  => '0',
+					)
+				),
+				array(
 					'label'   => 'My Radio Field',
 					'id'      => 'unique_radio_field',
 					'type'    => 'radio',
