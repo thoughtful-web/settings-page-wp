@@ -3,7 +3,7 @@
  * The file that wraps the WordPress Settings API in a file-configurable framework.
  *
  * @package    ThoughtfulWeb\LibraryWP
- * @subpackage Settings
+ * @subpackage Field
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
@@ -79,7 +79,7 @@ class Checkbox {
 	/**
 	 * Constructor for the Field class.
 	 *
-	 * @param array $field {
+	 * @param array  $field {
 	 *     The field registration arguments.
 	 *
 	 *     @type string $label       Formatted title of the field. Shown as the label for the field during output. Required.
@@ -146,7 +146,7 @@ class Checkbox {
 
 		foreach ( $this->default_field as $key => $default_value ) {
 			if ( 'data_args' === $key ) {
-				foreach( $default_value as $data_key => $default_data_value ) {
+				foreach ( $default_value as $data_key => $default_data_value ) {
 					if ( ! array_key_exists( $data_key, $field[ $key ] ) ) {
 						$field[ $key ][ $data_key ] = $default_data_value;
 					}
@@ -167,35 +167,34 @@ class Checkbox {
 	 *
 	 * @return string
 	 */
-	public static function sanitize( $value ) {
+	public function sanitize( $value ) {
 
-		// Get the predefined choice from the configuration variable.
-		$config_choice = array_keys( $this->field['choice'] );
-		// If the choice value is present in the configuration, continue.
-		if ( ! in_array( $value[0], $config_choice, true ) ) {
+		// If the choice value is present in the configuration and it is not a configured choice then it is a falsified choice.
+		if ( ! empty( $value ) && $value !== $this->field['choice'] ) {
 			// Value is falsified.
 			// Get the default choice values.
-			$default = isset( $this->field['data_args']['default'] ) ? $this->field['data_args']['default'] : array();
+			$default = isset( $this->field['data_args']['default'] ) ? array_keys( $this->field['data_args']['default'] ) : array();
 			// Get the database choice and fall back to the default configured value.
 			$value = get_site_option( $this->option_group, $default );
 		}
 
-		return array_values($value)[0];
+		return $value;
 
 	}
 
 	/**
-	* Get the settings option array and print one of its values.
-	* @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea
-	*
-	* @param array $args The arguments needed to render the setting field.
-	*
-	* @return void
-	*/
+	 * Get the settings option array and print one of its values.
+	 *
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea
+	 *
+	 * @param array $args The arguments needed to render the setting field.
+	 *
+	 * @return void
+	 */
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
-		$value       = get_site_option( $args['id'], $args['data_args']['default'] );
+		$value       = get_site_option( $args['id'], array_keys( $args['data_args']['default'] ) );
 		$extra_attrs = $this->get_optional_attributes( $args );
 
 		// Render the form field output.
@@ -234,7 +233,7 @@ class Checkbox {
 	 *     @key string $desc The field description.
 	 * }
 	 *
-	 * @return string
+	 * @return void
 	 */
 	private function output_description( $args ) {
 		if ( isset( $args['desc'] ) && $args['desc'] ) {
