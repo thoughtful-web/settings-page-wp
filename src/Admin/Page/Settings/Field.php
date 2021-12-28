@@ -224,7 +224,7 @@ class Field {
 	 *
 	 * @return string
 	 */
-	private function output_description( $args ) {
+	protected function output_description( $args ) {
 		if ( isset( $args['desc'] ) && $args['desc'] ) {
 			$desc = '<br />' . $args['desc'];
 			echo wp_kses_post( $desc );
@@ -240,7 +240,7 @@ class Field {
 	 *
 	 * @return string
 	 */
-	private function get_optional_attributes( $field ) {
+	protected function get_optional_attributes( $field ) {
 
 		// Determine additional HTML attributes to append to the element.
 		$extra_attrs = array();
