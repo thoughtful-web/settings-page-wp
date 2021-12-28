@@ -171,21 +171,24 @@ class Checkboxes {
 
 		// Get the predefined choices from the configuration variable.
 		$config_choices = array_keys( $this->field['choices'] );
+		$final_choices  = array();
 		foreach ( $value as $key => $choice ) {
 			// If the choice value is present in the configuration, continue.
 			if ( in_array( $choice, $config_choices, true ) ) {
+				// Ensure the choice can only be passed once.
+				$final_choices[ $choice ] = $choice;
 				continue;
 			} else {
 				// Value is falsified.
 				// Get the default choice values.
 				$default = isset( $this->field['data_args']['default'] ) ? $this->field['data_args']['default'] : array();
 				// Get the database choices and fall back to the default configured value.
-				$value = get_site_option( $this->option_group, $default );
+				$final_choices = get_site_option( $this->option_group, $default );
 				break;
 			}
 		}
 
-		return $value;
+		return $final_choices;
 
 	}
 
