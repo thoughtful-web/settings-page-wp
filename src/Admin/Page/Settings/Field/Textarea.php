@@ -38,7 +38,7 @@ class Textarea extends Field {
 			'sanitize_callback' => 'sanitize_textarea_field',
 			'show_in_rest'      => false,
 			'description'       => '',
-		)
+		),
 	);
 
 	/**
@@ -48,22 +48,22 @@ class Textarea extends Field {
 	 */
 	private $allowed_html = array(
 		'textarea' => array(
-			'class'         => true,
-			'cols'          => true,
-			'data-*'        => true,
-			'disabled'      => true,
-			'autocomplete'  => true,
-			'disabled'      => true,
-			'id'            => true,
-			'maxlength'     => true,
-			'minlength'     => true,
-			'name'          => true,
-			'placeholder'   => true,
-			'readonly'      => true,
-			'required'      => true,
-			'rows'          => true,
-			'spellcheck'    => true,
-			'wrap'          => true,
+			'class'        => true,
+			'cols'         => true,
+			'data-*'       => true,
+			'disabled'     => true,
+			'autocomplete' => true,
+			'disabled'     => true,
+			'id'           => true,
+			'maxlength'    => true,
+			'minlength'    => true,
+			'name'         => true,
+			'placeholder'  => true,
+			'readonly'     => true,
+			'required'     => true,
+			'rows'         => true,
+			'spellcheck'   => true,
+			'wrap'         => true,
 		),
 	);
 
