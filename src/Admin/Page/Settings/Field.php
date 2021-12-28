@@ -1,6 +1,6 @@
 <?php
 /**
- * The file that extends WP_Error notification capabilities.
+ * The file that serves as a base for creating Field classes for the Settings API.
  *
  * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Settings
@@ -14,48 +14,71 @@
 declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
 
+/**
+ * The TextField class.
+ *
+ * @since 0.1.0
+ */
 class Field {
 
 	/**
-	 * Field registration parameters.
-	 * @var array $params The field registration parameters.
-	 */
-	private $params;
-
-	/**
-	 * HTML field to PHP variable type translation.
+	 * The default values for required $field members.
 	 *
-	 * @var array $type_assoc Field and variable type associations.
+	 * @var array $default The default field parameter member values.
 	 */
-	private $type_assoc = array(
-		'text'        => 'string',
-		'textarea'    => 'string',
-		'wp_editor'   => 'string',
-		'checkbox'    => 'boolean',
-		'radio'       => 'array',
-		'select'      => 'string',
-		'multiselect' => 'array',
-		'media'       => 'string',
-		'email'       => 'string',
+	private $default_field = array(
+		'type'        => 'text',
+		'desc'        => '',
+		'placeholder' => '',
+		'data_args'   => array(
+			'default'           => '',
+			'sanitize_callback' => 'sanitize_text_field',
+			'show_in_rest'      => false,
+			'type'              => 'string',
+			'description'       => '',
+		)
 	);
 
 	/**
-	 * Simple sanitization functions.
-	 * Null values are set at runtime.
+	 * Allowed HTML.
 	 *
-	 * @var array $sanitize Single sanitization functions for saving options to the database.
+	 * @var array $allowed_html The allowed HTML for the element produced by this class.
 	 */
-	private $sanitize = array(
-		'text'        => 'sanitize_text_field',
-		'textarea'    => 'sanitize_textarea_field',
-		'wp_editor'   => 'wp_filter_post_kses',
-		'email'       => 'sanitize_email',
-		'checkbox'    => null,
-		'radio'       => null,
-		'select'      => null,
-		'multiselect' => null,
-		'media'       => null,
+	private $allowed_html = array(
+		'input' => array(
+			'class'         => true,
+			'data-*'        => true,
+			'autocomplete'  => true,
+			'disabled'      => true,
+			'id'            => true,
+			'list'          => true,
+			'maxlength'     => true,
+			'minlength'     => true,
+			'name'          => true,
+			'pattern'       => true,
+			'placeholder'   => true,
+			'readonly'      => true,
+			'required'      => true,
+			'size'          => true,
+			'spellcheck'    => true,
+			'type'          => 'text',
+			'value'         => true,
+		),
 	);
+
+	/**
+	 * Stored field value.
+	 *
+	 * @var array $field The registered field arguments.
+	 */
+	private $field;
+
+	/**
+	 * Name the group of database options which the fields represent.
+	 *
+	 * @var string $option_group The database option group name. Lowercase letters and underscores only. If not configured it will default  to the menu_slug method argument with hyphens replaced with underscores.
+	 */
+	private $option_group;
 
 	/**
 	 * Constructor for the Field class.
@@ -63,16 +86,18 @@ class Field {
 	 * @param array $field {
 	 *     The field registration arguments.
 	 *
-	 *     @type string $label       Formatted title of the field. Shown as the label for the field during output.
-	 *     @type string $id          Slug-name to identify the field. Used in the 'id' attribute of tags.
-	 *     @type string $type        The type attribute.
-	 *     @type string $desc        The description.
-	 *     @type mixed  $placeholder The placeholder text, if applicable.
-	 *     @type mixed  $label_for   When supplied, the setting title will be wrapped in a `<label>` element, its `for` attribute populated with this value.
-	 *     @type mixed  $class       CSS Class to be added to the `<tr>` element when the field is output.
+	 *     @type string $label       Formatted title of the field. Shown as the label for the field during output. Required.
+	 *     @type string $id          Slug-name to identify the field. Used in the 'id' attribute of tags. Required.
+	 *     @type string $type        The type attribute. Required.
+	 *     @type string $desc        The description. Optional.
+	 *     @type mixed  $placeholder The placeholder text, if applicable. Optional.
+	 *     @type string $default     The default value. Optional.
+	 *     @type mixed  $label_for   When supplied, the setting title will be wrapped in a `<label>` element, its `for` attribute populated with this value. Optional.
+	 *     @type mixed  $class       CSS Class to be added to the `<tr>` element when the field is output. Optional.
 	 *     @type array  $data_args {
-	 *         Data used to describe the setting when registered.
+	 *         Data used to describe the setting when registered. Required.
 	 *
+	 *         @type string     $option_name       The option name. If not provided, will default to the ID attribute of the HTML element. Optional.
 	 *         @type mixed      $default           Default value when calling `get_option()`. Optional.
 	 *         @type callable   $sanitize_callback A callback function that sanitizes the option's value. Optional.
 	 *         @type bool|array $show_in_rest      Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key.
@@ -80,230 +105,167 @@ class Field {
 	 *         @type string     $description       A description of the data attached to this setting. Only used for the REST API.
 	 *     }
 	 * }
-	 * @param callable $callback Function that fills the field with the desired form inputs. The function should echo its output. Callable. Required.
-	 * @param string   $page     The slug-name of the settings page on which to show the section (general, reading, writing, ...).
-	 * @param string   $section  The slug-name of the section of the settings page in which to show the box.
+	 * @param string $menu_slug         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
+	 * @param string $section_id   The slug-name of the section of the settings page in which to show the box.
+	 * @param string $option_group Name the group of database options which the fields represent.
 	 */
-	public function __construct( $field, $page, $section ) {
+	public function __construct( $field, $menu_slug, $section_id, $option_group ) {
 
-		// Assign sanitization filters defined in this class but unable to be defined during build time.
-		$this->sanitize['checkbox']    = array( $this, 'sanitize_booleanish' );
-		$this->sanitize['radio']       = array( $this, 'sanitize_choices' );
-		$this->sanitize['select']      = array( $this, 'sanitize_choices' );
-		$this->sanitize['multiselect'] = array( $this, 'sanitize_choices' );
-		$this->sanitize['media']       = array( $this, 'sanitize_file_name' );
+		$this->option_group = $option_group;
 
-		$params = $this->compile_settings_params( $field, $page );
+		// Define the option value sanitization callback method.
+		$this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
 
-		// Store the compiled registration parameters.
-		$this->params = array(
-			'field'         => $field,
-			'page'          => $page,
-			'section'       => $section,
-			'option_group'  => $params['option_group'],
-			'option_name'   => $field['id'],
-			'settings_args' => $params['args'],
+		// Merge user-defined field values with default values.
+		$field = $this->apply_defaults( $field );
+
+		// Store the merged field.
+		$this->field = $field;
+
+		// Register the setting.
+		register_setting( $option_group, $field['id'], $field['data_args'] );
+
+		// Register the field.
+		add_settings_field(
+			$field['id'],
+			$field['label'],
+			array( $this, 'output' ),
+			$menu_slug,
+			$section_id,
+			$field
 		);
-
-		// Register the settings field output.
-		add_settings_field( $field['id'], $field['label'], array( $this, 'field_output_callback' ), $page, $section, $field );
-
-		// Register the settings field database entry.
-		register_setting( $params['option_group'], $field['id'], $params['args'] );
 
 	}
 
 	/**
-	 * Compile the settings arguments.
+	 * Merge user-defined field values with default values.
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param array  $field The field arguments.
-	 * @param string $page  The page slug.
+	 * @param array $field The field registration arguments.
 	 *
 	 * @return array
 	 */
-	private function compile_settings_params( $field, $page ) {
+	private function apply_defaults( $field ) {
 
-		$results = array();
-
-		// Register the database settings field.
-		$option_group = str_replace( '-', '_', sanitize_key( $page ) );
-
-		// Known blacklist of database option names.
-		if ( in_array( $option_group, array( 'privacy', 'misc' ), true ) ) {
-			$option_group .= '_option';
+		foreach ( $this->default_field as $key => $default_value ) {
+			if ( 'data_args' === $key ) {
+				foreach( $default_value as $data_key => $default_data_value ) {
+					if ( ! array_key_exists( $data_key, $field[ $key ] ) ) {
+						$field[ $key ][ $data_key ] = $default_data_value;
+					}
+				}
+			} elseif ( ! array_key_exists( $key, $field ) ) {
+				$field[ $key ] = $default_value;
+			}
 		}
-		$results['option_group'] = $option_group;
 
-		// Assemble the remaining data registration arguments.
-		$args = array(
-			'type'              => $this->type_assoc[ $field['type'] ],
-			'description'       => null,
-			'sanitize_callback' => array( $this, $this->sanitize[ $field['type'] ] ),
+		return $field;
+
+	}
+
+	/**
+	 * Sanitize the text field value.
+	 *
+	 * @param string $value          The unsanitized option value.
+	 * @param string $option         The option name.
+	 * @param string $original_value The original value passed to the function.
+	 *
+	 * @return string
+	 */
+	public function sanitize( $value ) {
+
+		$value = sanitize_text_field( $value );
+		if ( empty( $value ) ) {
+			$value = get_site_option( $this->option_group, $this->field['data_args']['default'] );
+		}
+
+		return $value;
+
+	}
+
+	/**
+	* Get the settings option array and print one of its values.
+	* @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/text
+	*
+	* @param array $args The arguments needed to render the setting field.
+	*
+	* @return void
+	*/
+	public function output( $args ) {
+
+		// Assemble the variables necessary to output the form field from settings.
+		$value       = get_site_option( $args['id'], $args['data_args']['default'] );
+		$extra_attrs = $this->get_optional_attributes( $args );
+
+		// Render the form field output.
+		$output = sprintf(
+			'<input type="text" id="%1$s" name="%2$s" value="%3$s" %4$s/>',
+			esc_attr( $args['id'] ),
+			esc_attr( $args['data_args']['label_for'] ),
+			esc_attr( $value ),
+			$extra_attrs
 		);
-		if ( array_key_exists( 'data_args', $field ) && array_key_exists( 'default', $field['data_args'] ) ) {
-			$args['default'] = $field['data_args']['default'];
-		}
-		// This library does not fully support REST access, but some may choose to try using it and I don't want to stop them.
-		if ( array_key_exists( 'data_args', $field ) && array_key_exists( 'show_in_rest', $field['data_args'] ) ) {
-			$args['show_in_rest'] = $field['data_args']['show_in_rest'];
-		}
+		echo wp_kses( $output, $this->allowed_html );
 
-		// Return the compiled arguments.
-		$results['args'] = $args;
-
-		return $results;
+		// Render the description text.
+		$this->output_description( $args );
 
 	}
 
 	/**
-	 * The field HTML rendering callback function.
+	 * Echo the Field description.
 	 *
-	 * @param array $field The field arguments.
+	 * @param array $args {
+	 *     The arguments needed to render the setting field.
 	 *
-	 * @return void
+	 *     @key string $desc The field description.
+	 * }
+	 *
+	 * @return string
 	 */
-	public function field_output_callback( $field ) {
-
-		$value = get_option( $field['id'] );
-		$placeholder = '';
-		if ( isset( $field['placeholder'] ) ) {
-			$placeholder = $field['placeholder'];
+	private function output_description( $args ) {
+		if ( isset( $args['desc'] ) && $args['desc'] ) {
+			$desc = '<br />' . $args['desc'];
+			echo wp_kses_post( $desc );
 		}
-
-		$output = '';
-
-		switch ( $field['type'] ) {
-			case 'checkbox':
-
-				break;
-			case 'text':
-			default:
-				printf( '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />',
-					$field['id'],
-					$field['type'],
-					$placeholder,
-					$value
-				);
-				break;
-		}
-
 	}
 
 	/**
-	 * Get the settings option array and print one of its values.
+	 * Get optional attributes of the output element.
 	 *
-	 * @param array $args The arguments needed to render the setting field.
+	 * @since 0.1.0
 	 *
-	 * @return void
+	 * @param array $field The field parameters.
+	 *
+	 * @return string
 	 */
-	public function checkbox_field( $args ) {
+	private function get_optional_attributes( $field ) {
 
-		$option_name   = $args['option_name'];
-		$field_name    = $args['field_name'];
-		$default_value = $this->default_option[ $field_name ];
-		$option        = get_site_option( $option_name );
-		$is_checked    = isset( $option[ $field_name ] ) ? $option[ $field_name ] : $default_value;
-		$checked       = 'on' === $is_checked ? ' checked' : '';
-		echo "<input type=\"checkbox\" name=\"{$option_name}[{$field_name}]\" id=\"{$option_name}[{$field_name}]\" class=\"settings-checkbox\"{$checked} />";
-
-	}
-
-	/**
-	 * Get the settings option array and print one of its values.
-	 *
-	 * @param array $args The arguments needed to render the setting field.
-	 *
-	 * @return void
-	 */
-	public function text_field( $args ) {
-
-		$option_name   = $args['option_name'];
-		$field_name    = $args['field_name'];
-		$default_value = $this->default_option[ $field_name ];
-		$option        = get_site_option( $option_name );
-		$value         = isset( $option[ $field_name ] ) ? $option[ $field_name ] : $default_value;
-		echo "<input type=\"text\" name=\"{$option_name}[{$field_name}]\" id=\"{$option_name}[{$field_name}]\" class=\"settings-text\" value=\"{$value}\" data-lpignore=\"true\" size=\"40\" />";
-		if ( isset( $args['after'] ) ) {
-			echo $args['after'];
-		}
-
-	}
-
-	/**
-	 * Get the settings option array and print one of its values.
-	 *
-	 * @param array $args The arguments needed to render the setting field.
-	 *
-	 * @return void
-	 */
-	public function textarea_field( $args ) {
-
-		$option_name   = $args['option_name'];
-		$field_name    = $args['field_name'];
-		$default_value = $this->default_option[ $field_name ];
-		$option        = get_site_option( $option_name );
-		$value         = isset( $option[ $field_name ] ) ? $option[ $field_name ] : $default_value;
-		echo "<textarea name=\"{$option_name}[{$field_name}]\" id=\"{$option_name}[{$field_name}]\" class=\"settings-textarea\" rows=\"5\">{$value}</textarea>";
-
-	}
-
-	/**
-	 * Get the settings option array and print one of its values.
-	 *
-	 * @param array $args The arguments needed to render the setting field.
-	 *
-	 * @return void
-	 */
-	public function wp_editor_field( $args ) {
-
-		$option_name   = $args['option_name'];
-		$field_name    = $args['field_name'];
-		$default_value = $this->default_option[ $field_name ];
-		$editor_args   = array(
-			'textarea_name' => "{$option_name}[{$field_name}]",
-			'tinymce'       => array(
-				'toolbar1' => 'formatselect,bold,italic,underline,bullist,numlist,blockquote,hr,separator,alignleft,aligncenter,alignright,alignjustify,indent,outdent,charmap,link,unlink,undo,redo,fullscreen,wp_help',
-				'toolbar2' => '',
-				'paste_remove_styles' => true,
-				'paste_remove_spans' => true,
-				'paste_strip_class_attributes' => 'all',
-				'content_css' => '',
-			),
-			'default_editor' => '',
+		// Determine additional HTML attributes to append to the element.
+		$extra_attrs = array();
+		// First choose those among the top-level array members.
+		$disallowed_data_args_as_attrs = array(
+			'type',
+			'value',
+			'name',
+			'id',
 		);
-		if ( isset( $args['editor_args'] ) ) {
-			$editor_args = array_merge( $editor_args, $args['editor_args'] );
+		if ( array_key_exists( 'placeholder', $field ) && ! empty( $field['placeholder'] ) ) {
+			$extra_attrs['placeholder']  = 'placeholder="' . esc_attr( $field['placeholder'] ) . '"';
 		}
-
-		$option  = get_site_option( $option_name );
-		$content = isset( $option[ $field_name ] ) && $option[ $field_name ] ? $option[ $field_name ] : $default_value;
-		$content = stripslashes( $content );
-
-		add_filter( 'quicktags_settings', function( $qtInit ){ $qtInit['buttons'] = ','; return $qtInit; });
-		wp_editor( $content, $field_name, $editor_args );
-
-	}
-
-	/**
-	 * Get the settings option array and print one of its values.
-	 *
-	 * @param array $args The arguments needed to render the setting field.
-	 *
-	 * @return void
-	 */
-	public function number_field( $args ) {
-
-		$option_name   = $args['option_name'];
-		$field_name    = $args['field_name'];
-		$default_value = $this->default_option[ $field_name ];
-		$option        = get_site_option( $option_name );
-		$value         = isset( $option[ $field_name ] ) ? $option[ $field_name ] : $default_value;
-		echo "<input type=\"number\" min=\"1\" name=\"{$option_name}[{$field_name}]\" id=\"{$option_name}[{$field_name}]\" class=\"settings-number\" value=\"{$value}\" data-lpignore=\"true\" />";
-		if ( isset( $args['after'] ) ) {
-			echo $args['after'];
+		// Then choose those among the data_args array members.
+		$field_allowed_html_key = array_keys( $this->allowed_html )[0];
+		$field_allowed_html     = $this->allowed_html[ $field_allowed_html_key ];
+		foreach ( $field['data_args'] as $attr => $attr_value ) {
+			if ( array_key_exists( $attr, $field_allowed_html ) && ! in_array( $attr, $disallowed_data_args_as_attrs ) ) {
+				$extra_attrs[ $attr ] = $attr . '="' . esc_attr( $attr_value ) . '"';
+			}
 		}
+		// Then combine the results into a string.
+		$extra_attrs = ! empty( $extra_attrs ) ? implode( ' ', $extra_attrs ) . ' ' : '';
+
+		return $extra_attrs;
 
 	}
 }

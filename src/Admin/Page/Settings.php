@@ -149,6 +149,14 @@ class Settings {
 							$this->option_group
 						);
 						break;
+					case 'textarea':
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Number(
+							$field,
+							$this->menu_slug,
+							$section_id,
+							$this->option_group
+						);
+						break;
 					case 'checkbox':
 						if ( array_key_exists( 'choice', $field ) ) {
 							new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Checkbox(
