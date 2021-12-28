@@ -149,7 +149,7 @@ class Settings {
 							$this->option_group
 						);
 						break;
-					case 'textarea':
+					case 'number':
 						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Number(
 							$field,
 							$this->menu_slug,
