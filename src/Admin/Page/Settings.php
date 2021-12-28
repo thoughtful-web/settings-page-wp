@@ -166,6 +166,14 @@ class Settings {
 							);
 						}
 						break;
+					case 'wp_editor':
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\WP_Editor(
+							$field,
+							$this->menu_slug,
+							$section_id,
+							$this->option_group
+						);
+						break;
 					default:
 						break;
 					}
