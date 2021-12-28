@@ -93,8 +93,8 @@ return array(
 					'placeholder' => 'my placeholder',
 				),
 				array(
-					'label'       => 'My Text Field',
-					'id'          => 'unique_number_field',
+					'label'       => 'My Decimal Number Field',
+					'id'          => 'unique_decimal_number_field',
 					'type'        => 'number',
 					'desc'        => 'My number field description',
 					'placeholder' => 'Multiple of 0.1',
@@ -105,7 +105,7 @@ return array(
 					)
 				),
 				array(
-					'label'       => 'My Text Field',
+					'label'       => 'My Negative Number Field',
 					'id'          => 'unique_negative_number_field',
 					'type'        => 'number',
 					'desc'        => 'My negative number field description',
