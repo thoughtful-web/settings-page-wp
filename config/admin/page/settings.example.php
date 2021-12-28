@@ -106,9 +106,9 @@ return array(
 				),
 				array(
 					'label'       => 'My Text Field',
-					'id'          => 'unique_number_field',
+					'id'          => 'unique_negative_number_field',
 					'type'        => 'number',
-					'desc'        => 'My number field description',
+					'desc'        => 'My negative number field description',
 					'placeholder' => 'Multiple of -1',
 					'data_args'   => array(
 						'step' => '1',
