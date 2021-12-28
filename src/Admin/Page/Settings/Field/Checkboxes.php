@@ -70,6 +70,13 @@ class Checkboxes {
 	private $field;
 
 	/**
+	 * Name the group of database options which the fields represent.
+	 *
+	 * @var string $option_group The database option group name. Lowercase letters and underscores only. If not configured it will default  to the menu_slug method argument with hyphens replaced with underscores.
+	 */
+	private $option_group;
+
+	/**
 	 * Constructor for the Field class.
 	 *
 	 * @param array $field {
@@ -99,6 +106,8 @@ class Checkboxes {
 	 * @param string $option_group Name the group of database options which the fields represent.
 	 */
 	public function __construct( $field, $menu_slug, $section_id, $option_group ) {
+
+		$this->option_group = $option_group;
 
 		// Define the option value sanitization callback method.
 		$this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
@@ -154,13 +163,11 @@ class Checkboxes {
 	/**
 	 * Sanitize the text field value.
 	 *
-	 * @param string $value          The unsanitized option value.
-	 * @param string $option         The option name.
-	 * @param string $original_value The original value passed to the function.
+	 * @param string $value The unsanitized option value.
 	 *
 	 * @return string
 	 */
-	public static function sanitize( $value, $option, $original_value ) {
+	public static function sanitize( $value ) {
 
 		// Get the predefined choices from the configuration variable.
 		$config_choices = array_keys( $this->field['choices'] );
@@ -173,7 +180,7 @@ class Checkboxes {
 				// Get the default choice values.
 				$default = isset( $this->field['data_args']['default'] ) ? $this->field['data_args']['default'] : array();
 				// Get the database choices and fall back to the default configured value.
-				$value = get_site_option( $option, $default );
+				$value = get_site_option( $this->option_group, $default );
 				break;
 			}
 		}

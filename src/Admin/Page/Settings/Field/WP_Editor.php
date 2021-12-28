@@ -53,6 +53,13 @@ class WP_Editor {
 	private $field;
 
 	/**
+	 * Name the group of database options which the fields represent.
+	 *
+	 * @var string $option_group The database option group name. Lowercase letters and underscores only. If not configured it will default  to the menu_slug method argument with hyphens replaced with underscores.
+	 */
+	private $option_group;
+
+	/**
 	 * Constructor for the Field class.
 	 *
 	 * @param array $field {
@@ -82,6 +89,8 @@ class WP_Editor {
 	 * @param string $option_group Name the group of database options which the fields represent.
 	 */
 	public function __construct( $field, $menu_slug, $section_id, $option_group ) {
+
+		$this->option_group = $option_group;
 
 		// Define the allowed HTML.
 		$this->allowed_html = wp_kses_allowed_html( 'post' );
@@ -140,17 +149,16 @@ class WP_Editor {
 	/**
 	 * Sanitize the text field value.
 	 *
-	 * @param string $value          The unsanitized option value.
-	 * @param string $option         The option name.
-	 * @param string $original_value The original value passed to the function.
+	 * @param string $value The unsanitized option value.
 	 *
 	 * @return string
 	 */
-	public static function sanitize( $value, $option, $original_value ) {
+	public static function sanitize( $value ) {
 
-		$value = wp_kses_post( $value );
+		$original_value = $value;
+		$value          = wp_kses_post( $value );
 		if ( $value !== $original_value && empty( $value ) ) {
-			$value = get_site_option( $option, $this->field['data_args']['default'] );
+			$value = get_site_option( $this->option_group, $this->field['data_args']['default'] );
 		}
 
 		return $value;
@@ -174,26 +182,22 @@ class WP_Editor {
 		$settings    = array(
 			'textarea_name' => $args['id'],
 		);
-		$extra_attrs = $this->get_optional_attributes( $args );
 
 		// Render the form field output.
-		// $editor_args   = array(
-		// 	'textarea_name' => "{$option_name}[{$field_name}]",
-		// 	'tinymce'       => array(
-		// 		'toolbar1' => 'formatselect,bold,italic,underline,bullist,numlist,blockquote,hr,separator,alignleft,aligncenter,alignright,alignjustify,indent,outdent,charmap,link,unlink,undo,redo,fullscreen,wp_help',
-		// 		'toolbar2' => '',
-		// 		'paste_remove_styles' => true,
-		// 		'paste_remove_spans' => true,
-		// 		'paste_strip_class_attributes' => 'all',
-		// 		'content_css' => '',
-		// 	),
-		// 	'default_editor' => '',
-		// );
-		// if ( isset( $args['editor_args'] ) ) {
-		// 	$editor_args = array_merge( $editor_args, $args['editor_args'] );
-		// }
+		$settings_default = array(
+			'tinymce'       => array(
+				'toolbar1'                     => 'formatselect,bold,italic,underline,bullist,numlist,blockquote,hr,separator,alignleft,aligncenter,alignright,alignjustify,indent,outdent,charmap,link,unlink,undo,redo,fullscreen,wp_help',
+				'toolbar2' => '',
+				'paste_remove_styles'          => true,
+				'paste_remove_spans'           => true,
+				'paste_strip_class_attributes' => 'all',
+			),
+			'default_editor' => '',
+			'textarea_rows'  => 10,
+			'editor_css'     => '<style>body{background-color:#FFF;}</style>',
+		);
+		$settings         = array_merge( $settings_default, $settings );
 
-		// add_filter( 'quicktags_settings', function( $qtInit ){ $qtInit['buttons'] = ','; return $qtInit; });
 		wp_editor( $content, $editor_id, $settings );
 
 		// Render the description text.
@@ -217,43 +221,5 @@ class WP_Editor {
 			$desc = '<br />' . $args['desc'];
 			echo wp_kses_post( $desc );
 		}
-	}
-
-	/**
-	 * Get optional attributes of the output element.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param array $field The field parameters.
-	 *
-	 * @return string
-	 */
-	private function get_optional_attributes( $field ) {
-
-		// Determine additional HTML attributes to append to the element.
-		$extra_attrs = array();
-		// First choose those among the top-level array members.
-		$disallowed_data_args_as_attrs = array(
-			'type',
-			'value',
-			'name',
-			'id',
-		);
-		if ( array_key_exists( 'placeholder', $field ) && ! empty( $field['placeholder'] ) ) {
-			$extra_attrs['placeholder']  = 'placeholder="' . esc_attr( $field['placeholder'] ) . '"';
-		}
-		// Then choose those among the data_args array members.
-		$field_allowed_html_key = array_keys( $this->allowed_html )[0];
-		$field_allowed_html     = $this->allowed_html[ $field_allowed_html_key ];
-		foreach ( $field['data_args'] as $attr => $attr_value ) {
-			if ( array_key_exists( $attr, $field_allowed_html ) && ! in_array( $attr, $disallowed_data_args_as_attrs ) ) {
-				$extra_attrs[ $attr ] = $attr . '="' . esc_attr( $attr_value ) . '"';
-			}
-		}
-		// Then combine the results into a string.
-		$extra_attrs = ! empty( $extra_attrs ) ? implode( ' ', $extra_attrs ) . ' ' : '';
-
-		return $extra_attrs;
-
 	}
 }

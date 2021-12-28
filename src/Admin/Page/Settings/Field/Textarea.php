@@ -73,6 +73,13 @@ class Textarea {
 	private $field;
 
 	/**
+	 * Name the group of database options which the fields represent.
+	 *
+	 * @var string $option_group The database option group name. Lowercase letters and underscores only. If not configured it will default  to the menu_slug method argument with hyphens replaced with underscores.
+	 */
+	private $option_group;
+
+	/**
 	 * Constructor for the Field class.
 	 *
 	 * @param array $field {
@@ -102,6 +109,8 @@ class Textarea {
 	 * @param string $option_group Name the group of database options which the fields represent.
 	 */
 	public function __construct( $field, $menu_slug, $section_id, $option_group ) {
+
+		$this->option_group = $option_group;
 
 		// Define the option value sanitization callback method.
 		$this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
@@ -163,11 +172,11 @@ class Textarea {
 	 *
 	 * @return string
 	 */
-	public static function sanitize( $value, $option, $original_value ) {
+	public static function sanitize( $value ) {
 
 		$value = sanitize_textarea_field( $value );
 		if ( empty( $value ) ) {
-			$value = get_site_option( $option, $this->field['data_args']['default'] );
+			$value = get_site_option( $this->option_group, $this->field['data_args']['default'] );
 		}
 
 		return $value;
