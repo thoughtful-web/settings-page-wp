@@ -82,8 +82,8 @@ return array(
 		),
 		array(
 			'section'     => 'unique-section-id-2',
-			'title'       => '',
-			'description' => '',
+			'title'       => 'Section Two',
+			'description' => 'Section Two description text',
 			'fields'      => array(
 				array(
 					'label'       => 'My Editor Field',
