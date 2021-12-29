@@ -61,17 +61,17 @@ class Checkboxes extends Field {
 		'label' => array(
 			'for' => true,
 		),
-		'br' => true,
+		'br'    => true,
 	);
 
 	/**
 	 * Sanitize the text field value.
 	 *
-	 * @param string $value The unsanitized option value.
+	 * @param array $value The unsanitized option value.
 	 *
-	 * @return string
+	 * @return array
 	 */
-	public static function sanitize( $value ) {
+	public function sanitize( $value ) {
 
 		// Get the predefined choices from the configuration variable.
 		$config_choices = array_keys( $this->field['choices'] );
@@ -97,13 +97,14 @@ class Checkboxes extends Field {
 	}
 
 	/**
-	* Get the settings option array and print one of its values.
-	* @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea
-	*
-	* @param array $args The arguments needed to render the setting field.
-	*
-	* @return void
-	*/
+	 * Get the settings option array and print one of its values.
+	 *
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/checkbox
+	 *
+	 * @param array $args The arguments needed to render the setting field.
+	 *
+	 * @return void
+	 */
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
