@@ -278,7 +278,7 @@ class Settings {
 				<script type="text/javascript">
 					jQuery(document).ready(
 						function($){
-							$('input[data-wp-color-picker]').wpColorPicker();
+							$('input[data-wp-color-picker]').wpColorPicker({width:400});
 						}
 					);
 				</script>
