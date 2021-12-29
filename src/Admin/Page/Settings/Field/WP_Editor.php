@@ -26,7 +26,7 @@ class WP_Editor {
 	 *
 	 * @var array $default The default field parameter member values.
 	 */
-	private $default_field = array(
+	protected $default_field = array(
 		'type'      => 'wp_editor',
 		'desc'      => '',
 		'data_args' => array(
@@ -43,21 +43,21 @@ class WP_Editor {
 	 *
 	 * @var array $allowed_html The allowed HTML for the element produced by this class.
 	 */
-	private $allowed_html;
+	protected $allowed_html;
 
 	/**
 	 * Stored field value.
 	 *
 	 * @var array $field The registered field arguments.
 	 */
-	private $field;
+	protected $field;
 
 	/**
 	 * Name the group of database options which the fields represent.
 	 *
 	 * @var string $option_group The database option group name. Lowercase letters and underscores only. If not configured it will default  to the menu_slug method argument with hyphens replaced with underscores.
 	 */
-	private $option_group;
+	protected $option_group;
 
 	/**
 	 * Constructor for the Field class.

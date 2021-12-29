@@ -28,7 +28,7 @@ class Number extends Field {
 	 *
 	 * @var array $default The default field parameter member values.
 	 */
-	private $default_field = array(
+	protected $default_field = array(
 		'type'        => 'number',
 		'desc'        => '',
 		'placeholder' => '',
@@ -49,7 +49,7 @@ class Number extends Field {
 	 *
 	 * @var array $allowed_html The allowed HTML for the element produced by this class.
 	 */
-	private $allowed_html = array(
+	protected $allowed_html = array(
 		'input' => array(
 			'class'        => true,
 			'data-*'       => true,
