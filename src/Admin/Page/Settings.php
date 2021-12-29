@@ -190,7 +190,7 @@ class Settings {
 							$this->option_group
 						);
 						if ( ! wp_script_is( 'wp-color-picker', 'queue' ) || ! wp_style_is( 'wp-color-picker', 'queue' ) ) {
-							add_action( 'admin_enqueue_scripts', 'enqueue_color_picker_js' );
+							add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_color_picker_js' ) );
 						}
 						break;
 					default:
