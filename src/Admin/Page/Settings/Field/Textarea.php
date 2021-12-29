@@ -1,6 +1,6 @@
 <?php
 /**
- * The file that extends the Field constructor into a Textarea Field for the Settings API.
+ * The file that extends the Field class into a Text Field for the Settings API.
  *
  * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Field
@@ -17,7 +17,7 @@ namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
 use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
 
 /**
- * The TextField class.
+ * The Textarea Field class.
  *
  * @since 0.1.0
  */

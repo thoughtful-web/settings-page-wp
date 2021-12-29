@@ -1,6 +1,6 @@
 <?php
 /**
- * The file that serves as a base for creating Field classes for the Settings API.
+ * The file that provides a class which serves as a base for creating Field classes for the Settings API.
  *
  * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Settings
@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
 
 /**
- * The TextField class.
+ * The Field class.
  *
  * @since 0.1.0
  */
@@ -24,7 +24,7 @@ class Field {
 	/**
 	 * The default values for required $field members.
 	 *
-	 * @var array $default The default field parameter member values.
+	 * @var array $default_field The default field parameter member values.
 	 */
 	protected $default_field = array(
 		'type'        => 'text',

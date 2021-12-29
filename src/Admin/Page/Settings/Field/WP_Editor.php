@@ -1,13 +1,13 @@
 <?php
 /**
- * The file that wraps the WordPress Settings API in a file-configurable framework.
+ * The file that extends the Field class into a WP Editor Field for the Settings API.
  *
  * @package    ThoughtfulWeb\LibraryWP
- * @subpackage Settings
+ * @subpackage Field
  * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
  * @copyright  2021 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/page/settings/field/textareafield.php
+ * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/page/settings/field/wp_editor.php
  * @since      0.1.0
  */
 
@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
 
 /**
- * The TextField class.
+ * The WP_Editor Field class.
  *
  * @since 0.1.0
  */
