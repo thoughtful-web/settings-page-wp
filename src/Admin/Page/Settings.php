@@ -274,7 +274,7 @@ class Settings {
 			</form>
 			<?php
 			if ( wp_script_is( 'wp-color-picker', 'queue' ) ) {
-
+				?>
 				<script type="text/javascript">
 					jQuery(document).ready(
 						function($){
@@ -282,7 +282,7 @@ class Settings {
 						}
 					);
 				</script>
-
+				<?php
 			}
 			?>
 		</div>
@@ -314,6 +314,19 @@ class Settings {
 					submit_button( 'Save Settings' );
 				?>
 			</form>
+			<?php
+			if ( wp_script_is( 'wp-color-picker', 'queue' ) ) {
+				?>
+				<script type="text/javascript">
+					jQuery(document).ready(
+						function($){
+							$('input[data-wp-color-picker]').wpColorPicker();
+						}
+					);
+				</script>
+				<?php
+			}
+			?>
 		</div>
 		<?php
 
