@@ -182,12 +182,41 @@ class Settings {
 							$this->option_group
 						);
 						break;
+					case 'color':
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Color(
+							$field,
+							$this->menu_slug,
+							$section_id,
+							$this->option_group
+						);
+						if ( ! wp_script_is( 'wp-color-picker', 'queue' ) || ! wp_style_is( 'wp-color-picker', 'queue' ) ) {
+							add_action( 'admin_enqueue_scripts', 'enqueue_color_picker_js' );
+						}
+						break;
 					default:
 						break;
-					}
+				}
 
 			}
 
+		}
+
+	}
+
+	/**
+	 * Enqueue the WordPress Color Picker plugin files.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
+	public function enqueue_color_picker_js() {
+
+		if ( ! wp_script_is( 'wp-color-picker', 'queue' ) ) {
+			wp_enqueue_script( 'wp-color-picker' );
+		}
+		if ( ! wp_style_is( 'wp-color-picker', 'queue' ) ) {
+			wp_enqueue_style( 'wp-color-picker' );
 		}
 
 	}
@@ -243,6 +272,19 @@ class Settings {
 					submit_button( 'Save Settings' );
 				?>
 			</form>
+			<?php
+			if ( wp_script_is( 'wp-color-picker', 'queue' ) ) {
+
+				<script type="text/javascript">
+					jQuery(document).ready(
+						function($){
+							$('input[data-wp-color-picker]').wpColorPicker();
+						}
+					);
+				</script>
+
+			}
+			?>
 		</div>
 		<?php
 

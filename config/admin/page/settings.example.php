@@ -38,7 +38,17 @@ return array(
 						'default'       => 'A thoughtful, optional, default value',
 						'data-lpignore' => 'true',
 						'size'          => '40',
-					)
+					),
+				),
+				array(
+					'label'     => 'My Color Field',
+					'id'        => 'unique_color_field',
+					'type'      => 'color',
+					'desc'      => 'My color field description',
+					'data_args' => array(
+						'default'       => '#000000',
+						'data-lpignore' => 'true',
+					),
 				),
 				array(
 					'label'       => 'My Textarea Field',
@@ -58,7 +68,7 @@ return array(
 					'data_args' => array(
 						'default' => array(
 							'1' => 'My Choice',
-						)
+						),
 					),
 				),
 				array(
@@ -102,7 +112,7 @@ return array(
 						'step' => '0.1',
 						'min'  => '0',
 						'max'  => '10',
-					)
+					),
 				),
 				array(
 					'label'       => 'My Negative Number Field',
@@ -114,7 +124,7 @@ return array(
 						'step' => '1',
 						'min'  => '-10',
 						'max'  => '0',
-					)
+					),
 				),
 				array(
 					'label'   => 'My Radio Field',
