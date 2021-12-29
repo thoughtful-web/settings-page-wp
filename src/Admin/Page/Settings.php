@@ -214,6 +214,7 @@ class Settings {
 
 		if ( ! wp_script_is( 'wp-color-picker', 'queue' ) ) {
 			wp_enqueue_script( 'wp-color-picker' );
+			wp_add_inline_script( 'wp-color-picker', "jQuery('input[data-wp-color-picker]').wpColorPicker({width:400});" );
 		}
 		if ( ! wp_style_is( 'wp-color-picker', 'queue' ) ) {
 			wp_enqueue_style( 'wp-color-picker' );
@@ -263,12 +264,12 @@ class Settings {
 			<?php settings_errors(); ?>
 			<form action="options.php" method="post">
 				<?php
-					// output security fields for the registered setting
+					// Output security fields for the registered setting.
 					settings_fields( $this->option_group );
-					// output setting sections and their fields
-					// (sections are registered for "$this->menu_slug", each field is registered to a specific section)
+					// Output setting sections and their fields.
+					// (Sections are registered for "$this->menu_slug", each field is registered to a specific section).
 					do_settings_sections( $this->menu_slug );
-					// output save settings button
+					// Output save settings button.
 					submit_button( 'Save Settings' );
 				?>
 			</form>
@@ -276,11 +277,7 @@ class Settings {
 			if ( wp_script_is( 'wp-color-picker', 'queue' ) ) {
 				?>
 				<script type="text/javascript">
-					jQuery(document).ready(
-						function($){
-							$('input[data-wp-color-picker]').wpColorPicker({width:400});
-						}
-					);
+
 				</script>
 				<?php
 			}
@@ -305,7 +302,7 @@ class Settings {
 
 		?>
 		<div class="wrap">
-        	<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<?php settings_errors(); ?>
 			<form method="POST" action="edit.php?action=<?php echo $this->menu_slug ?>">
 				<?php
