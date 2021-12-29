@@ -46,8 +46,7 @@ return array(
 					'type'      => 'color',
 					'desc'      => 'My color field description',
 					'data_args' => array(
-						'default'       => '#000000',
-						'data-lpignore' => 'true',
+						'default' => '#000000',
 					),
 				),
 				array(
