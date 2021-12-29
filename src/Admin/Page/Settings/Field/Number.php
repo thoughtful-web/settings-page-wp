@@ -101,7 +101,7 @@ class Number extends Field {
 			// Ensure the number is either a float or an integer.
 			$is_float = $value === strval( floatval( $value ) );
 			$is_int   = $value === strval( intval( $value ) );
-			if ( ! $is_float || ! $is_int ) {
+			if ( ! $is_float && ! $is_int ) {
 				$valid = false;
 			} else {
 				// Get the field's numeric schema.
@@ -130,7 +130,7 @@ class Number extends Field {
 		}
 		if ( ! $valid ) {
 			$default = isset( $this->field['data_args']['default'] ) ? $this->field['data_args']['default'] : '';
-			$value = get_site_option( $this->option_group, $default );
+			$value   = get_site_option( $this->option_group, $default );
 		}
 
 		return $value;
