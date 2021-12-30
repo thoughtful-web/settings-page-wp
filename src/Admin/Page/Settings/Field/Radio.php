@@ -29,9 +29,9 @@ class Radio extends Field {
 	 * @var array $default The default field parameter member values.
 	 */
 	protected $default_field = array(
-		'type'        => 'radio',
-		'desc'        => '',
-		'data_args'   => array(
+		'type'      => 'radio',
+		'desc'      => '',
+		'data_args' => array(
 			'default'      => '',
 			'show_in_rest' => false,
 			'type'         => 'string',
