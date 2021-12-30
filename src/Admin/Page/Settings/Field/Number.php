@@ -99,8 +99,8 @@ class Number extends Field {
 			$valid = false;
 		} else {
 			// Ensure the number is either a float or an integer.
-			$is_float = $value === strval( floatval( $value ) );
-			$is_int   = $value === strval( intval( $value ) );
+			$is_float = strval( floatval( $value ) ) === $value;
+			$is_int   = strval( intval( $value ) ) === $value;
 			if ( ! $is_float && ! $is_int ) {
 				$valid = false;
 			} else {
@@ -115,9 +115,12 @@ class Number extends Field {
 					// Validate maximum value.
 					$valid = false;
 				} elseif ( $schema['step'] ) {
-					// Validate step using an alternative to the "fmod" function.
-					// https://www.php.net/manual/en/function.fmod.php#122782
-					if ( $schema['step'] === strval( floatval( $value ) ) ) {
+					/**
+					 * Validate the "step" attribute using an alternative to the "fmod" function.
+					 *
+					 * @link https://www.php.net/manual/en/function.fmod.php#122782
+					 */
+					if ( strval( floatval( $value ) ) === $schema['step'] ) {
 						$step_nval = floatval( $schema['step'] );
 					} else {
 						$step_nval = intval( $value );
