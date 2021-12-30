@@ -129,8 +129,7 @@ class Number extends Field {
 			}
 		}
 		if ( ! $valid ) {
-			$default = isset( $this->field['data_args']['default'] ) ? $this->field['data_args']['default'] : '';
-			$value   = get_site_option( $this->option_group, $default );
+			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
 		}
 
 		return $value;
