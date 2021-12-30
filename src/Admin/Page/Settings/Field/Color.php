@@ -64,6 +64,52 @@ class Color extends Field {
 	);
 
 	/**
+	 * Class constructor.
+	 *
+	 * @return void
+	 */
+	public function __construct() {
+
+		// Call the Field::construct() method.
+		parent::__construct();
+
+		// Queue the color picker scripts if they aren't already.
+		if ( ! wp_script_is( 'wp-color-picker', 'queue' ) || ! wp_style_is( 'wp-color-picker', 'queue' ) ) {
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_color_picker_js' ) );
+		}
+
+	}
+
+	/**
+	 * Enqueue the WordPress Color Picker plugin files.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
+	 */
+	public function enqueue_color_picker_js() {
+
+		if ( ! wp_script_is( 'wp-color-picker', 'queue' ) ) {
+
+			wp_enqueue_script( 'wp-color-picker' );
+			wp_add_inline_script( 'wp-color-picker', "jQuery('input[data-wp-color-picker]').wpColorPicker({
+				width:400,
+				change: function(event, ui) {
+					var label = jQuery(event.target).closest('.wp-picker-container').find('.wp-color-result-text');
+					label.html( 'Select Color: ' + ui.color.toString() );
+				}});" );
+
+		}
+
+		if ( ! wp_style_is( 'wp-color-picker', 'queue' ) ) {
+
+			wp_enqueue_style( 'wp-color-picker' );
+
+		}
+
+	}
+
+	/**
 	 * Sanitize the text field value.
 	 *
 	 * @param string $value The unsanitized option value.
