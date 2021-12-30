@@ -88,6 +88,7 @@ class WP_Editor extends Field {
 
 	/**
 	 * Sanitize the text field value.
+	 * There is supposedly a common limit of 16mb applied by shared hosts to database transactional strings.
 	 *
 	 * @param string $value The unsanitized option value.
 	 *
@@ -97,7 +98,7 @@ class WP_Editor extends Field {
 
 		$original_value = $value;
 		$value          = wp_kses_post( $value );
-		if ( $value !== $original_value ) {
+		if ( $value !== $original_value || strlen( $value ) > 16777216 ) {
 			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
 		}
 
