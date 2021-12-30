@@ -98,7 +98,7 @@ class WP_Editor extends Field {
 		$original_value = $value;
 		$value          = wp_kses_post( $value );
 		if ( $value !== $original_value ) {
-			$value = get_site_option( $this->option_group, $this->field['data_args']['default'] );
+			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
 		}
 
 		return $value;
