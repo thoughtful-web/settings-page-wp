@@ -79,9 +79,8 @@ class Text extends Field {
 
 		$original_value = $value;
 		$value          = sanitize_text_field( $value );
-		if ( $original_value !== $value ) {
-			$default_value = isset( $this->field['data_args']['default'] ) ? $this->field['data_args']['default'] : '';
-			$value         = get_site_option( $this->option_group, $default_value );
+		if ( $value !== $original_value ) {
+			$value = get_site_option( $this->option_group, $this->field['data_args']['default'] );
 		}
 
 		return $value;
