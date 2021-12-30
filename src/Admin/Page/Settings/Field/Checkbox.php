@@ -33,7 +33,7 @@ class Checkbox extends Field {
 		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
-			'default'      => array(),
+			'default'      => '',
 			'show_in_rest' => false,
 			'type'         => 'string',
 			'description'  => '',
@@ -74,12 +74,9 @@ class Checkbox extends Field {
 	public function sanitize( $value ) {
 
 		// If the choice value is present in the configuration and it is not a configured choice then it is a falsified choice.
-		if ( ! empty( $value ) && $value !== $this->field['choice'] ) {
+		if ( ! empty( $value ) && array_key_first( $this->field['choice'] ) !== $value ) {
 			// Value is falsified.
-			// Get the default choice values.
-			$default = isset( $this->field['data_args']['default'] ) ? array_keys( $this->field['data_args']['default'] ) : array();
-			// Get the database choice and fall back to the default configured value.
-			$value = get_site_option( $this->option_group, $default );
+			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
 		}
 
 		return $value;
@@ -111,7 +108,7 @@ class Checkbox extends Field {
 				$checked = 'checked ';
 			}
 			$output[] = sprintf(
-				'<input type="checkbox" id="%1$s__%2$s" name="%1$s[]" value="%2$s" %3$s%4$s/> <label for="%1$s__%2$s" />%5$s</label>',
+				'<input type="checkbox" id="%1$s__%2$s" name="%1$s" value="%2$s" %3$s%4$s/> <label for="%1$s__%2$s" />%5$s</label>',
 				esc_attr( $args['id'] ),
 				$choice_value,
 				$checked,
