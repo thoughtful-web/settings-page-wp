@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress_PSR4">
+    <description>Coding standard based on WordPress with some additions.</description>
+
+     <!-- Include the whole Zend standard -->
+    <rule ref="WordPress">
+		<exclude name="WordPress.Files.FileName"/>
+	</rule>
+</ruleset>
