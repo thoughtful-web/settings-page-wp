@@ -64,14 +64,38 @@ class Color extends Field {
 	);
 
 	/**
-	 * Class constructor.
+	 * Constructor for the Color Field class.
 	 *
-	 * @return void
+	 * @param array  $field {
+	 *     The field registration arguments.
+	 *
+	 *     @type string $label       Formatted title of the field. Shown as the label for the field during output. Required.
+	 *     @type string $id          Slug-name to identify the field. Used in the 'id' attribute of tags. Required.
+	 *     @type string $type        The type attribute. Required.
+	 *     @type string $desc        The description. Optional.
+	 *     @type mixed  $placeholder The placeholder text, if applicable. Optional.
+	 *     @type string $default     The default value. Optional.
+	 *     @type mixed  $label_for   When supplied, the setting title will be wrapped in a `<label>` element, its `for` attribute populated with this value. Optional.
+	 *     @type mixed  $class       CSS Class to be added to the `<tr>` element when the field is output. Optional.
+	 *     @type array  $data_args {
+	 *         Data used to describe the setting when registered. Required.
+	 *
+	 *         @type string     $option_name       The option name. If not provided, will default to the ID attribute of the HTML element. Optional.
+	 *         @type mixed      $default           Default value when calling `get_option()`. Optional.
+	 *         @type callable   $sanitize_callback A callback function that sanitizes the option's value. Optional.
+	 *         @type bool|array $show_in_rest      Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key.
+	 *         @type string     $type              The type of data associated with this setting. Only used for the REST API. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'.
+	 *         @type string     $description       A description of the data attached to this setting. Only used for the REST API.
+	 *     }
+	 * }
+	 * @param string $menu_slug         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
+	 * @param string $section_id   The slug-name of the section of the settings page in which to show the box.
+	 * @param string $option_group Name the group of database options which the fields represent.
 	 */
-	public function __construct() {
+	public function __construct( $field, $menu_slug, $section_id, $option_group ) {
 
 		// Call the Field::construct() method.
-		parent::__construct();
+		parent::__construct( $field, $menu_slug, $section_id, $option_group );
 
 		// Queue the color picker scripts if they aren't already.
 		if ( ! wp_script_is( 'wp-color-picker', 'queue' ) || ! wp_style_is( 'wp-color-picker', 'queue' ) ) {
@@ -92,12 +116,15 @@ class Color extends Field {
 		if ( ! wp_script_is( 'wp-color-picker', 'queue' ) ) {
 
 			wp_enqueue_script( 'wp-color-picker' );
-			wp_add_inline_script( 'wp-color-picker', "jQuery('input[data-wp-color-picker]').wpColorPicker({
-				width:400,
-				change: function(event, ui) {
-					var label = jQuery(event.target).closest('.wp-picker-container').find('.wp-color-result-text');
-					label.html( 'Select Color: ' + ui.color.toString() );
-				}});" );
+			wp_add_inline_script(
+				'wp-color-picker',
+				"jQuery('input[data-wp-color-picker]').wpColorPicker({
+	width:400,
+	change: function(event, ui) {
+		var label = jQuery(event.target).closest('.wp-picker-container').find('.wp-color-result-text');
+		label.html( 'Select Color: ' + ui.color.toString() );
+	}});"
+			);
 
 		}
 
