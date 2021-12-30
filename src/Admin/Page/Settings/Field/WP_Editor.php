@@ -14,12 +14,14 @@
 declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
 
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
+
 /**
  * The WP_Editor Field class.
  *
  * @since 0.1.0
  */
-class WP_Editor {
+class WP_Editor extends Field {
 
 	/**
 	 * The default values for required $field members.
@@ -35,7 +37,7 @@ class WP_Editor {
 			'sanitize_callback' => 'wp_kses_post',
 			'show_in_rest'      => false,
 			'description'       => '',
-		)
+		),
 	);
 
 	/**
@@ -46,23 +48,9 @@ class WP_Editor {
 	protected $allowed_html;
 
 	/**
-	 * Stored field value.
+	 * Constructor for the WP_Editor Field class.
 	 *
-	 * @var array $field The registered field arguments.
-	 */
-	protected $field;
-
-	/**
-	 * Name the group of database options which the fields represent.
-	 *
-	 * @var string $option_group The database option group name. Lowercase letters and underscores only. If not configured it will default  to the menu_slug method argument with hyphens replaced with underscores.
-	 */
-	protected $option_group;
-
-	/**
-	 * Constructor for the Field class.
-	 *
-	 * @param array $field {
+	 * @param array  $field {
 	 *     The field registration arguments.
 	 *
 	 *     @type string $label       Formatted title of the field. Shown as the label for the field during output. Required.
@@ -90,59 +78,11 @@ class WP_Editor {
 	 */
 	public function __construct( $field, $menu_slug, $section_id, $option_group ) {
 
-		$this->option_group = $option_group;
+		// Call the Field::construct() method.
+		parent::__construct( $field, $menu_slug, $section_id, $option_group );
 
 		// Define the allowed HTML.
 		$this->allowed_html = wp_kses_allowed_html( 'post' );
-
-		// Define the option value sanitization callback method.
-		$this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
-
-		// Merge user-defined field values with default values.
-		$field = $this->apply_defaults( $field );
-
-		// Store the merged field.
-		$this->field = $field;
-
-		// Register the setting.
-		register_setting( $option_group, $field['id'], $field['data_args'] );
-
-		// Register the field.
-		add_settings_field(
-			$field['id'],
-			$field['label'],
-			array( $this, 'output' ),
-			$menu_slug,
-			$section_id,
-			$field
-		);
-
-	}
-
-	/**
-	 * Merge user-defined field values with default values.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param array $field The field registration arguments.
-	 *
-	 * @return array
-	 */
-	private function apply_defaults( $field ) {
-
-		foreach ( $this->default_field as $key => $default_value ) {
-			if ( 'data_args' === $key ) {
-				foreach( $default_value as $data_key => $default_data_value ) {
-					if ( ! array_key_exists( $data_key, $field[ $key ] ) ) {
-						$field[ $key ][ $data_key ] = $default_data_value;
-					}
-				}
-			} elseif ( ! array_key_exists( $key, $field ) ) {
-				$field[ $key ] = $default_value;
-			}
-		}
-
-		return $field;
 
 	}
 
@@ -153,11 +93,11 @@ class WP_Editor {
 	 *
 	 * @return string
 	 */
-	public static function sanitize( $value ) {
+	public function sanitize( $value ) {
 
 		$original_value = $value;
 		$value          = wp_kses_post( $value );
-		if ( $value !== $original_value && empty( $value ) ) {
+		if ( $value !== $original_value ) {
 			$value = get_site_option( $this->option_group, $this->field['data_args']['default'] );
 		}
 
@@ -167,6 +107,7 @@ class WP_Editor {
 
 	/**
 	 * Get the settings option array and print one of its values.
+	 *
 	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea
 	 *
 	 * @param array $args The arguments needed to render the setting field.
@@ -176,10 +117,10 @@ class WP_Editor {
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
-		$value       = get_site_option( $args['id'], $args['data_args']['default'] );
-		$content     = stripslashes( $value );
-		$editor_id   = $args['id'];
-		$settings    = array(
+		$value     = get_site_option( $args['id'], $args['data_args']['default'] );
+		$content   = stripslashes( $value );
+		$editor_id = $args['id'];
+		$settings  = array(
 			'textarea_name' => $args['id'],
 		);
 
@@ -203,23 +144,5 @@ class WP_Editor {
 		// Render the description text.
 		$this->output_description( $args );
 
-	}
-
-	/**
-	 * Echo the Field description.
-	 *
-	 * @param array $args {
-	 *     The arguments needed to render the setting field.
-	 *
-	 *     @key string $desc The field description.
-	 * }
-	 *
-	 * @return string
-	 */
-	private function output_description( $args ) {
-		if ( isset( $args['desc'] ) && $args['desc'] ) {
-			$desc = '<br />' . $args['desc'];
-			echo wp_kses_post( $desc );
-		}
 	}
 }
