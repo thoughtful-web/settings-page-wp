@@ -83,11 +83,9 @@ class Checkboxes extends Field {
 				$final_choices[ $choice ] = $choice;
 				continue;
 			} else {
-				// Value is falsified.
-				// Get the default choice values.
-				$default = isset( $this->field['data_args']['default'] ) ? $this->field['data_args']['default'] : array();
+				// A value is falsified.
 				// Get the database choices and fall back to the default configured value.
-				$final_choices = get_site_option( $this->option_group, $default );
+				$final_choices = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
 				break;
 			}
 		}
