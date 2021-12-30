@@ -127,9 +127,9 @@ class WP_Editor extends Field {
 
 		// Render the form field output.
 		$settings_default = array(
-			'tinymce'       => array(
+			'tinymce'        => array(
 				'toolbar1'                     => 'formatselect,bold,italic,underline,bullist,numlist,blockquote,hr,separator,alignleft,aligncenter,alignright,alignjustify,indent,outdent,charmap,link,unlink,undo,redo,fullscreen,wp_help',
-				'toolbar2' => '',
+				'toolbar2'                     => '',
 				'paste_remove_styles'          => true,
 				'paste_remove_spans'           => true,
 				'paste_strip_class_attributes' => 'all',
