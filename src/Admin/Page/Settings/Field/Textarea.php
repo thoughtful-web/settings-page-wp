@@ -76,9 +76,10 @@ class Textarea extends Field {
 	 */
 	public function sanitize( $value ) {
 
-		$value = sanitize_textarea_field( $value );
-		if ( empty( $value ) ) {
-			$value = get_site_option( $this->option_group, $this->field['data_args']['default'] );
+		$original_value = $value;
+		$value          = sanitize_textarea_field( $value );
+		if ( $value !== $original_value ) {
+			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
 		}
 
 		return $value;
