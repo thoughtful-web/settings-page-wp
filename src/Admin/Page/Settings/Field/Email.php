@@ -48,22 +48,22 @@ class Email extends Field {
 	 */
 	protected $allowed_html = array(
 		'input' => array(
-			'class'        => true,
-			'data-*'       => true,
-			'disabled'     => true,
-			'id'           => true,
-			'list'         => true,
-			'maxlength'    => true,
-			'minlength'    => true,
-			'multiple'     => true,
-			'name'         => true,
-			'pattern'      => true,
-			'placeholder'  => true,
-			'readonly'     => true,
-			'required'     => true,
-			'size'         => true,
-			'type'         => 'email',
-			'value'        => true,
+			'class'       => true,
+			'data-*'      => true,
+			'disabled'    => true,
+			'id'          => true,
+			'list'        => true,
+			'maxlength'   => true,
+			'minlength'   => true,
+			'multiple'    => true,
+			'name'        => true,
+			'pattern'     => true,
+			'placeholder' => true,
+			'readonly'    => true,
+			'required'    => true,
+			'size'        => true,
+			'type'        => 'email',
+			'value'       => true,
 		),
 	);
 
@@ -80,8 +80,7 @@ class Email extends Field {
 		$original_value = $value;
 		$value          = sanitize_email( $value );
 		if ( $original_value !== $value ) {
-			$default_value = isset( $this->field['data_args']['default'] ) ? $this->field['data_args']['default'] : '';
-			$value         = get_site_option( $this->option_group, $default_value );
+			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
 		}
 
 		return $value;

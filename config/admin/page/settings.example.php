@@ -57,11 +57,11 @@ return array(
 					'placeholder' => 'my placeholder',
 				),
 				array(
-					'label'   => 'My Checkbox Field',
-					'id'      => 'unique_checkbox_field',
-					'type'    => 'checkbox',
-					'desc'    => 'My checkbox field description',
-					'choice' => array(
+					'label'     => 'My Checkbox Field',
+					'id'        => 'unique_checkbox_field',
+					'type'      => 'checkbox',
+					'desc'      => 'My checkbox field description',
+					'choice'    => array(
 						'1' => 'My Choice',
 					),
 					'data_args' => array(
@@ -71,11 +71,11 @@ return array(
 					),
 				),
 				array(
-					'label'   => 'My Checkbox Fields',
-					'id'      => 'unique_checkbox_fields',
-					'type'    => 'checkbox',
-					'desc'    => 'My checkbox fields description',
-					'choices' => array(
+					'label'     => 'My Checkbox Fields',
+					'id'        => 'unique_checkbox_fields',
+					'type'      => 'checkbox',
+					'desc'      => 'My checkbox fields description',
+					'choices'   => array(
 						'option_one'   => 'Option 1',
 						'option_two'   => 'Option 2',
 						'option_three' => 'Option 3',
