@@ -31,11 +31,13 @@ class Select extends Field {
 	protected $default_field = array(
 		'type'      => 'select',
 		'desc'      => '',
+		'prompt'    => 'Please choose an option',
 		'data_args' => array(
 			'default'      => '',
 			'show_in_rest' => false,
 			'type'         => 'string',
 			'description'  => '',
+			''
 		),
 	);
 
@@ -189,6 +191,12 @@ class Select extends Field {
 			esc_attr( $args['id'] ),
 			$extra_attrs
 		);
+		if ( $args['prompt'] ) {
+			$output[] = sprintf(
+				'<option value="">%1$s</option>',
+				$args['prompt']
+			);
+		}
 		foreach ( $args['choices'] as $option_value => $option_text ) {
 			$selected = '';
 			if ( $value && in_array( $option_value, $value_arr, true ) ) {
