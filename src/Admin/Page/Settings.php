@@ -190,6 +190,22 @@ class Settings {
 							$this->option_group
 						);
 						break;
+					case 'email':
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Email(
+							$field,
+							$this->menu_slug,
+							$section_id,
+							$this->option_group
+						);
+						break;
+					case 'select':
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Select(
+							$field,
+							$this->menu_slug,
+							$section_id,
+							$this->option_group
+						);
+						break;
 					default:
 						break;
 				}
