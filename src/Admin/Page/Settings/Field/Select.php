@@ -37,7 +37,6 @@ class Select extends Field {
 			'show_in_rest' => false,
 			'type'         => 'string',
 			'description'  => '',
-			''
 		),
 	);
 
@@ -104,14 +103,26 @@ class Select extends Field {
 		// Call the Field::construct() method.
 		parent::__construct( $field, $menu_slug, $section_id, $option_group );
 
-		// Detect if this is a multiselect field.
-		$field_data  = $this->field['data_args'];
-		$is_multiple = isset( $field_data['multiple'] ) && 'false' !== $field_data['multiple'] ? true : false;
-
 		// Ensure the correct default is present.
-		if ( $is_multiple && ! is_array( $field_data['default'] ) ) {
+		if ( $this->is_multiselect() && ! is_array( $this->field['data_args']['default'] ) ) {
 			$this->field['data_args']['default'] = array( $this->field['data_args']['default'] );
 		}
+
+	}
+
+	/**
+	 * Detect if this is a multiselect field.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return bool
+	 */
+	private function is_multiselect() {
+
+		$field_data   = $this->field['data_args'];
+		$has_multiple = isset( $field_data['multiple'] ) && 'false' !== $field_data['multiple'] ? true : false;
+
+		return $has_multiple;
 
 	}
 
@@ -120,7 +131,7 @@ class Select extends Field {
 	 *
 	 * @param string|string[] $value The unsanitized option value(s).
 	 *
-	 * @return array
+	 * @return string|string[]
 	 */
 	public function sanitize( $value ) {
 
@@ -128,13 +139,12 @@ class Select extends Field {
 		$valid = true;
 
 		// Detect if this is a multiselect field.
-		$field_data  = $this->field['data_args'];
-		$is_multiple = isset( $field_data['multiple'] ) && 'false' !== $field_data['multiple'] ? true : false;
+		$is_multiselect = $this->is_multiselect();
 
 		// Detect if the correct value format is provided.
 		if (
-			$is_multiple && ! is_array( $value ) ||
-			! $is_multiple && is_array( $value )
+			$is_multiselect && ! is_array( $value ) ||
+			! $is_multiselect && is_array( $value )
 		) {
 			$valid = false;
 		}
@@ -142,8 +152,10 @@ class Select extends Field {
 		// If the provided value is correct for the configuration, then continue validating.
 		if ( $valid ) {
 			// If this is not a multiselect field then convert the value to an array temporarily.
-			if ( ! $is_multiple && ! is_array( $value ) ) {
-				$value = array( $value );
+			$restore_later = false;
+			if ( ! $is_multiselect && ! is_array( $value ) ) {
+				$restore_later = true;
+				$value         = array( $value );
 			}
 			// Get the predefined choices from the configuration variable.
 			$config_choices = array_keys( $this->field['choices'] );
@@ -155,9 +167,12 @@ class Select extends Field {
 					break;
 				}
 			}
+			if ( $restore_later ) {
+				$value = $value[0];
+			}
 		}
 		// If an invalid scenario was detected, then reset the value to the previous state or a default one.
-		if ( ! $valid ) {
+		if ( ! $valid && ! empty( $value ) ) {
 			// A value is falsified.
 			// Get the database choices and fall back to the default configured value.
 			$value = get_site_option( $this->field['id'], $field_data['default'] );
@@ -183,12 +198,14 @@ class Select extends Field {
 		$value       = get_site_option( $args['id'], $args['data_args']['default'] );
 		$value_arr   = is_array( $value ) ? $value : array( $value );
 		$extra_attrs = $this->get_optional_attributes( $args );
+		$multi_mod   = $this->is_multiselect() ? '[]' : '';
 
 		// Render the form field output.
-		$output = array();
+		$output   = array();
 		$output[] = sprintf(
-			'<select id="%1$s" name="%1$s" %2$s>',
+			'<select id="%1$s" name="%1$s%2$s" %3$s>',
 			esc_attr( $args['id'] ),
+			$multi_mod,
 			$extra_attrs
 		);
 		if ( $args['prompt'] ) {
