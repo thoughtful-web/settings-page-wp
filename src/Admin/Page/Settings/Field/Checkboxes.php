@@ -76,6 +76,9 @@ class Checkboxes extends Field {
 		// Get the predefined choices from the configuration variable.
 		$config_choices = array_keys( $this->field['choices'] );
 		$final_choices  = array();
+		if ( ! is_array( $value ) ) {
+			$value = array( $value );
+		}
 		foreach ( $value as $key => $choice ) {
 			// If the choice value is present in the configuration, continue.
 			if ( in_array( $choice, $config_choices, true ) ) {
