@@ -172,6 +172,13 @@ return array(
 					'desc'        => 'My email field description',
 					'placeholder' => 'my placeholder',
 				),
+				array(
+					'label'       => 'My Phone Field',
+					'id'          => 'unique_phone_field',
+					'type'        => 'tel',
+					'desc'        => 'My phone field description',
+					'placeholder' => 'my placeholder',
+				),
 			),
 		),
 	),

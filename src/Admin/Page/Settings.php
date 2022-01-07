@@ -206,6 +206,14 @@ class Settings {
 							$this->option_group
 						);
 						break;
+					case 'tel':
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Phone(
+							$field,
+							$this->menu_slug,
+							$section_id,
+							$this->option_group
+						);
+						break;
 					default:
 						break;
 				}
