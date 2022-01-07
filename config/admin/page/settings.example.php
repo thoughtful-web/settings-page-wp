@@ -178,6 +178,9 @@ return array(
 					'type'        => 'tel',
 					'desc'        => 'Example: 555-555-5555',
 					'placeholder' => '555-555-5555',
+					'data_args'   => array(
+						'pattern' => '[0-9]{3}-[0-9]{3}-[0-9]{4}',
+					),
 				),
 			),
 		),
