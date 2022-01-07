@@ -176,7 +176,7 @@ return array(
 					'label'       => 'My Phone Field',
 					'id'          => 'unique_phone_field',
 					'type'        => 'tel',
-					'desc'        => 'My phone field description',
+					'desc'        => 'Example: 555-555-5555',
 					'placeholder' => '555-555-5555',
 				),
 			),
