@@ -1,6 +1,6 @@
 <?php
 /**
- * The file that extends the Field class into a Text Field for the Settings API.
+ * The file that extends the Field class into a Phone Field for the Settings API.
  *
  * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Field
@@ -17,11 +17,13 @@ namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
 use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
 
 /**
- * The Text Field class.
+ * The Phone Field class.
+ *
+ * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/url
  *
  * @since 0.1.0
  */
-class Text extends Field {
+class Url extends Field {
 
 	/**
 	 * The default values for required $field members.
@@ -29,7 +31,7 @@ class Text extends Field {
 	 * @var array $default The default field parameter member values.
 	 */
 	protected $default_field = array(
-		'type'        => 'text',
+		'type'        => 'url',
 		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
@@ -50,7 +52,6 @@ class Text extends Field {
 		'input' => array(
 			'class'        => true,
 			'data-*'       => true,
-			'autocomplete' => true,
 			'disabled'     => true,
 			'id'           => true,
 			'list'         => true,
@@ -62,7 +63,6 @@ class Text extends Field {
 			'readonly'     => true,
 			'required'     => true,
 			'size'         => true,
-			'spellcheck'   => true,
 			'type'         => 'text',
 			'value'        => true,
 		),
@@ -78,9 +78,21 @@ class Text extends Field {
 	public function sanitize( $value ) {
 
 		$original_value = $value;
-		$value          = sanitize_text_field( $value );
-		if ( $value !== $original_value ) {
-			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
+		if ( empty( $this->field['data_args']['pattern'] ) ) {
+			$value = sanitize_text_field( $value );
+			if ( $value !== $original_value ) {
+				$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
+			}
+		} else {
+			$value = trim( $value );
+			preg_match( $this->field['data_args']['pattern'], $value, $matches );
+			if ( ! empty( $matches ) ) {
+				$value = $matches[0];
+			}
+			$value = esc_url_raw( $value );
+			if ( $value !== $original_value ) {
+				$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
+			}
 		}
 
 		return $value;

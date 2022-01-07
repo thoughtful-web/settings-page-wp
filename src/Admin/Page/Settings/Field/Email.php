@@ -86,35 +86,4 @@ class Email extends Field {
 		return $value;
 
 	}
-
-	/**
-	 * Get the settings option array and print one of its values.
-	 *
-	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/text
-	 *
-	 * @param array $args The arguments needed to render the setting field.
-	 *
-	 * @return void
-	 */
-	public function output( $args ) {
-
-		// Assemble the variables necessary to output the form field from settings.
-		$default_value = isset( $this->field['data_args']['default'] ) ? $this->field['data_args']['default'] : '';
-		$value         = get_site_option( $args['id'], $default_value );
-		$extra_attrs   = $this->get_optional_attributes( $args );
-
-		// Render the form field output.
-		$output = sprintf(
-			'<input type="email" id="%1$s" name="%2$s" value="%3$s" %4$s/>',
-			esc_attr( $args['id'] ),
-			esc_attr( $args['data_args']['label_for'] ),
-			esc_attr( $value ),
-			$extra_attrs
-		);
-		echo wp_kses( $output, $this->allowed_html );
-
-		// Render the description text.
-		$this->output_description( $args );
-
-	}
 }

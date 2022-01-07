@@ -200,7 +200,8 @@ class Field {
 
 		// Render the form field output.
 		$output = sprintf(
-			'<input type="text" id="%1$s" name="%2$s" value="%3$s" %4$s/>',
+			'<input type="%1$s" id="%2$s" name="%3$s" value="%4$s" %5$s/>',
+			esc_attr( $args['type'] ),
 			esc_attr( $args['id'] ),
 			esc_attr( $args['data_args']['label_for'] ),
 			esc_attr( $value ),

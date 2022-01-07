@@ -182,6 +182,16 @@ return array(
 						'pattern' => '[0-9]{3}-[0-9]{3}-[0-9]{4}',
 					),
 				),
+				array(
+					'label'       => 'My URL Field',
+					'id'          => 'unique_url_field',
+					'type'        => 'url',
+					'desc'        => 'Example: https://.*',
+					'placeholder' => 'https://example.com/',
+					'data_args'   => array(
+						'pattern' => 'https://.*',
+					),
+				),
 			),
 		),
 	),
