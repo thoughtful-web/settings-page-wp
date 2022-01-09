@@ -235,15 +235,29 @@ class Settings {
 
 		$options_form = $this->config['network'] ? 'network_options_form' : 'site_options_form';
 
-		add_menu_page(
-			$this->config['method_args']['page_title'],
-			$this->config['method_args']['menu_title'],
-			$this->config['method_args']['capability'],
-			$this->config['method_args']['menu_slug'],
-			array( $this, $options_form ),
-			$this->config['method_args']['icon_url'],
-			$this->config['method_args']['position']
-		);
+		if (
+			! isset( $this->config['method_args']['parent_slug'] )
+		) {
+			add_menu_page(
+				$this->config['method_args']['page_title'],
+				$this->config['method_args']['menu_title'],
+				$this->config['method_args']['capability'],
+				$this->config['method_args']['menu_slug'],
+				array( $this, $options_form ),
+				$this->config['method_args']['icon_url'],
+				$this->config['method_args']['position']
+			);
+		} else {
+			add_submenu_page(
+				$this->config['method_args']['parent_slug'],
+				$this->config['method_args']['page_title'],
+				$this->config['method_args']['menu_title'],
+				$this->config['method_args']['capability'],
+				$this->config['method_args']['menu_slug'],
+				array( $this, $options_form ),
+				$this->config['method_args']['position']
+			);
+		}
 
 	}
 
