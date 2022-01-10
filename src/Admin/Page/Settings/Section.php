@@ -30,10 +30,17 @@ class Section {
 	 */
 	private $capability;
 
-	public function __construct( $id, $title, $description, $page, $capability ) {
+	/**
+	 * The settings section.
+	 *
+	 * @var array $section The settings section configuration array.
+	 */
+
+	public function __construct( $id, $title, $description, $page, $capability, $section ) {
 
 		$this->description = $description;
 		$this->capability  = $capability;
+		$this->section     = $section;
 
 		add_settings_section( $id, $title, array( $this, 'description' ), $page );
 
@@ -58,6 +65,10 @@ class Section {
 
 		if ( current_user_can( $this->capability ) ) {
 			echo wp_kses_post( $this->description );
+		}
+
+		if ( array_key_exists( 'include', $this->section ) && ! empty( $this->section['include'] ) ) {
+			include $section['include'];
 		}
 
 	}

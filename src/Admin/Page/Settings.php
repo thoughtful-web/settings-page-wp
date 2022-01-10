@@ -110,7 +110,8 @@ class Settings {
 				$section['title'],
 				$section['description'],
 				$this->menu_slug,
-				$this->capability
+				$this->capability,
+				$section,
 			);
 		}
 
