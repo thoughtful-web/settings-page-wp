@@ -68,7 +68,7 @@ class Section {
 		}
 
 		if ( array_key_exists( 'include', $this->section ) && ! empty( $this->section['include'] ) ) {
-			include $section['include'];
+			include $this->section['include'];
 		}
 
 	}
