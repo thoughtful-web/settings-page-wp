@@ -168,13 +168,15 @@ class Config {
 	private function associate_label_for( $config ) {
 
 		foreach ( $config['sections'] as $section_key => $section ) {
-			foreach( $section['fields'] as $field_key => $field ) {
-				if ( ! array_key_exists( 'data_args', $field ) ) {
-					$config['sections'][ $section_key ]['fields'][ $field_key ]['data_args'] = array(
-						'label_for' => $field['id'],
-					);
-				} elseif ( ! array_key_exists( 'label_for', $field['data_args'] ) ) {
-					$config['sections'][ $section_key ]['fields'][ $field_key ]['data_args']['label_for'] = $field['id'];
+			if ( array_key_exists( 'fields', $section ) ) {
+				foreach( $section['fields'] as $field_key => $field ) {
+					if ( ! array_key_exists( 'data_args', $field ) ) {
+						$config['sections'][ $section_key ]['fields'][ $field_key ]['data_args'] = array(
+							'label_for' => $field['id'],
+						);
+					} elseif ( ! array_key_exists( 'label_for', $field['data_args'] ) ) {
+						$config['sections'][ $section_key ]['fields'][ $field_key ]['data_args']['label_for'] = $field['id'];
+					}
 				}
 			}
 		}
