@@ -186,7 +186,7 @@ return array(
 					'label'       => 'My URL Field',
 					'id'          => 'unique_url_field',
 					'type'        => 'url',
-					'desc'        => 'Example: https://.*',
+					'desc'        => 'Must have the "https" protocol. Example: https://example.com/',
 					'placeholder' => 'https://example.com/',
 					'data_args'   => array(
 						'pattern' => 'https://.*',

@@ -215,6 +215,14 @@ class Settings {
 							$this->option_group
 						);
 						break;
+					case 'url':
+						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Url(
+							$field,
+							$this->menu_slug,
+							$section_id,
+							$this->option_group
+						);
+						break;
 					default:
 						break;
 				}
