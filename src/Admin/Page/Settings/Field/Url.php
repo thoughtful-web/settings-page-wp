@@ -78,19 +78,21 @@ class Url extends Field {
 	public function sanitize( $value ) {
 
 		$original_value = $value;
-		if ( empty( $this->field['data_args']['pattern'] ) ) {
+		if ( ! array_key_exists( 'pattern', $this->field['data_args'] ) || empty( $this->field['data_args']['pattern'] ) ) {
 			$value = sanitize_text_field( $value );
 			if ( $value !== $original_value ) {
 				$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
 			}
 		} else {
 			$value = trim( $value );
-			preg_match( $this->field['data_args']['pattern'], $value, $matches );
+			$pattern = '/' . str_replace( '/', '\/', $this->field['data_args']['pattern'] ) . '/';
+			preg_match( $pattern, $value, $matches );
 			if ( ! empty( $matches ) ) {
 				$value = $matches[0];
 			}
 			$value = esc_url_raw( $value );
 			if ( $value !== $original_value ) {
+				error_log('The Url Field was not able to sanitize its value using the pattern you defined: ' . $this->field['data_args']['pattern'] . ' (html), ' . $pattern . ' (php)');
 				$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
 			}
 		}
