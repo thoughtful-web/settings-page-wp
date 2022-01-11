@@ -55,8 +55,8 @@ class Text extends Validate {
 
 		// If the input must follow a pattern.
 		if ( ! empty( $this->settings['data_args']['pattern'] ) ) {
-			$has_pattern = $this->is_pattern( $input );
-			if ( false === $has_pattern['status'] ) {
+			$is_pattern = $this->is_pattern( $input );
+			if ( false === $is_pattern['status'] ) {
 				$valid['status']    = false;
 				$valid['message'][] = 'The value must follow the pattern "' . $this->settings['data_args']['pattern'] . '"';
 			}
