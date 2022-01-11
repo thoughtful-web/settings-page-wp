@@ -15,6 +15,8 @@ declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
 
 use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Validate\Text_Validator;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Validate\Text_Sanitizer;
 
 /**
  * The Phone Field class.
@@ -71,30 +73,32 @@ class Url extends Field {
 	/**
 	 * Sanitize the text field value.
 	 *
+	 * @see https://developer.wordpress.org/reference/functions/esc_url_raw/
+	 *
 	 * @param string $value The unsanitized option value.
 	 *
 	 * @return string
 	 */
 	public function sanitize( $value ) {
 
-		$original_value = $value;
-		if ( ! array_key_exists( 'pattern', $this->field['data_args'] ) || empty( $this->field['data_args']['pattern'] ) ) {
-			$value = sanitize_text_field( $value );
-			if ( $value !== $original_value ) {
-				$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-			}
-		} else {
-			$value = trim( $value );
-			$pattern = '/' . str_replace( '/', '\/', $this->field['data_args']['pattern'] ) . '/';
-			preg_match( $pattern, $value, $matches );
-			if ( ! empty( $matches ) ) {
-				$value = $matches[0];
-			}
-			$value = esc_url_raw( $value );
-			if ( $value !== $original_value ) {
-				error_log('The Url Field was not able to sanitize its value using the pattern you defined: ' . $this->field['data_args']['pattern'] . ' (html), ' . $pattern . ' (php)');
-				$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-			}
+		// Save the value state.
+		$initial_value = $value;
+		$db_value      = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
+
+		// Validate the value.
+		$validate = new Text_Validator( $this->field );
+		$is_valid = $validate->is_valid( $value );
+		if ( ! $is_valid['status'] ) {
+			$validate->notify( $is_valid['message'] );
+			return $db_value;
+		}
+
+		// Sanitize the valid value.
+		$sanitize = new Text_Sanitizer( $this->field );
+		$value = trim( $value );
+		$value = esc_url_raw( $value );
+		if ( $value !== $initial_value ) {
+			$validate->notify( 'The ' . $this->field['label'] . ' value had invalid characters removed.', 'warning' );
 		}
 
 		return $value;
