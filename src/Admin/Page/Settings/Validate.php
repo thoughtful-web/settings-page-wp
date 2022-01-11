@@ -79,7 +79,7 @@ class Validate {
 	public function notify( $message, $type ) {
 
 		$setting = $this->setting['id'];
-		$code    = 'notice_' . $this->setting['id'];
+		$code    = 'notice_validate_' . $this->setting['id'];
 		if ( $type ) {
 			$code .= "_$type";
 		}
