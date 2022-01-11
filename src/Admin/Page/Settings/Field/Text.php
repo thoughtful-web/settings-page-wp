@@ -84,7 +84,7 @@ class Text extends Field {
 		$passed        = true;
 
 		// Validate the value.
-		$validate = new Validate_Text( $this->field );
+		$validate = new Text_Validator( $this->field );
 		$is_valid = $validate->is_valid( $value );
 		if ( ! $is_valid['status'] ) {
 			$validate->notify( $is_valid['message'] );
