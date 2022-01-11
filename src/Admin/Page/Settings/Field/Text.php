@@ -94,7 +94,7 @@ class Text extends Field {
 		// Sanitize the valid value.
 		$value = sanitize_text_field( $value );
 		if ( $value !== $initial_value ) {
-			$validate->notify( 'The ' . $this->field['label'] . ' value had invalid content removed.' );
+			$validate->notify( 'The ' . $this->field['label'] . ' value had invalid content removed.', 'warning' );
 		}
 
 		return $value;
