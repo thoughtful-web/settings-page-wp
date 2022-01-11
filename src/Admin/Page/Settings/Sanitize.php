@@ -21,7 +21,9 @@ class Sanitize {
 	 *
 	 * @access private
 	 */
-	private $settings = array();
+	private $settings = array(
+		'data_args' => array(),
+	);
 
 	/**
 	 * Instantiate the class and assign properties from the parameters.
