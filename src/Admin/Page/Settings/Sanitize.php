@@ -37,49 +37,6 @@ class Sanitize {
 	}
 
 	/**
-	 * Get the fully sanitized value.
-	 *
-	 * @param string $input The input value to sanitize.
-	 * @param string $mode  (Optional) The purpose for sanitizing the value. Default is 'attribute'.
-	 *
-	 * @return string
-	 */
-	public function sanitize( $input, $mode = 'attribute' ) {
-
-		if ( 'attribute' === $mode ) {
-			$input = esc_attr( $input );
-		}
-		return $input;
-
-	}
-
-	/**
-	 * Detect if the value is sanitary.
-	 *
-	 * @param string $input The input value to sanitize.
-	 * @param string $mode  (Optional) The purpose for sanitizing the value. Default is 'attribute'.
-	 *
-	 * @return array
-	 */
-	public function is_sanitary( $input, $mode = 'attribute' ) {
-
-		$label         = $this->settings['label'];
-		$initial_value = $input;
-		$sanitized     = $this->sanitize( $input, $mode );
-		$sanitary      = array(
-			'status'  => true,
-			'message' => 'The ' . $label . ' field is sanitary.'
-		);
-		if ( $sanitized !== $initial_value ) {
-			$sanitary['status']  = false;
-			$sanitary['message'] = 'The ' . $label . ' field has invalid characters.';
-		}
-
-		return $sanitary;
-
-	}
-
-	/**
 	 * Notify the user of the validation status.
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/add_settings_error/
