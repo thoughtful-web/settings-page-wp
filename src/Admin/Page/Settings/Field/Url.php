@@ -81,24 +81,20 @@ class Url extends Field {
 	 */
 	public function sanitize( $value ) {
 
-		// Save the value state.
-		$initial_value = $value;
-		$db_value      = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-
 		// Validate the value.
 		$validate = new Text_Validator( $this->field );
 		$is_valid = $validate->is_valid( $value );
 		if ( ! $is_valid['status'] ) {
 			$validate->notify( $is_valid['message'] );
-			return $db_value;
+			return get_site_option( $this->field['id'], $this->field['data_args']['default'] );
 		}
 
 		// Sanitize the valid value.
-		$sanitize = new Text_Sanitizer( $this->field );
-		$value = trim( $value );
-		$value = esc_url_raw( $value );
-		if ( $value !== $initial_value ) {
-			$validate->notify( 'The ' . $this->field['label'] . ' value had invalid characters removed.', 'warning' );
+		$sanitizer  = new Text_Sanitizer( $this->field );
+		$sanitation = $sanitizer->is_sanitary( $value );
+		if ( false === $sanitation['status'] ) {
+			$value = $sanitizer->sanitize( $value, 'db' );
+			$sanitizer->notify( $sanitation['message'], 'warning' );
 		}
 
 		return $value;
