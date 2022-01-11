@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
 
 use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Validate\Text as Validate_Text;
 
 /**
  * The Text Field class.
@@ -77,10 +78,23 @@ class Text extends Field {
 	 */
 	public function sanitize( $value ) {
 
-		$original_value = $value;
-		$value          = sanitize_text_field( $value );
-		if ( $value !== $original_value ) {
-			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
+		// Save the value state.
+		$initial_value = $value;
+		$db_value      = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
+		$passed        = true;
+
+		// Validate the value.
+		$validate = new Validate_Text( $this->field );
+		$is_valid = $validate->is_valid( $value );
+		if ( ! $is_valid['status'] ) {
+			$validate->notify( $is_valid['message'] );
+			return $db_value;
+		}
+
+		// Sanitize the valid value.
+		$value = sanitize_text_field( $value );
+		if ( $value !== $initial_value ) {
+			$validate->notify( 'The ' . $this->field['label'] . ' value had invalid content removed.' );
 		}
 
 		return $value;
