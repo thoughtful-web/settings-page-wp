@@ -16,7 +16,7 @@ namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
 
 use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Validate;
 
-class Text extends Validate {
+class Text_Validator extends Validate {
 
 	/**
 	 * Validation settings.
@@ -31,7 +31,10 @@ class Text extends Validate {
 	);
 
 	/**
-	 * Validate the input text.
+	 * Validate the input text using the following requirements:
+	 * 1. Is not empty if it is a required field.
+	 * 2. Matches a pattern if present.
+	 * 3. Is within the min and max lengths. 16mb is the default max length.
 	 *
 	 * @param  string $input The string to validate.
 	 * @return array
