@@ -185,6 +185,18 @@ class Field {
 	}
 
 	/**
+	 * Sanitize the value for display in a form.
+	 *
+	 * @param string $input The input value to sanitize for display.
+	 * @param string $mode  (Optional) The mode for displaying the value. Default is 'attribute'.
+	 *
+	 * @return void
+	 */
+	public function sanitize_field( $input, $mode = 'attribute' ) {
+		return esc_attr( $input );
+	}
+
+	/**
 	* Get the settings option array and print one of its values.
 	* @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/text
 	*
@@ -196,6 +208,7 @@ class Field {
 
 		// Assemble the variables necessary to output the form field from settings.
 		$value       = get_site_option( $args['id'], $args['data_args']['default'] );
+		$value       = $this->sanitize_field( $value );
 		$extra_attrs = $this->get_optional_attributes( $args );
 
 		// Render the form field output.
@@ -204,7 +217,7 @@ class Field {
 			esc_attr( $args['type'] ),
 			esc_attr( $args['id'] ),
 			esc_attr( $args['data_args']['label_for'] ),
-			esc_attr( $value ),
+			$value,
 			$extra_attrs
 		);
 		echo wp_kses( $output, $this->allowed_html );
