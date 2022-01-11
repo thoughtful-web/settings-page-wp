@@ -81,7 +81,6 @@ class Text extends Field {
 		// Save the value state.
 		$initial_value = $value;
 		$db_value      = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-		$passed        = true;
 
 		// Validate the value.
 		$validate = new Text_Validator( $this->field );
