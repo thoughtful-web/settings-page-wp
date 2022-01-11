@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
 
 use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
-use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Validate\Text as Validate_Text;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Validate\Text_Validator;
 
 /**
  * The Text Field class.
