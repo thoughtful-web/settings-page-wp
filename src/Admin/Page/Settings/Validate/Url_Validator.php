@@ -70,6 +70,15 @@ class Url_Validator extends Text_Validator {
 			$valid['message']['has_php_tag'] = $has_php_tag['message'];
 		}
 
+		// Detect disallowed protocols.
+		$protocols    = wp_allowed_protocols();
+		$tested_value = wp_kses_bad_protocol( $input, $protocols );
+		if ( $tested_value !== $input ) {
+			$valid['status']                       = false;
+			$valid['message']['has_bad_protocol']  = 'The value must only include allowed protocols.';
+			$valid['message']['has_bad_protocol'] .= "Valid protocols: '" . implode( "', '", $protocols ) . "'.";
+		}
+
 		return $valid;
 
 	}
