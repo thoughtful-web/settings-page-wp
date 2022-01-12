@@ -117,7 +117,7 @@ class Field {
 		$field = $this->apply_defaults( $field );
 
 		// Define the option value sanitization callback method.
-		if ( false !== $field['data_args']['sanitize_callback'] && ! is_callable( $field['data_args']['sanitize_callback'] ) ) {
+		if ( false !== boolval( $field['data_args']['sanitize_callback'] ) && ! is_callable( $field['data_args']['sanitize_callback'] ) ) {
 			$field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
 		}
 
