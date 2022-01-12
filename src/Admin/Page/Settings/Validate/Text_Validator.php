@@ -70,14 +70,14 @@ class Text_Validator extends Validate {
 
 		// If the input has script tags.
 		$has_script_tag = $this->has_script_tag( $input );
-		if ( true === $has_script_tags['status'] ) {
+		if ( true === $has_script_tag['status'] ) {
 			$valid['status']                    = false;
 			$valid['message']['has_script_tag'] = $has_script_tag['message'];
 		}
 
 		// If the input has script tags.
 		$has_php_tag = $this->has_php_tag( $input );
-		if ( true === $has_php_tags['status'] ) {
+		if ( true === $has_php_tag['status'] ) {
 			$valid['status']                 = false;
 			$valid['message']['has_php_tag'] = $has_php_tag['message'];
 		}
@@ -225,7 +225,7 @@ class Text_Validator extends Validate {
 	 * @param string $input The input value to sanitize.
 	 * @return void
 	 */
-	public function has_php_tags( $input ) {
+	public function has_php_tag( $input ) {
 
 		$valid = array(
 			'status'  => true,
