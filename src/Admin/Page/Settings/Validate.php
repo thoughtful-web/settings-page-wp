@@ -38,6 +38,61 @@ class Validate {
 	}
 
 	/**
+	 * Validate the input text using the following requirements:
+	 * 1. Is not empty if it is a required field.
+	 * 2. Matches a pattern if present.
+	 * 3. Is within the min and max lengths. 16mb is the default max length.
+	 *
+	 * @param  string $input The string to validate.
+	 * @return array
+	 */
+	public function is_valid( $input ) {
+
+		// Declare initial variables.
+		$initial_value = $input;
+		$label         = $this->settings['label'];
+		// Declare success based variables.
+		$valid = array(
+			'status'   => true,
+			'messages' => array( 'success' => "The {$label} value is valid." ),
+		);
+
+		// Sanitize the input for various purposes.
+		$validated = $this->validate( $input );
+
+		// Detect if the value was modified by the sanitization process.
+		if ( false === $validated['status'] ) {
+			$valid['status']   = false;
+			$valid['messages'] = array( 'fail' => "The {$label} value is invalid:", );
+			$valid['messages'] = array_merge( $valid['messages'], $validated['messages'] );
+		}
+
+		// Convert the messages to a single string.
+		$valid['message'] = implode( ' ', $valid['messages'] );
+
+		return $valid;
+
+	}
+
+	/**
+	 * Validate the input value and return any error messages.
+	 * Must be implemented by other classes.
+	 *
+	 * @param string $input The input value.
+	 * @return void
+	 */
+	public function validate( $input ) {
+
+		$valid = array(
+			'status'   => true,
+			'messages' => array(),
+		);
+
+		return $valid;
+
+	}
+
+	/**
 	 * Notify the user of the validation status.
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/add_settings_error/
