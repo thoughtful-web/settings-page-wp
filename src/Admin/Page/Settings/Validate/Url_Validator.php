@@ -56,6 +56,20 @@ class Url_Validator extends Text_Validator {
 			$valid['message']['not_length'] = $is_length['message'];
 		}
 
+		// If the input has script tags.
+		$has_script_tag = $this->has_script_tag( $input );
+		if ( true === $has_script_tag['status'] ) {
+			$valid['status']                    = false;
+			$valid['message']['has_script_tag'] = $has_script_tag['message'];
+		}
+
+		// If the input has script tags.
+		$has_php_tag = $this->has_php_tag( $input );
+		if ( true === $has_php_tag['status'] ) {
+			$valid['status']                 = false;
+			$valid['message']['has_php_tag'] = $has_php_tag['message'];
+		}
+
 		return $valid;
 
 	}
