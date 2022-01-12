@@ -37,26 +37,56 @@ class Text_Validator extends Validate {
 	 * 3. Is within the min and max lengths. 16mb is the default max length.
 	 *
 	 * @param  string $input The string to validate.
+	 * @param  string $mode  The mode of transport for the input.
 	 * @return array
 	 */
-	public function is_valid( $input ) {
+	public function is_valid( $input, $mode = null ) {
 
 		// Declare initial variables.
 		$initial_value = $input;
 		$label         = $this->settings['label'];
 		// Declare success based variables.
-		$success = 'The ' . $label . ' value is valid.';
-		$failure = 'The ' . $label . ' value has one or more validation errors:';
-		$valid   = array(
-			'status'  => true,
-			'message' => array(),
+		$valid = array(
+			'status'   => true,
+			'messages' => array( 'success' => "The {$label} value is valid." ),
+		);
+
+		// Sanitize the input for various purposes.
+		$validated = $this->validate( $input, $mode );
+
+		// Detect if the value was modified by the sanitization process.
+		if ( false === $validated['status'] ) {
+			$valid['status']   = false;
+			$valid['messages'] = array( 'fail' => "The {$label} value is invalid:", );
+			$valid['messages'] = array_merge( $valid['messages'], $validated['messages'] );
+		}
+
+		// Convert the messages to a single string.
+		$valid['message'] = implode( ' ', $valid['messages'] );
+
+		return $valid;
+
+	}
+
+	/**
+	 * Validate the input value and return any error messages.
+	 *
+	 * @param string $input The input value.
+	 * @param string $mode  The mode of transport.
+	 * @return void
+	 */
+	public function validate( $input, $mode ) {
+
+		$valid = array(
+			'status'   => true,
+			'messages' => array(),
 		);
 
 		// If the input is empty but required.
 		$is_empty = $this->is_empty( $input );
 		if ( ! empty( $this->settings['data_args']['required'] ) ) {
 			if ( true === $is_empty['status'] ) {
-				$valid['status']    = false;
+				$valid['status']              = false;
 				$valid['message']['is_empty'] = 'The value cannot be empty.';
 			}
 		}
@@ -65,32 +95,31 @@ class Text_Validator extends Validate {
 		if ( ! empty( $this->settings['data_args']['pattern'] ) ) {
 			$is_pattern = $this->is_pattern( $input );
 			if ( false === $is_pattern['status'] ) {
-				$valid['status']    = false;
-				$valid['message']['is_pattern'] = 'The value must follow the pattern "' . $this->settings['data_args']['pattern'] . '"';
+				$valid['status']                 = false;
+				$valid['message']['not_pattern'] = 'The value must follow the pattern "' . $this->settings['data_args']['pattern'] . '"';
 			}
 		}
 
 		// If the input must follow length requirements.
 		$is_length = $this->is_length( $input );
 		if ( false === $is_length['status'] ) {
-			$valid['status']               = false;
-			$valid['message']['is_length'] = $is_length['message'];
+			$valid['status']                = false;
+			$valid['message']['not_length'] = $is_length['message'];
 		}
 
-		// Load the initial value of the results message.
-		if ( $input === $initial_value ) {
-			// Set the success message.
-			$valid['message']['success'] = $success;
-		} else {
-			// Set the failure message preface.
-			array_unshift( $valid['message'], $failure );
+		// If the input has script tags.
+		$has_script_tag = $this->has_script_tag( $input );
+		if ( true === $has_script_tags['status'] ) {
+			$valid['status']                    = false;
+			$valid['message']['has_script_tag'] = $has_script_tag['message'];
 		}
 
-		// Apply user filters to the return value. Typically used to customize messages.
-		$valid = apply_filters( 'twl_settings_validate_text', $valid, $label, $this->settings );
-
-		// Convert the message to a single string.
-		$valid['message'] = implode( ' ', $valid['message'] );
+		// If the input has script tags.
+		$has_php_tag = $this->has_php_tag( $input );
+		if ( true === $has_php_tags['status'] ) {
+			$valid['status']                 = false;
+			$valid['message']['has_php_tag'] = $has_php_tag['message'];
+		}
 
 		return $valid;
 
@@ -111,11 +140,11 @@ class Text_Validator extends Validate {
 		);
 
 		// I suspect 16mb is a common max string length for SQL database insertion on shared hosting for WordPress.
-		if ( ! defined( 'TWL_SETTINGS_MAX_STRING_LENGTH' ) ) {
-			define( 'TWL_SETTINGS_MAX_STRING_LENGTH', 16777216 );
+		if ( ! defined( 'TWL_SETTINGS_MAX_DB_STRING_LENGTH' ) ) {
+			define( 'TWL_SETTINGS_MAX_DB_STRING_LENGTH', 16777216 );
 		}
 		$minlength = 0;
-		$maxlength = TWL_SETTINGS_MAX_STRING_LENGTH;
+		$maxlength = TWL_SETTINGS_MAX_DB_STRING_LENGTH;
 		$strlen    = strlen( $input );
 		if ( ! empty( $this->settings['data_args']['minlength'] ) ) {
 			$minlength = $this->settings['data_args']['minlength'];
@@ -177,15 +206,78 @@ class Text_Validator extends Validate {
 		$label = $this->settings['label'];
 		$valid = array(
 			'status'  => false,
-			'message' => 'The ' . $label . ' field is not empty.'
+			'message' => 'The ' . $label . ' value is not empty.'
 		);
 
 		// Validate.
 		if ( empty( $input ) || empty( trim( $input ) ) ) {
 
 			$valid['status']  = true;
-			$valid['message'] = 'The ' . $label . ' setting is empty.';
+			$valid['message'] = 'The ' . $label . ' value is empty.';
 
+		}
+
+		return $valid;
+
+	}
+
+	/**
+	 * Sanitize the value of script tags.
+	 *
+	 * @param string $input The input value to sanitize.
+	 * @return void
+	 */
+	public function has_script_tag( $input ) {
+
+		$valid = array(
+			'status'  => true,
+			'message' => 'Script tag(s) not found',
+		);
+
+		// Remove JavaScript.
+		preg_match( '/<script\b[^>]*>(.*?)<\/script>/is', '', $input, $matches );
+		if ( $matches ) {
+			$valid['status'] = false;
+		}
+
+		preg_match( '~<\s*\bscript\b[^>]*>(.*?)<\s*\/\s*script\s*>~is', '', $input, $matches );
+		if ( $matches ) {
+			$valid['status'] = false;
+		}
+
+		preg_match( '/\/\*\*\/script|s\/\*\*\/cript|sc\/\*\*\/ript|scr\/\*\*\/ipt|scri\/\*\*\/pt|scrip\/\*\*\/t|script\/\*\*\//', '', $input, $matches );
+		if ( $matches ) {
+			$valid['status'] = false;
+		}
+
+		if ( false === $valid['status'] ) {
+			$valid['message'] = 'Script tag(s) found.';
+		}
+
+		return $valid;
+
+	}
+
+	/**
+	 * Sanitize the value of php tags.
+	 *
+	 * @param string $input The input value to sanitize.
+	 * @return void
+	 */
+	public function has_php_tags( $input ) {
+
+		$valid = array(
+			'status'  => true,
+			'message' => 'PHP tag(s) not found',
+		);
+
+		preg_match( '/<\?php(.*?);?\s*\?>/', '', $input, $matches );
+		if ( $matches ) {
+			$valid['status'] = false;
+		}
+
+		if ( false === $valid['status'] ) {
+			$valid['message'] = 'PHP tag(s) found.';
 		}
 
 		return $valid;
