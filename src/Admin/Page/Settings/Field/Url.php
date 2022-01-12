@@ -16,7 +16,7 @@ namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
 
 use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
 use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Validate\Text_Validator;
-use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Validate\Text_Sanitizer;
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Validate\Url_Sanitizer;
 
 /**
  * The Phone Field class.
@@ -75,29 +75,29 @@ class Url extends Field {
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/esc_url_raw/
 	 *
-	 * @param string $value The unsanitized option value.
+	 * @param string $input The unsanitized option value.
 	 *
 	 * @return string
 	 */
-	public function sanitize( $value ) {
+	public function sanitize( $input ) {
 
-		// Validate the value.
+		// Validate the input.
 		$validate = new Text_Validator( $this->field );
-		$is_valid = $validate->is_valid( $value );
+		$is_valid = $validate->is_valid( $input );
 		if ( ! $is_valid['status'] ) {
 			$validate->notify( $is_valid['message'] );
 			return get_site_option( $this->field['id'], $this->field['data_args']['default'] );
 		}
 
-		// Sanitize the valid value.
-		$sanitizer  = new Text_Sanitizer( $this->field );
-		$sanitation = $sanitizer->is_sanitary( $value );
-		if ( false === $sanitation['status'] ) {
-			$value = $sanitizer->sanitize( $value, 'db' );
-			$sanitizer->notify( $sanitation['message'], 'warning' );
+		// Sanitize the valid input.
+		$sanitizer   = new Url_Sanitizer( $this->field );
+		$is_sanitary = $sanitizer->is_sanitary( $input, 'db' );
+		if ( false === $is_sanitary['status'] ) {
+			$input = $sanitizer->sanitize( $input, 'db' );
+			$sanitizer->notify( $is_sanitary, 'warning' );
 		}
 
-		return $value;
+		return $input;
 
 	}
 }

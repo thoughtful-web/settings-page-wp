@@ -41,13 +41,19 @@ class Sanitize {
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/add_settings_error/
 	 *
-	 * @param string $message (Required) The formatted message text to display to the user (will be
-	 *                        shown inside styled <div> and <p> tags).
-	 * @param string $type    (Optional) Message type, controls HTML class. Possible values include
-	 *                        'error', 'success', 'warning', 'info'. Default value: 'error'.
+	 * @param array  $is_sanitary {
+	 *                   (Required) The formatted message parameters to display to the user (will
+	 *                   be shown inside styled <div> and <p> tags).
+	 *                   @key boolean  $status   The status of the sanitization.
+	 *                   @key string[] $messages The associative array of sanitization messages.
+	 *                   @key string   $message  The concatenated $messages string.
+	 *               }
+	 * @param string $type        (Optional) Message type, controls HTML class. Possible values
+	 *                            include 'error', 'success', 'warning', 'info'. Default behavior
+	 *                            emits an error. Default value: null.
 	 * @return void
 	 */
-	public function notify( $message, $type ) {
+	public function notify( $is_sanitary, $type = null ) {
 
 		$setting = $this->setting['id'];
 		$code    = 'notice_sanitize_' . $this->setting['id'];
@@ -56,6 +62,9 @@ class Sanitize {
 		}
 		$code .= '_' . uniqid();
 		$code  = esc_attr( $code );
+
+		$is_sanitary = apply_filters( 'notice_sanitize_' . $this->setting['type'], $is_sanitary, $type, $this->setting );
+		$message     = apply_filters( $code, $is_sanitary['message'], $is_sanitary, $type, $this->setting );
 
 		if ( $type ) {
 			add_settings_error( $setting, $code, $message, $type );

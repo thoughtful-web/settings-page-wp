@@ -19,74 +19,145 @@ use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Sanitize;
 class Text_Sanitizer extends Sanitize {
 
 	/**
-	 * Get the fully sanitized value.
+	 * Detect if the value is sanitary.
 	 *
-	 * @param string   $input The input value to sanitize.
+	 * @param string $input The input value to sanitize.
+	 * @param string $mode  (Optional) The mode of transport for the string. Accepts 'db', 'form',
+	 *                      or 'attribute'. Default is null.
+	 *
+	 * @return array
+	 */
+	public function is_sanitary( $input, $mode = null ) {
+
+		// Declare initial variables.
+		$initial_value = $input;
+		$label         = $this->settings['label'];
+		// Declare success based variables.
+		$sanitary = array(
+			'status'   => true,
+			'messages' => array( 'success' => "The {$label} value is safe." ),
+		);
+
+		// Sanitize the input for various purposes.
+		$input = $this->sanitize( $input, $mode );
+
+		// Detect if the value was modified by the sanitization process.
+		if ( $input !== $initial_value ) {
+			$sanitary['status']   = false;
+			$san_key              = 'db' === $mode ? 'sanitize_db' : 'sanitize';
+			$sanitary['messages'] = array(
+				'fail'   => "The {$label} value was modified:",
+				$san_key => 'unsafe content was found.'
+			);
+		}
+
+		// Convert the messages to a single string.
+		$sanitary['message'] = implode( ' ', $sanitary['messages'] );
+
+		return $sanitary;
+
+	}
+
+	/**
+	 * Sanitize the string for presentation purposes.
+	 *
+	 * @param string $input The input value to sanitize.
+	 * @param string $mode  (Optional) The mode of transport for the string. Accepts 'db' or
+	 *                      'attribute'. Default is null.
 	 *
 	 * @return string
 	 */
-	public function sanitize_attr( $input ) {
+	public function sanitize( $input, $mode = null ) {
 
-		$input = esc_attr( $input );
+		if ( 'db' === $mode ) {
+			$input = $this->sanitize_db( $input );
+		} elseif ( 'attribute' === $mode ) {
+			$input = $this->sanitize_attr( $input );
+		} else {
+			$input = $this->sanitize_display( $input );
+		}
 
 		return $input;
 
 	}
 
 	/**
-	 * Detect if the value is sanitary.
+	 * Sanitize the string for database purposes.
 	 *
-	 * @param string          $input The input value to sanitize.
-	 * @param string|string[] $mode  (Optional) The purpose for sanitizing the value. Default is
-	 *                               'attribute'.
+	 * @param string $input The input value to sanitize.
 	 *
-	 * @return array
+	 * @return string
 	 */
-	public function is_sanitary( $input, $mode = 'attribute' ) {
+	public function sanitize_db( $input ) {
 
-		// Ensure the mode is an array.
-		if ( ! is_array( $mode ) ) {
-			$mode = array( $mode );
-		}
+		$input = $this->sanitize_script_tags( $input );
+		$input = $this->sanitize_php_tags( $input );
 
-		// Declare initial variables.
-		$initial_value = $input;
-		$label         = $this->settings['label'];
-		// Declare success based variables.
-		$success  = 'The ' . $label . ' value is free of unsafe characters.';
-		$failure  = 'The ' . $label . ' value was modified:';
-		$sanitary = array(
-			'status'  => true,
-			'message' => array(),
-		);
+		return $input;
 
-		// Sanitize the input for HTML attributes.
-		if ( in_array( 'attribute', $mode, true ) ) {
-			$input = $this->sanitize_attr( $input, $mode );
-			// Detect if the value was modified by the sanitization process.
-			if ( $input !== $initial_value ) {
-				$sanitary['status'] = false;
-				// Assign the message to a key for filter assistance.
-				$sanitary['message']['sanitize_attr'] = 'The ' . $label . ' field has unsafe HTML attribute characters.';
-			}
-		}
+	}
 
-		// Load the initial value of the results message.
-		if ( $input === $initial_value ) {
-			// Set the success message.
-			$sanitary['message']['success'] = $success;
-		} else {
-			// Set the failure message preface.
-			array_unshift( $sanitary['message'], $failure );
-		}
+	/**
+	 * Sanitize the value for HTML attribute purposes.
+	 *
+	 * @param string $input The input value to sanitize.
+	 *
+	 * @return string
+	 */
+	public function sanitize_attr( $input ) {
 
-		// Apply user filters to the return value. Typically used to customize messages.
-		$sanitary = apply_filters( 'twl_settings_sanitize_text', $sanitary, $label, $this->settings );
+		$input = preg_replace( '"', '', $input );
+		$input = $this->sanitize_script_tags( $input );
+		$input = $this->sanitize_php_tags( $input );
 
-		// Convert the message to a single string.
-		$sanitary['message'] = implode( ' ', $sanitary['message'] );
+		return $input;
 
-		return $sanitary;
+	}
+
+	/**
+	 * Sanitize the value for presentation purposes.
+	 *
+	 * @param string $input The input value to sanitize.
+	 *
+	 * @return string
+	 */
+	public function sanitize_display( $input ) {
+
+		$input = $this->sanitize_script_tags( $input );
+		$input = $this->sanitize_php_tags( $input );
+
+		return $input;
+
+	}
+
+	/**
+	 * Sanitize the value of script tags.
+	 *
+	 * @param string $input The input value to sanitize.
+	 * @return void
+	 */
+	public function sanitize_script_tags( $input ) {
+
+		// Remove JavaScript.
+		$input = preg_replace( '/<script\b[^>]*>(.*?)<\/script>/is', '', $input );
+		$input = preg_replace( '~<\s*\bscript\b[^>]*>(.*?)<\s*\/\s*script\s*>~is', '', $input );
+		$input = preg_replace( '/\/\*\*\/script|s\/\*\*\/cript|sc\/\*\*\/ript|scr\/\*\*\/ipt|scri\/\*\*\/pt|scrip\/\*\*\/t|script\/\*\*\//', '', $input );
+
+		return $input;
+
+	}
+
+	/**
+	 * Sanitize the value of php tags.
+	 *
+	 * @param string $input The input value to sanitize.
+	 * @return void
+	 */
+	public function sanitize_php_tags( $input ) {
+
+		$input = preg_replace( '/<\?php(.*?);?\s*\?>/', '', $input );
+
+		return $input;
 
 	}
 
