@@ -32,7 +32,7 @@ class Field {
 		'placeholder' => '',
 		'data_args'   => array(
 			'default'           => '',
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => null,
 			'show_in_rest'      => false,
 			'type'              => 'string',
 			'description'       => '',
@@ -113,11 +113,13 @@ class Field {
 
 		$this->option_group = $option_group;
 
-		// Define the option value sanitization callback method.
-		$this->default_field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
-
 		// Merge user-defined field values with default values.
 		$field = $this->apply_defaults( $field );
+
+		// Define the option value sanitization callback method.
+		if ( false !== $field['data_args']['sanitize_callback'] && ! is_callable( $field['data_args']['sanitize_callback'] ) ) {
+			$field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
+		}
 
 		// Store the merged field.
 		$this->field = $field;
@@ -175,8 +177,9 @@ class Field {
 	 */
 	public function sanitize( $value ) {
 
-		$value = sanitize_text_field( $value );
-		if ( empty( $value ) ) {
+		$initial_value = $value;
+		$value         = sanitize_text_field( $value );
+		if ( $initial_value !== $value ) {
 			$value = get_site_option( $this->option_group, $this->field['data_args']['default'] );
 		}
 
