@@ -1,6 +1,7 @@
 <?php
 /**
  * The file that creates a Settings page section.
+ * @todo Make error messages configurable via a file with sprintf-compatible string template characters.
  *
  * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Settings
