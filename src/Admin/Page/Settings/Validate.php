@@ -37,56 +37,32 @@ class Validate {
 	}
 
 	/**
-	 * Validate the emptiness of the input.
-	 *
-	 * @param  string $input The setting input value.
-	 * @return array
-	 */
-	public function is_empty( $input ) {
-
-		$label = $this->settings['label'];
-		$valid = array(
-			'status'  => false,
-			'message' => 'The ' . $label . ' field is not empty.'
-		);
-
-		// Validate.
-		if ( is_string( $input ) && ( empty( $input ) || empty( trim( $input ) ) ) ) {
-
-			$valid['status']  = true;
-			$valid['message'] = apply_filters( 'twl_validate_string_empty', 'The ' . $label . ' setting is empty.', $label, $this->settings );
-
-		} elseif ( is_array( $input ) && empty( $input ) ) {
-
-			$valid['status']  = true;
-			$valid['message'] = apply_filters( 'twl_validate_array_empty', 'The ' . $label . ' setting does not have an option selected.', $label, $this->settings );
-
-		}
-
-		return $valid;
-
-	}
-
-	/**
 	 * Notify the user of the validation status.
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/add_settings_error/
 	 *
-	 * @param string $message (Required) The formatted message text to display to the user (will be
-	 *                        shown inside styled <div> and <p> tags).
-	 * @param string $type    (Optional) Message type, controls HTML class. Possible values include
-	 *                        'error', 'success', 'warning', 'info'. Default value: 'error'.
+	 * @param array  $is_valid {
+	 *                   (Required) The formatted message parameters to display to the user (will
+	 *                   be shown inside styled <div> and <p> tags).
+	 *                   @key boolean  $status   The status of the sanitization.
+	 *                   @key string[] $messages The associative array of sanitization messages.
+	 *                   @key string   $message  The concatenated $messages string.
+	 *               }
+	 * @param string $type     (Optional) Message type, controls HTML class. Possible values
+	 *                         include 'error', 'success', 'warning', 'info'. Default behavior
+	 *                         emits an error. Default value: null.
 	 * @return void
 	 */
-	public function notify( $message, $type ) {
+	public function notify( $is_valid, $type = null ) {
 
-		$setting = $this->setting['id'];
-		$code    = 'notice_validate_' . $this->setting['id'];
-		if ( $type ) {
-			$code .= "_$type";
-		}
-		$code .= '_' . uniqid();
-		$code  = esc_attr( $code );
+		$setting  = $this->settings['id'];
+		$code     = 'notice_validate_' . $this->settings['id'];
+		$code    .= $type ? "_$type" : '_error';
+		$code    .= '_' . uniqid();
+		$code     = esc_attr( $code );
+
+		$is_valid = apply_filters( 'notice_validate_' . $this->settings['type'], $is_valid, $type, $this->settings );
+		$message  = apply_filters( $code, $is_valid['message'], $is_valid, $type, $this->settings );
 
 		if ( $type ) {
 			add_settings_error( $setting, $code, $message, $type );
