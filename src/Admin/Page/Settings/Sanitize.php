@@ -55,13 +55,11 @@ class Sanitize {
 	 */
 	public function notify( $is_sanitary, $type = null ) {
 
-		$setting = $this->setting['id'];
-		$code    = 'notice_sanitize_' . $this->setting['id'];
-		if ( $type ) {
-			$code .= "_$type";
-		}
-		$code .= '_' . uniqid();
-		$code  = esc_attr( $code );
+		$setting  = $this->setting['id'];
+		$code     = 'notice_sanitize_' . $this->setting['id'];
+		$code    .= $type ? "_$type" : '_error';
+		$code    .= '_' . uniqid();
+		$code     = esc_attr( $code );
 
 		$is_sanitary = apply_filters( 'notice_sanitize_' . $this->setting['type'], $is_sanitary, $type, $this->setting );
 		$message     = apply_filters( $code, $is_sanitary['message'], $is_sanitary, $type, $this->setting );
