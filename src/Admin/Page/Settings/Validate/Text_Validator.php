@@ -34,10 +34,9 @@ class Text_Validator extends Validate {
 	 * Validate the input value and return any error messages.
 	 *
 	 * @param string $input The input value.
-	 * @param string $mode  The mode of transport.
 	 * @return void
 	 */
-	public function validate( $input, $mode ) {
+	public function validate( $input ) {
 
 		$valid = array(
 			'status'   => true,
