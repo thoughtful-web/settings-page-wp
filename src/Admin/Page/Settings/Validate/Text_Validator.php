@@ -53,11 +53,12 @@ class Text_Validator extends Validate {
 		}
 
 		// If the input must follow a pattern.
-		if ( ! empty( $this->settings['data_args']['pattern'] ) ) {
+		$pattern = $this->settings['data_args']['pattern'];
+		if ( ! empty( $pattern ) ) {
 			$is_pattern = $this->is_pattern( $input );
 			if ( false === $is_pattern['status'] ) {
 				$valid['status']                 = false;
-				$valid['message']['not_pattern'] = 'The value must follow the pattern "' . $this->settings['data_args']['pattern'] . '"';
+				$valid['message']['not_pattern'] = "The value must follow the pattern \"{$pattern}\"";
 			}
 		}
 
@@ -97,15 +98,15 @@ class Text_Validator extends Validate {
 		$label = $this->settings['label'];
 		$valid = array(
 			'status'  => true,
-			'message' => 'The ' . $label . ' input is a valid length.',
+			'message' => "The $label input is a valid length.",
 		);
 
 		// I suspect 16mb is a common max string length for SQL database insertion on shared hosting for WordPress.
-		if ( ! defined( 'TWL_SETTINGS_MAX_DB_STRING_LENGTH' ) ) {
-			define( 'TWL_SETTINGS_MAX_DB_STRING_LENGTH', 16777216 );
+		if ( ! defined( 'TWL_SETTING_MAX_STRING_LENGTH' ) ) {
+			define( 'TWL_SETTING_MAX_STRING_LENGTH', 16777216 );
 		}
 		$minlength = 0;
-		$maxlength = TWL_SETTINGS_MAX_DB_STRING_LENGTH;
+		$maxlength = TWL_SETTING_MAX_STRING_LENGTH;
 		$strlen    = strlen( $input );
 		if ( ! empty( $this->settings['data_args']['minlength'] ) ) {
 			$minlength = $this->settings['data_args']['minlength'];
@@ -116,11 +117,11 @@ class Text_Validator extends Validate {
 		if ( $strlen < $minlength || $strlen > $maxlength ) {
 			if ( $true_max === $maxlength && $minlength > 0 ) {
 				$valid['status']  = false;
-				$valid['message'] = 'The value is ' . strlen( $input ) . ' characters long and must be more than ' . $minlength . ' characters long.';
+				$valid['message'] = "The value is {$strlen} characters long and must be more than {$minlength} characters long.";
 			} elseif ( $true_max !== $maxlength ) {
 				$valid['status']  = false;
-				$valid['message'] = 'The value is ' . strlen( $input ) . ' characters long and must be between ' . $minlength . ' and ' . $maxlength . ' characters long.';
-			} elseif ( $minlength <= 0 ) {
+				$valid['message'] = "The value is {$strlen} characters long and must be between {$minlength} and {$maxlength} characters long.";
+			} else {
 				// We already handle empty strings.
 			}
 		}
@@ -167,14 +168,14 @@ class Text_Validator extends Validate {
 		$label = $this->settings['label'];
 		$valid = array(
 			'status'  => false,
-			'message' => 'The ' . $label . ' value is not empty.'
+			'message' => "The $label value is not empty.",
 		);
 
 		// Validate.
 		if ( empty( $input ) || empty( trim( $input ) ) ) {
 
 			$valid['status']  = true;
-			$valid['message'] = 'The ' . $label . ' value is empty.';
+			$valid['message'] = "The $label value is empty.";
 
 		}
 

@@ -41,11 +41,12 @@ class Url_Validator extends Text_Validator {
 		}
 
 		// If the input must follow a pattern.
-		if ( ! empty( $this->settings['data_args']['pattern'] ) ) {
+		$pattern = $this->settings['data_args']['pattern'];
+		if ( ! empty( $pattern ) ) {
 			$is_pattern = $this->is_pattern( $input );
 			if ( false === $is_pattern['status'] ) {
 				$valid['status']                 = false;
-				$valid['message']['not_pattern'] = 'The value must follow the pattern "' . $this->settings['data_args']['pattern'] . '"';
+				$valid['message']['not_pattern'] = "The value must follow the pattern \"$pattern\".";
 			}
 		}
 
@@ -74,9 +75,9 @@ class Url_Validator extends Text_Validator {
 		$protocols    = wp_allowed_protocols();
 		$tested_value = wp_kses_bad_protocol( $input, $protocols );
 		if ( $tested_value !== $input ) {
+			$protocol_allowlist                    = implode( "', '", $protocols );
 			$valid['status']                       = false;
-			$valid['message']['has_bad_protocol']  = 'The value must only include allowed protocols.';
-			$valid['message']['has_bad_protocol'] .= "Valid protocols: '" . implode( "', '", $protocols ) . "'.";
+			$valid['message']['has_bad_protocol']  = "The value must only include allowed protocols. Valid protocols: '{$protocol_allowlist}'.";
 		}
 
 		return $valid;

@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 return array(
-	'method_args'  => array(
+	'method_args'   => array(
 		'page_title' => 'A Thoughtful Settings Page',
 		'menu_title' => 'Thoughtful Settings',
 		'capability' => 'manage_options',
@@ -19,10 +19,10 @@ return array(
 		'icon_url'   => 'dashicons-admin-settings',
 		'position'   => 2,
 	),
-	'description'  => 'A thoughtful settings page description.',
-	'option_group' => 'thoughtful_settings',
-	'network'      => false,
-	'sections'     => array(
+	'description'   => 'A thoughtful settings page description.',
+	'option_group'  => 'thoughtful_settings',
+	'network'       => false,
+	'sections'      => array(
 		array(
 			'section'     => 'unique-section-id-1',
 			'title'       => 'Section One',
@@ -195,4 +195,10 @@ return array(
 			),
 		),
 	),
+	'notifications' => array(
+		'has_bad_protocol' => 'The value must only include allowed protocols. Valid protocols: \'%s\'.',
+		'is_empty'         => 'The value cannot be empty.',
+		'is_length'        => 'The value is %1$s characters long and must be between %2$s and %3$s characters long.',
+		'not_pattern'      => 'The value must follow the pattern \'%s\'.',
+	)
 );

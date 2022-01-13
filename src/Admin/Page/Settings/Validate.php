@@ -27,6 +27,10 @@ class Validate {
 	);
 
 	/**
+	 * Validation messages.
+	 */
+
+	/**
 	 * Instantiate the class and assign properties from the parameters.
 	 *
 	 * @param string $setting The setting parameters to use when validating.

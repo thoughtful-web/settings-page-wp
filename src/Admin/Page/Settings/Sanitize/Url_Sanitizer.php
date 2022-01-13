@@ -30,8 +30,6 @@ class Url_Sanitizer extends Text_Sanitizer {
 	public function sanitize_db( $input ) {
 
 		$input = esc_url_raw( $input );
-		$input = $this->sanitize_script_tags( $input );
-		$input = $this->sanitize_php_tags( $input );
 
 		return $input;
 
@@ -49,9 +47,6 @@ class Url_Sanitizer extends Text_Sanitizer {
 	public function sanitize_attr( $input ) {
 
 		$input = esc_url( $input );
-		$input = $this->sanitize_script_tags( $input );
-		$input = $this->sanitize_php_tags( $input );
-
 		return $input;
 
 	}
@@ -68,8 +63,6 @@ class Url_Sanitizer extends Text_Sanitizer {
 	public function sanitize_display( $input ) {
 
 		$input = esc_url( $input );
-		$input = $this->sanitize_script_tags( $input );
-		$input = $this->sanitize_php_tags( $input );
 
 		return $input;
 
