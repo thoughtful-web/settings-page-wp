@@ -116,22 +116,6 @@ class Select extends Field {
 	}
 
 	/**
-	 * Detect if this is a multiselect field.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return bool
-	 */
-	private function is_multiselect() {
-
-		$field_data   = $this->field['data_args'];
-		$has_multiple = isset( $field_data['multiple'] ) && 'false' !== $field_data['multiple'] ? true : false;
-
-		return $has_multiple;
-
-	}
-
-	/**
 	 * Get the settings option array and print one of its values.
 	 *
 	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select
@@ -147,7 +131,7 @@ class Select extends Field {
 		$value       = get_site_option( $args['id'] );
 		$value_arr   = is_array( $value ) ? $value : array( $value );
 		$extra_attrs = $this->get_optional_attributes( $args );
-		$multi_mod   = $this->is_multiselect() ? '[]' : '';
+		$multi_mod   = array_key_exists( 'multiple', $field_data ) ? '[]' : '';
 
 		// Render the form field output.
 		$output   = array();
