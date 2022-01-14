@@ -33,10 +33,11 @@ class Select extends Field {
 		'desc'      => '',
 		'prompt'    => 'Please choose an option',
 		'data_args' => array(
-			'default'      => '',
-			'show_in_rest' => false,
-			'type'         => 'string',
-			'description'  => '',
+			'default'           => '',
+			'show_in_rest'      => false,
+			'sanitize_callback' => true,
+			'type'              => 'string',
+			'description'       => '',
 		),
 	);
 
@@ -123,62 +124,6 @@ class Select extends Field {
 		$has_multiple = isset( $field_data['multiple'] ) && 'false' !== $field_data['multiple'] ? true : false;
 
 		return $has_multiple;
-
-	}
-
-	/**
-	 * Sanitize the select field value.
-	 *
-	 * @param string|string[] $value The unsanitized option value(s).
-	 *
-	 * @return string|string[]
-	 */
-	public function sanitize( $value ) {
-
-		// Assume valid and detect invalid scenarios.
-		$valid = true;
-
-		// Detect if this is a multiselect field.
-		$is_multiselect = $this->is_multiselect();
-
-		// Detect if the correct value format is provided.
-		if (
-			$is_multiselect && ! is_array( $value ) ||
-			! $is_multiselect && is_array( $value )
-		) {
-			$valid = false;
-		}
-
-		// If the provided value is correct for the configuration, then continue validating.
-		if ( $valid ) {
-			// If this is not a multiselect field then convert the value to an array temporarily.
-			$restore_later = false;
-			if ( ! $is_multiselect && ! is_array( $value ) ) {
-				$restore_later = true;
-				$value         = array( $value );
-			}
-			// Get the predefined choices from the configuration variable.
-			$config_choices = array_keys( $this->field['choices'] );
-			foreach ( $value as $choice ) {
-				// If the choice value is present in the configuration, continue.
-				if ( ! in_array( $choice, $config_choices, true ) ) {
-					// A value is falsified.
-					$valid = false;
-					break;
-				}
-			}
-			if ( $restore_later ) {
-				$value = $value[0];
-			}
-		}
-		// If an invalid scenario was detected, then reset the value to the previous state or a default one.
-		if ( ! $valid && ! empty( $value ) ) {
-			// A value is falsified.
-			// Get the database choices and fall back to the default configured value.
-			$value = get_site_option( $this->field['id'], $field_data['default'] );
-		}
-
-		return $value;
 
 	}
 

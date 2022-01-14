@@ -14,6 +14,8 @@
 declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
 
+use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Sanitize;
+
 /**
  * The Field class.
  *
@@ -32,7 +34,7 @@ class Field {
 		'placeholder' => '',
 		'data_args'   => array(
 			'default'           => '',
-			'sanitize_callback' => null,
+			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'type'              => 'string',
 			'description'       => '',
@@ -97,12 +99,12 @@ class Field {
 	 *     @type array  $data_args {
 	 *         Data used to describe the setting when registered. Required.
 	 *
-	 *         @type string     $option_name       The option name. If not provided, will default to the ID attribute of the HTML element. Optional.
-	 *         @type mixed      $default           Default value when calling `get_option()`. Optional.
-	 *         @type callable   $sanitize_callback A callback function that sanitizes the option's value. Optional.
-	 *         @type bool|array $show_in_rest      Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key.
-	 *         @type string     $type              The type of data associated with this setting. Only used for the REST API. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'.
-	 *         @type string     $description       A description of the data attached to this setting. Only used for the REST API.
+	 *         @type string             $option_name       The option name. If not provided, will default to the ID attribute of the HTML element. Optional.
+	 *         @type mixed              $default           Default value when calling `get_option()`. Optional.
+	 *         @type boolean|callable   $sanitize_callback (Optional) A callback function that sanitizes the field's database option value. Hooked to the filter "sanitize_option_{$option_name}" with $option_name equal to this field's $id value. This hook is run by the "sanitize_option()" function which is executed within Settings API functions like "add_option", "update_option", etc.
+	 *         @type bool|array         $show_in_rest      Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key.
+	 *         @type string             $type              The type of data associated with this setting. Only used for the REST API. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'.
+	 *         @type string             $description       A description of the data attached to this setting. Only used for the REST API.
 	 *     }
 	 * }
 	 * @param string $menu_slug         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
@@ -116,8 +118,9 @@ class Field {
 		// Merge user-defined field values with default values.
 		$field = $this->apply_defaults( $field );
 
-		// Define the option value sanitization callback method.
-		if ( false !== boolval( $field['data_args']['sanitize_callback'] ) && ! is_callable( $field['data_args']['sanitize_callback'] ) ) {
+		// A callback function that sanitizes the option's value.
+		$callback = $field['data_args']['sanitize_callback'];
+		if ( false !== boolval( $callback ) && ! is_callable( $callback ) ) {
 			$field['data_args']['sanitize_callback'] = array( $this, 'sanitize' );
 		}
 
@@ -167,7 +170,10 @@ class Field {
 	}
 
 	/**
-	 * Sanitize the text field value.
+	 * A callback function that sanitizes the field's database option value. Hooked to the filter
+	 * "sanitize_option_{$option_name}" with $option_name equal to this field's $id value. This
+	 * hook is run by the "sanitize_option()" function which is executed within Settings API
+	 * functions like "add_option", "update_option", etc.
 	 *
 	 * @param string $value          The unsanitized option value.
 	 * @param string $option         The option name.
@@ -175,28 +181,12 @@ class Field {
 	 *
 	 * @return string
 	 */
-	public function sanitize( $value ) {
+	public function sanitize( $value, $option, $original_value ) {
 
-		$initial_value = $value;
-		$value         = sanitize_text_field( $value );
-		if ( $initial_value !== $value ) {
-			$value = get_site_option( $this->option_group, $this->field['data_args']['default'] );
-		}
-
+		$sanitizer = new Sanitize( $this->field );
+		$value     = $sanitizer->sanitize( $value, $option, $original_value );
 		return $value;
 
-	}
-
-	/**
-	 * Sanitize the value for display in a form.
-	 *
-	 * @param string $input The input value to sanitize for display.
-	 * @param string $mode  (Optional) The mode for displaying the value. Default is 'attribute'.
-	 *
-	 * @return void
-	 */
-	public function sanitize_field( $input, $mode = 'attribute' ) {
-		return esc_attr( $input );
 	}
 
 	/**
@@ -210,7 +200,7 @@ class Field {
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
-		$value       = get_site_option( $args['id'], $args['data_args']['default'] );
+		$value       = get_option( $args['id'], $args['data_args']['default'] );
 		$value       = $this->sanitize_field( $value );
 		$extra_attrs = $this->get_optional_attributes( $args );
 

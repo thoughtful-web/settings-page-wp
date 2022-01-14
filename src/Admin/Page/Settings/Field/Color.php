@@ -34,7 +34,7 @@ class Color extends Field {
 		'placeholder' => '',
 		'data_args'   => array(
 			'default'           => '',
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'type'              => 'string',
 			'description'       => '',
@@ -133,25 +133,6 @@ class Color extends Field {
 			wp_enqueue_style( 'wp-color-picker' );
 
 		}
-
-	}
-
-	/**
-	 * Sanitize the text field value.
-	 *
-	 * @param string $value The unsanitized option value.
-	 *
-	 * @return string
-	 */
-	public function sanitize( $value ) {
-
-		$original_value = $value;
-		$value          = sanitize_text_field( $value );
-		if ( $value !== $original_value ) {
-			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-		}
-
-		return $value;
 
 	}
 

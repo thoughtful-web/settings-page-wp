@@ -34,7 +34,7 @@ class WP_Editor extends Field {
 		'data_args' => array(
 			'default'           => '',
 			'type'              => 'string',
-			'sanitize_callback' => 'wp_kses_post',
+			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'description'       => '',
 		),
@@ -83,26 +83,6 @@ class WP_Editor extends Field {
 
 		// Define the allowed HTML.
 		$this->allowed_html = wp_kses_allowed_html( 'post' );
-
-	}
-
-	/**
-	 * Sanitize the text field value.
-	 * There is supposedly a common limit of 16mb applied by shared hosts to database transactional strings.
-	 *
-	 * @param string $value The unsanitized option value.
-	 *
-	 * @return string
-	 */
-	public function sanitize( $value ) {
-
-		$original_value = $value;
-		$value          = wp_kses_post( $value );
-		if ( $value !== $original_value || strlen( $value ) > 16777216 ) {
-			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-		}
-
-		return $value;
 
 	}
 

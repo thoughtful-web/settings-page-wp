@@ -35,7 +35,7 @@ class Textarea extends Field {
 		'data_args'   => array(
 			'default'           => '',
 			'type'              => 'string',
-			'sanitize_callback' => 'sanitize_textarea_field',
+			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'description'       => '',
 		),
@@ -66,25 +66,6 @@ class Textarea extends Field {
 			'wrap'         => true,
 		),
 	);
-
-	/**
-	 * Sanitize the text field value.
-	 *
-	 * @param string $value The unsanitized option value.
-	 *
-	 * @return string
-	 */
-	public function sanitize( $value ) {
-
-		$original_value = $value;
-		$value          = sanitize_textarea_field( $value );
-		if ( $value !== $original_value ) {
-			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-		}
-
-		return $value;
-
-	}
 
 	/**
 	 * Get the settings option array and print one of its values.

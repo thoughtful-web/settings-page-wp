@@ -34,7 +34,7 @@ class Email extends Field {
 		'placeholder' => '',
 		'data_args'   => array(
 			'default'           => '',
-			'sanitize_callback' => 'sanitize_email',
+			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'type'              => 'string',
 			'description'       => '',
@@ -66,24 +66,4 @@ class Email extends Field {
 			'value'       => true,
 		),
 	);
-
-	/**
-	 * Sanitize the text field value.
-	 *
-	 * @param string $value The unsanitized option value.
-	 *
-	 * @return string
-	 */
-	public function sanitize( $value ) {
-
-		$value          = trim( $value );
-		$original_value = $value;
-		$value          = sanitize_email( $value );
-		if ( $original_value !== $value ) {
-			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-		}
-
-		return $value;
-
-	}
 }

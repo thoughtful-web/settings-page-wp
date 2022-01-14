@@ -33,10 +33,11 @@ class Checkboxes extends Field {
 		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
-			'default'      => array(),
-			'show_in_rest' => false,
-			'type'         => 'string',
-			'description'  => '',
+			'default'           => array(),
+			'sanitize_callback' => true,
+			'show_in_rest'      => false,
+			'type'              => 'string',
+			'description'       => '',
 		),
 	);
 
@@ -63,39 +64,6 @@ class Checkboxes extends Field {
 		),
 		'br'    => true,
 	);
-
-	/**
-	 * Sanitize the text field value.
-	 *
-	 * @param array $value The unsanitized option value.
-	 *
-	 * @return array
-	 */
-	public function sanitize( $value ) {
-
-		// Get the predefined choices from the configuration variable.
-		$config_choices = array_keys( $this->field['choices'] );
-		$final_choices  = array();
-		if ( ! is_array( $value ) ) {
-			$value = array( $value );
-		}
-		foreach ( $value as $key => $choice ) {
-			// If the choice value is present in the configuration, continue.
-			if ( in_array( $choice, $config_choices, true ) ) {
-				// Ensure the choice can only be passed once.
-				$final_choices[ $choice ] = $choice;
-				continue;
-			} else {
-				// A value is falsified.
-				// Get the database choices and fall back to the default configured value.
-				$final_choices = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-				break;
-			}
-		}
-
-		return $final_choices;
-
-	}
 
 	/**
 	 * Get the settings option array and print one of its values.

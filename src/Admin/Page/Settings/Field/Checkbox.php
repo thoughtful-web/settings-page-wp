@@ -33,10 +33,11 @@ class Checkbox extends Field {
 		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
-			'default'      => '',
-			'show_in_rest' => false,
-			'type'         => 'string',
-			'description'  => '',
+			'default'           => '',
+			'sanitize_callback' => true,
+			'show_in_rest'      => false,
+			'type'              => 'string',
+			'description'       => '',
 		),
 	);
 
@@ -63,25 +64,6 @@ class Checkbox extends Field {
 		),
 		'br'    => true,
 	);
-
-	/**
-	 * Sanitize the text field value.
-	 *
-	 * @param string $value The unsanitized option value.
-	 *
-	 * @return string
-	 */
-	public function sanitize( $value ) {
-
-		// If the choice value is present in the configuration and it is not a configured choice then it is a falsified choice.
-		if ( ! empty( $value ) && array_key_first( $this->field['choice'] ) !== $value ) {
-			// Value is falsified.
-			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-		}
-
-		return $value;
-
-	}
 
 	/**
 	 * Get the settings option array and print one of its values.

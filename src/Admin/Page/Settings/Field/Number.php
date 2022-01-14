@@ -34,7 +34,7 @@ class Number extends Field {
 		'placeholder' => '',
 		'data_args'   => array(
 			'default'           => '',
-			'sanitize_callback' => 'floatval',
+			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'type'              => 'string',
 			'description'       => '',
@@ -68,74 +68,4 @@ class Number extends Field {
 			'value'        => true,
 		),
 	);
-
-	/**
-	 * Sanitize the field value.
-	 * Validates the value against the following conditions:
-	 * 1. Is numeric.
-	 * 2. Is no greater than 16mb in string length.
-	 * 3. Is a float or integer.
-	 * 4. Is constrained to the configured minimum and maximum values.
-	 * 5. Is constrained to the step configuration.
-	 *
-	 * @param string $value The unsanitized option value.
-	 *
-	 * @return string
-	 */
-	public function sanitize( $value ) {
-
-		// Assume valid and detect invalid scenarios.
-		$valid = true;
-		// Remove surrounding whitespace.
-		$value = trim( $value );
-		// Store original value for comparison.
-		$original_value = $value;
-		// Detect invalid circumstances and then fall back to the previous value.
-		if ( ! is_numeric( $value ) ) {
-			// The easiest rejection to make.
-			$valid = false;
-		} elseif ( strlen( $value ) > 16777216 ) {
-			// Max length of a transactional string set by most web hosts for SQL is 16mb.
-			$valid = false;
-		} else {
-			// Ensure the number is either a float or an integer.
-			$is_float = strval( floatval( $value ) ) === $value;
-			$is_int   = strval( intval( $value ) ) === $value;
-			if ( ! $is_float && ! $is_int ) {
-				$valid = false;
-			} else {
-				// Get the field's numeric schema.
-				$schema         = $this->field['data_args'];
-				$schema['type'] = $is_float ? 'float' : 'int';
-				$schema['nval'] = $is_float ? floatval( $value ) : intval( $value );
-				if ( $schema['min'] && $schema['nval'] < $schema['min'] ) {
-					// Validate minimum value.
-					$valid = false;
-				} elseif ( $schema['max'] && $schema['nval'] > $schema['max'] ) {
-					// Validate maximum value.
-					$valid = false;
-				} elseif ( $schema['step'] ) {
-					/**
-					 * Validate the "step" attribute using an alternative to the "fmod" function.
-					 *
-					 * @link https://www.php.net/manual/en/function.fmod.php#122782
-					 */
-					if ( strval( floatval( $value ) ) === $schema['step'] ) {
-						$step_nval = floatval( $schema['step'] );
-					} else {
-						$step_nval = intval( $value );
-					}
-					if ( 0.0 !== floatval( $schema['nval'] - intval( $schema['nval'] / $step_nval ) * $step_nval ) ) {
-						$valid = false;
-					}
-				}
-			}
-		}
-		if ( ! $valid ) {
-			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-		}
-
-		return $value;
-
-	}
 }

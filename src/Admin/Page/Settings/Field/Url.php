@@ -38,7 +38,7 @@ class Url extends Field {
 		'placeholder' => '',
 		'data_args'   => array(
 			'default'           => '',
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'type'              => 'string',
 			'description'       => '',
@@ -69,35 +69,4 @@ class Url extends Field {
 			'value'        => true,
 		),
 	);
-
-	/**
-	 * Sanitize the text field value.
-	 *
-	 * @see https://developer.wordpress.org/reference/functions/esc_url_raw/
-	 *
-	 * @param string $input The unsanitized option value.
-	 *
-	 * @return string
-	 */
-	public function sanitize( $input ) {
-
-		// Validate the input.
-		$validate = new Text_Validator( $this->field );
-		$is_valid = $validate->is_valid( $input );
-		if ( ! $is_valid['status'] ) {
-			$validate->notify( $is_valid['message'] );
-			return get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-		}
-
-		// Sanitize the valid input.
-		$sanitizer   = new Url_Sanitizer( $this->field );
-		$is_sanitary = $sanitizer->is_sanitary( $input, 'db' );
-		if ( false === $is_sanitary['status'] ) {
-			$input = $sanitizer->sanitize( $input, 'db' );
-			$sanitizer->notify( $is_sanitary, 'warning' );
-		}
-
-		return $input;
-
-	}
 }

@@ -67,31 +67,4 @@ class Phone extends Field {
 			'value'        => true,
 		),
 	);
-
-	/**
-	 * Sanitize the text field value.
-	 *
-	 * @param string $value The unsanitized option value.
-	 *
-	 * @return string
-	 */
-	public function sanitize( $value ) {
-
-		$original_value = $value;
-		if ( empty( $this->field['data_args']['pattern'] ) ) {
-			$value = sanitize_text_field( $value );
-		} else {
-			$value = trim( $value );
-			preg_match( $this->field['data_args']['pattern'], $value, $matches );
-			if ( ! empty( $matches ) ) {
-				$value = $matches[0];
-			}
-		}
-		if ( $value !== $original_value ) {
-			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-		}
-
-		return $value;
-
-	}
 }

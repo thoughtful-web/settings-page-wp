@@ -32,10 +32,11 @@ class Radio extends Field {
 		'type'      => 'radio',
 		'desc'      => '',
 		'data_args' => array(
-			'default'      => '',
-			'show_in_rest' => false,
-			'type'         => 'string',
-			'description'  => '',
+			'default'           => '',
+			'show_in_rest'      => false,
+			'sanitize_callback' => true,
+			'type'              => 'string',
+			'description'       => '',
 		),
 	);
 
@@ -62,28 +63,6 @@ class Radio extends Field {
 		),
 		'br'    => true,
 	);
-
-	/**
-	 * Sanitize the text field value.
-	 *
-	 * @param string $value The unsanitized option value.
-	 *
-	 * @return string
-	 */
-	public function sanitize( $value ) {
-
-		// Get the predefined choices from the configuration variable.
-		$config_choices = array_keys( $this->field['choices'] );
-		// If the choice value is present in the configuration, continue.
-		if ( ! in_array( $value, $config_choices, true ) ) {
-			// Value is falsified.
-			// Get the database choices and fall back to the default configured value.
-			$value = get_site_option( $this->field['id'], $this->field['data_args']['default'] );
-		}
-
-		return $value;
-
-	}
 
 	/**
 	 * Get the settings option array and print one of its values.
