@@ -225,7 +225,6 @@ class Field {
 
 		// Assemble the variables necessary to output the form field from settings.
 		$value       = get_option( $args['id'], $args['data_args']['default'] );
-		$value       = $this->sanitize_field( $value );
 		$extra_attrs = $this->get_optional_attributes( $args );
 
 		// Render the form field output.
