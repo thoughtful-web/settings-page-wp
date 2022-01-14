@@ -130,6 +130,15 @@ class Field {
 		// Register the setting.
 		register_setting( $option_group, $field['id'], $field['data_args'] );
 
+		// Hook a default option for the setting.
+		if (
+			array_key_exists( 'default', $field['data_args'] )
+			&& ! empty( $field['data_args']['default'] )
+		) {
+			$option = $field['id'];
+			add_filter( "default_option_{$option}", array( $this, 'default_option' ), 10, 3 );
+		}
+
 		// Register the field.
 		add_settings_field(
 			$field['id'],
@@ -166,6 +175,21 @@ class Field {
 		}
 
 		return $field;
+
+	}
+
+	/**
+	 * Provide the default option for this Option.
+	 *
+	 * @param mixed  $default The default value to return if the option does not exist
+	 *                        in the database.
+	 * @param string $option  Option name.
+	 * @param bool   $passed_default Was `get_option()` passed a default value?
+	 * @return mixed
+	 */
+	public function default_option( $default, $option, $passed_default ) {
+
+		return $this->field['data_args']['default'];
 
 	}
 
