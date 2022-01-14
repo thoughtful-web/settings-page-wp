@@ -105,7 +105,11 @@ class Select extends Field {
 		parent::__construct( $field, $menu_slug, $section_id, $option_group );
 
 		// Ensure the correct default is present.
-		if ( $this->is_multiselect() && ! is_array( $this->field['data_args']['default'] ) ) {
+		if (
+			array_key_exists( 'multiple', $this->field['data_args'] )
+			&& array_key_exists( 'default', $this->field['data_args'] )
+			&& ! is_array( $this->field['data_args']['default'] )
+		) {
 			$this->field['data_args']['default'] = array( $this->field['data_args']['default'] );
 		}
 
@@ -140,7 +144,7 @@ class Select extends Field {
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
-		$value       = get_site_option( $args['id'], $args['data_args']['default'] );
+		$value       = get_site_option( $args['id'] );
 		$value_arr   = is_array( $value ) ? $value : array( $value );
 		$extra_attrs = $this->get_optional_attributes( $args );
 		$multi_mod   = $this->is_multiselect() ? '[]' : '';

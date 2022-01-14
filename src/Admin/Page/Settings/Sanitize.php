@@ -263,8 +263,7 @@ class Sanitize {
 		}
 
 		if ( ! empty( $error ) ) {
-			$default_value = array_key_exists( 'default', $data_args ) ? $data_args['default'] : false;
-			$value         = get_option( $option, $default_value );
+			$value = get_option( $option );
 			if ( function_exists( 'add_settings_error' ) ) {
 				// Prepend the settings field label to the error message.
 				$error = __( 'The ' . $this->field['label'] . ' field encountered an error: ', 'thoughtful-web' ) . $error;
