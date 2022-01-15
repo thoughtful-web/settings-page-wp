@@ -104,7 +104,7 @@ class Sanitize {
 					$error = $value->get_error_message();
 				} else {
 					$value = sanitize_email( $value );
-					if ( ! is_email( $value ) ) {
+					if ( ! empty( trim( $value ) ) && ! is_email( $value ) ) {
 						$error = __( 'The email address entered did not appear to be a valid email address. Please enter a valid email address.', 'thoughtful-web' );
 					} else {
 						$match = 1;
