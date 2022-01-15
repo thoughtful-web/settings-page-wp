@@ -89,7 +89,7 @@ class Field {
 	 *     @type string $label       Formatted title of the field. Shown as the label for the field during output. Required.
 	 *     @type string $id          Slug-name to identify the field. Used in the 'id' attribute of tags. Required.
 	 *     @type string $type        The type attribute. Required.
-	 *     @type string $description The description. Optional.
+	 *     @type string $description The description shown beneath the form field. Optional.
 	 *     @type mixed  $placeholder The placeholder text, if applicable. Optional.
 	 *     @type mixed  $label_for   When supplied, the setting title will be wrapped in a `<label>` element, its `for` attribute populated with this value. Optional.
 	 *     @type mixed  $class       CSS Class to be added to the `<tr>` element when the field is output. Optional.
@@ -101,7 +101,7 @@ class Field {
 	 *         @type boolean|callable   $sanitize_callback (Optional) A callback function that sanitizes the field's database option value. Hooked to the filter "sanitize_option_{$option_name}" with $option_name equal to this field's $id value. This hook is run by the "sanitize_option()" function which is executed within Settings API functions like "add_option", "update_option", etc.
 	 *         @type bool|array         $show_in_rest      Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key.
 	 *         @type string             $type              The type of data associated with this setting. Only used for the REST API. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'.
-	 *         @type string             $description       A description of the data attached to this setting. Only used for the REST API.
+	 *         @type string             $description       A description of the data attached to this setting for a REST API response.
 	 *     }
 	 * }
 	 * @param string $menu_slug         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
