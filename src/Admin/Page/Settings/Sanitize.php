@@ -189,9 +189,7 @@ class Sanitize {
 			case 'checkbox':
 				if ( array_key_exists( 'choice', $this->field ) ) {
 					// If the choice value is present in the configuration and it is not a configured choice then it is a falsified choice.
-					if ( empty( $value ) ) {
-						$value = array();
-					} elseif ( array_key_first( $this->field['choice'] ) !== $value ) {
+					if ( ! empty( $value ) && strval( array_key_first( $this->field['choice'] ) ) !== $value ) {
 						// Value is falsified.
 						$error = __( 'The value submitted is not the preconfigured value. Please use the preconfigured value or an empty string.', 'thoughtful-web' );
 					}
