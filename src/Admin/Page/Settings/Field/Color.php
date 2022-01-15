@@ -148,7 +148,7 @@ class Color extends Field {
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
-		$value       = get_site_option( $args['id'] );
+		$value       = get_option( $args['id'] );
 		$extra_attrs = $this->get_optional_attributes( $args );
 
 		// Render the form field output.

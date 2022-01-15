@@ -98,7 +98,7 @@ class WP_Editor extends Field {
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
-		$value     = get_site_option( $args['id'] );
+		$value     = get_option( $args['id'] );
 		$content   = stripslashes( $value );
 		$editor_id = $args['id'];
 		$settings  = array(

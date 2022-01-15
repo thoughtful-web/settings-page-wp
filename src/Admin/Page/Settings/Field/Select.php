@@ -128,7 +128,7 @@ class Select extends Field {
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
-		$value       = get_site_option( $args['id'] );
+		$value       = get_option( $args['id'] );
 		$value_arr   = is_array( $value ) ? $value : array( $value );
 		$extra_attrs = $this->get_optional_attributes( $args );
 		$multi_mod   = array_key_exists( 'multiple', $field_data ) ? '[]' : '';
