@@ -82,9 +82,13 @@ class Checkbox extends Field {
 		$output = array();
 		foreach ( $args['choice'] as $choice_value => $choice_label ) {
 			$checked = '';
-			if ( $value && in_array( $choice_value, $value, true ) ) {
+			if ( is_array( $value ) && ! empty( $value ) && in_array( $choice_value, $value, true ) ) {
 				$checked = 'checked ';
 			} elseif ( is_string( $value ) && $value === $choice_value ) {
+				$checked = 'checked ';
+			} elseif ( is_int( $value ) && $value === intval( $choice_value ) ) {
+				$checked = 'checked ';
+			} elseif ( is_int( $choice_value ) && intval( $value ) === intval( $choice_value ) ) {
 				$checked = 'checked ';
 			}
 			$output[] = sprintf(
