@@ -180,16 +180,14 @@ class Field {
 	 * hook is run by the "sanitize_option()" function which is executed within Settings API
 	 * functions like "add_option", "update_option", etc.
 	 *
-	 * @param string $value          The unsanitized option value.
-	 * @param string $option         The option name.
-	 * @param string $original_value The original value passed to the function.
+	 * @param string $value The unsanitized option value.
 	 *
 	 * @return string
 	 */
-	public function sanitize( $value, $option, $original_value ) {
+	public function sanitize( $value ) {
 
 		$sanitizer = new Sanitize( $this->field );
-		$value     = $sanitizer->sanitize( $value, $option, $original_value );
+		$value     = $sanitizer->sanitize( $value );
 		return $value;
 
 	}

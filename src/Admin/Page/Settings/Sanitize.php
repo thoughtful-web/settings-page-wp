@@ -78,18 +78,18 @@ class Sanitize {
 	/**
 	 * Sanitize the string for presentation purposes.
 	 *
-	 * @param string $value          The sanitized option value.
-	 * @param string $option         The option name.
-	 * @param string $original_value The original value passed to the function.
+	 * @param string $value The sanitized option value.
 	 *
 	 * @return string
 	 */
-	public function sanitize( $value, $option, $original_value ) {
+	public function sanitize( $value ) {
 
 		global $wpdb;
 
-		$error     = '';
-		$data_args = $this->field['data_args'];
+		$option       = $this->field['id'];
+		$option_value = get_option( $option );
+		$error        = '';
+		$data_args    = $this->field['data_args'];
 
 		switch ( $this->field['type'] ) {
 			case 'color':
@@ -258,12 +258,12 @@ class Sanitize {
 		}
 
 		// Check for "required" data argument and emit an error if the value is empty while required.
-		if ( array_key_exists( 'required', $data_args ) && $data_args['required'] && empty( $value ) ) {
+		if ( array_key_exists( 'required', $data_args ) && $data_args['required'] && empty( $value ) && empty( $option_value ) ) {
 			$error = __( 'A value is required. Please enter a value.' );
 		}
 
 		if ( ! empty( $error ) ) {
-			$value = get_option( $option );
+			$value = $option_value;
 			if ( function_exists( 'add_settings_error' ) ) {
 				// Prepend the settings field label to the error message.
 				$error = __( 'The ' . $this->field['label'] . ' field encountered an error: ', 'thoughtful-web' ) . $error;
