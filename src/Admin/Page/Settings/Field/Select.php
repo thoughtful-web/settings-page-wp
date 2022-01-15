@@ -33,7 +33,6 @@ class Select extends Field {
 		'desc'      => '',
 		'prompt'    => 'Please choose an option',
 		'data_args' => array(
-			'default'           => '',
 			'show_in_rest'      => false,
 			'sanitize_callback' => true,
 			'type'              => 'string',

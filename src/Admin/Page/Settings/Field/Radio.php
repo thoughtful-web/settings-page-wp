@@ -32,7 +32,6 @@ class Radio extends Field {
 		'type'      => 'radio',
 		'desc'      => '',
 		'data_args' => array(
-			'default'           => '',
 			'show_in_rest'      => false,
 			'sanitize_callback' => true,
 			'type'              => 'string',

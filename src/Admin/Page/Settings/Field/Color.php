@@ -33,7 +33,6 @@ class Color extends Field {
 		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
-			'default'           => '',
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'type'              => 'string',

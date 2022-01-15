@@ -35,7 +35,6 @@ class Phone extends Field {
 		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
-			'default'           => '',
 			'sanitize_callback' => 'sanitize_text_field',
 			'show_in_rest'      => false,
 			'type'              => 'string',

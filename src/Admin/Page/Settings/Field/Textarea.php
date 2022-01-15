@@ -33,7 +33,6 @@ class Textarea extends Field {
 		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
-			'default'           => '',
 			'type'              => 'string',
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,
