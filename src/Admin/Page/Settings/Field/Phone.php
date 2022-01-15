@@ -32,7 +32,6 @@ class Phone extends Field {
 	 */
 	protected $default_field = array(
 		'type'        => 'tel',
-		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
 			'sanitize_callback' => 'sanitize_text_field',

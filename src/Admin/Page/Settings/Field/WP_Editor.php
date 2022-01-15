@@ -30,7 +30,6 @@ class WP_Editor extends Field {
 	 */
 	protected $default_field = array(
 		'type'      => 'wp_editor',
-		'desc'      => '',
 		'data_args' => array(
 			'type'              => 'string',
 			'sanitize_callback' => true,

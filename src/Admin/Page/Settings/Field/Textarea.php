@@ -30,7 +30,6 @@ class Textarea extends Field {
 	 */
 	protected $default_field = array(
 		'type'        => 'textarea',
-		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
 			'type'              => 'string',

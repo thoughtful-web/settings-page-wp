@@ -34,7 +34,6 @@ class Url extends Field {
 	 */
 	protected $default_field = array(
 		'type'        => 'url',
-		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
 			'sanitize_callback' => true,

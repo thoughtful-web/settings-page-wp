@@ -30,7 +30,6 @@ class Number extends Field {
 	 */
 	protected $default_field = array(
 		'type'        => 'number',
-		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
 			'sanitize_callback' => true,

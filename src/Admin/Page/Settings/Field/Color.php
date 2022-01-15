@@ -30,7 +30,6 @@ class Color extends Field {
 	 */
 	protected $default_field = array(
 		'type'        => 'color',
-		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
 			'sanitize_callback' => true,

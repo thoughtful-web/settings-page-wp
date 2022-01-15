@@ -30,7 +30,6 @@ class Radio extends Field {
 	 */
 	protected $default_field = array(
 		'type'      => 'radio',
-		'desc'      => '',
 		'data_args' => array(
 			'show_in_rest'      => false,
 			'sanitize_callback' => true,

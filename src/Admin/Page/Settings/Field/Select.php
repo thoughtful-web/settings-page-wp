@@ -30,7 +30,6 @@ class Select extends Field {
 	 */
 	protected $default_field = array(
 		'type'      => 'select',
-		'desc'      => '',
 		'prompt'    => 'Please choose an option',
 		'data_args' => array(
 			'show_in_rest'      => false,

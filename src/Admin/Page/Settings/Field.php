@@ -30,7 +30,6 @@ class Field {
 	 */
 	protected $default_field = array(
 		'type'        => 'text',
-		'desc'        => '',
 		'placeholder' => '',
 		'data_args'   => array(
 			'sanitize_callback' => true,
@@ -254,8 +253,8 @@ class Field {
 	 * @return string
 	 */
 	protected function output_description( $args ) {
-		if ( isset( $args['desc'] ) && $args['desc'] ) {
-			$desc = '<br />' . $args['desc'];
+		if ( array_key_exists( 'description', $args ) && $args['description'] ) {
+			$desc = '<br />' . $args['description'];
 			echo wp_kses_post( $desc );
 		}
 	}
