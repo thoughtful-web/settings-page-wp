@@ -131,7 +131,7 @@ class Select extends Field {
 		$value       = get_option( $args['id'] );
 		$value_arr   = is_array( $value ) ? $value : array( $value );
 		$extra_attrs = $this->get_optional_attributes( $args );
-		$multi_mod   = array_key_exists( 'multiple', $field_data ) ? '[]' : '';
+		$multi_mod   = array_key_exists( 'multiple', $args['data_args'] ) ? '[]' : '';
 
 		// Render the form field output.
 		$output   = array();
