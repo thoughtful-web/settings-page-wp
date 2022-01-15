@@ -124,7 +124,15 @@ class Field {
 		// Store the merged field.
 		$this->field = $field;
 
-		// Register the setting.
+		/**
+		 * Register the setting.
+		 * Registers the following hooks, if applicable:
+		 * 1. 'sanitize_option_{$option_name}'
+		 * 2. 'default_option_{$option_name}'
+		 * Runs the following hooks:
+		 * 1. apply_filters( 'register_setting_args', ... );
+		 * 2. do_action( 'register_setting', ... );
+		 */
 		register_setting( $option_group, $field['id'], $field['data_args'] );
 
 		// Register the field.
