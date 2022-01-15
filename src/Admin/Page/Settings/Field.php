@@ -89,7 +89,7 @@ class Field {
 	 *     @type string $label       Formatted title of the field. Shown as the label for the field during output. Required.
 	 *     @type string $id          Slug-name to identify the field. Used in the 'id' attribute of tags. Required.
 	 *     @type string $type        The type attribute. Required.
-	 *     @type string $desc        The description. Optional.
+	 *     @type string $description The description. Optional.
 	 *     @type mixed  $placeholder The placeholder text, if applicable. Optional.
 	 *     @type string $default     The default value. Optional.
 	 *     @type mixed  $label_for   When supplied, the setting title will be wrapped in a `<label>` element, its `for` attribute populated with this value. Optional.
