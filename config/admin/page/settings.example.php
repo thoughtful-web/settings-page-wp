@@ -99,7 +99,9 @@ return array(
 					'id'          => 'unique_wp_editor_field',
 					'type'        => 'wp_editor',
 					'description' => 'My WP Editor field description',
-					'default'     => 'my placeholder',
+					'data_args'   => array(
+						'default' => 'my placeholder',
+					),
 				),
 				array(
 					'label'       => 'My Decimal Number Field',
