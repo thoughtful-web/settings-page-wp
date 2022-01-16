@@ -83,9 +83,7 @@ class Settings {
 		if ( array_key_exists( 'stylesheet', $this->config ) && ! empty( $this->config['stylesheet'] ) ) {
 			$path_from_subfolder = dirname( __FILE__, 7 ) . '/config/thoughtful-web/settings/';
 			$file_path           = "{$path_from_subfolder}{$this->config['stylesheet']['file']}";
-			if ( file_exists( $file_path ) ) {
-				add_action( 'admin_init', array( $this, 'register_stylesheet' ) );
-			}
+			add_action( 'admin_init', array( $this, 'register_stylesheet' ) );
 		}
 
 	}
