@@ -79,6 +79,45 @@ class Settings {
 		}
 		add_action( 'admin_init', array( $this, 'settings_init' ) );
 
+		// Register the stylesheet if present.
+		if ( array_key_exists( 'stylesheet', $this->config ) && ! empty( $this->config['stylesheet'] ) ) {
+			$path_from_subfolder = dirname( __FILE__, 7 ) . '/config/thoughtful-web/settings/';
+			$file_path           = "{$path_from_subfolder}{$this->config['stylesheet']['file']}";
+			if ( file_exists( $file_path ) ) {
+				add_action( 'admin_init', array( $this, 'register_stylesheet' ) );
+			}
+		}
+
+	}
+
+	/**
+	 * Enqueue the Settings page's stylesheet file.
+	 *
+	 * @return void
+	 */
+	public function register_stylesheet() {
+
+		$slug        = $this->config['method_args']['menu_slug'];
+		$plugin_root = dirname( __FILE__, 7 );
+		$config_path = '/config/thoughtful-web/settings/';
+		$deps        = array_key_exists( 'deps', $this->config['stylesheet'] ) ? $this->config['stylesheet']['deps'] : array();
+		$file_url    = plugins_url( basename( $plugin_root ) . $config_path . $this->config['stylesheet']['file'] );
+		$file_path   = $plugin_root . $config_path . $this->config['stylesheet']['file'];
+		$version     = filemtime( $file_path );
+		// Register the stylesheet.
+		wp_register_style( 'settings-' . $slug, $file_url, $deps, $version );
+
+	}
+
+	/**
+	 * Enqueue the Settings page stylesheet.
+	 *
+	 * @return void
+	 */
+	public function enqueue_stylesheet() {
+
+		wp_enqueue_style( 'settings-' . $this->config['method_args']['menu_slug'] );
+
 	}
 
 	/**
@@ -253,7 +292,7 @@ class Settings {
 		if (
 			! isset( $this->config['method_args']['parent_slug'] )
 		) {
-			add_menu_page(
+			$page = add_menu_page(
 				$this->config['method_args']['page_title'],
 				$this->config['method_args']['menu_title'],
 				$this->config['method_args']['capability'],
@@ -263,7 +302,7 @@ class Settings {
 				$this->config['method_args']['position']
 			);
 		} else {
-			add_submenu_page(
+			$page = add_submenu_page(
 				$this->config['method_args']['parent_slug'],
 				$this->config['method_args']['page_title'],
 				$this->config['method_args']['menu_title'],
@@ -273,6 +312,7 @@ class Settings {
 				$this->config['method_args']['position']
 			);
 		}
+		add_action( "admin_print_styles-{$page}", array( $this, 'enqueue_stylesheet' ) );
 
 	}
 
