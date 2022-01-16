@@ -9,7 +9,7 @@
  *
  * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Settings
- * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
+ * @author     Zachary Kendall Watkins <watkinza@gmail.com>
  * @copyright  2022 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
  * @link       https://github.com/thoughtful-web/library-wp/blob/master/admin/page/settings/sanitize.php

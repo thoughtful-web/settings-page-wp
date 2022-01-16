@@ -6,8 +6,8 @@
  *
  * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Plugin
- * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
- * @copyright  2021 Zachary Kendall Watkins
+ * @author     Zachary Kendall Watkins <watkinza@gmail.com>
+ * @copyright  Zachary Kendall Watkins 2022
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0-or-later
  * @link       https://github.com/zachwatkins/wordpress-plugin-name/blob/master/util/class-activation.php
  * @since      0.1.0

@@ -4,8 +4,8 @@
  *
  * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Settings
- * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
- * @copyright  2021 Zachary Kendall Watkins
+ * @author     Zachary Kendall Watkins <watkinza@gmail.com>
+ * @copyright  Zachary Kendall Watkins 2022
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
  * @link       https://github.com/thoughtful-web/library-wp/blob/main/Admin/Page/Settings/Config.php
  * @since      0.1.0

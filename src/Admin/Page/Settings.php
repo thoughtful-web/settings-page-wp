@@ -4,8 +4,8 @@
  *
  * @package    ThoughtfulWeb\LibraryWP
  * @subpackage Settings
- * @author     Zachary Kendall Watkins <zachwatkins@tapfuel.io>
- * @copyright  2021 Zachary Kendall Watkins
+ * @author     Zachary Kendall Watkins <watkinza@gmail.com>
+ * @copyright  Zachary Kendall Watkins 2022
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
  * @link       https://github.com/thoughtful-web/library-wp/blob/master/Admin/Page/Settings.php
  * @since      0.1.0
@@ -57,12 +57,13 @@ class Settings {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param array|string $settings The settings page parameters array or file path relative to the root directory.
+	 * @param array|string $config (Optional) The settings page configuration parameters.
+	 *                                        Either a configuration file name, file path, or array.
 	 */
-	public function __construct( $settings = array() ) {
+	public function __construct( $config = array() ) {
 
 		// Store attributes from the compiled parameters.
-		$config_obj = new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Config( $settings );
+		$config_obj = new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Config( $config );
 
 		// Assign compiled values.
 		$this->config       = $config_obj->get();
