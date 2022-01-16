@@ -236,7 +236,7 @@ class Field {
 			esc_attr( $args['type'] ),
 			esc_attr( $args['id'] ),
 			esc_attr( $args['data_args']['label_for'] ),
-			$value,
+			esc_attr( $value ),
 			$extra_attrs
 		);
 		echo wp_kses( $output, $this->allowed_html );
