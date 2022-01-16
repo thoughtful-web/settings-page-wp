@@ -178,7 +178,11 @@ class Sanitize {
 				}
 				break;
 			case 'text':
-				$value = sanitize_text_field( $value );
+				$email_pattern = '/(<)([^>@\s]+@[^>\s]+\.[a-zA-Z]+[^\/]+)(>)/';
+				$replaced = preg_replace( $email_pattern, '{l__}$2{__r}', $value );
+				$value = sanitize_text_field( $replaced );
+				$value = str_replace( '{l__}', '<', $value );
+				$value = str_replace( '{__r}', '>', $value );
 				break;
 			case 'textarea':
 				$value = sanitize_textarea_field( $value );
