@@ -118,16 +118,28 @@ class Sanitize {
 				}
 				break;
 			case 'number':
+				// Detect if the option is trying to be set to an empty value.
+				if ( empty( $value ) ) {
+					$value = '';
+					break;
+				}
 				// Remove surrounding whitespace.
-				$value = trim( $value );
+				if ( is_string( $value ) ) {
+					$value = trim( $value );
+					// Ensure the number is either a float or an integer.
+					$is_float = strval( floatval( $value ) ) === $value;
+					$is_int   = strval( intval( $value ) ) === $value;
+					if ( $is_float ) {
+						$value = floatval( $value );
+					} elseif ( $is_int ) {
+						$value = intval( $value );
+					}
+				}
 				// Detect invalid circumstances and then fall back to the previous value.
 				if ( ! is_numeric( $value ) ) {
 					// The easiest rejection to make.
 					$error = __( 'The number value entered is not numeric. Please enter a valid number.', 'thoughtful-web' );
 				} else {
-					// Ensure the number is either a float or an integer.
-					$is_float = strval( floatval( $value ) ) === $value;
-					$is_int   = strval( intval( $value ) ) === $value;
 					if ( ! $is_float && ! $is_int ) {
 						$error = __( 'The number value entered is neither a float nor an integer. Please enter a valid number.', 'thoughtful-web' );
 					} else {
@@ -187,9 +199,17 @@ class Sanitize {
 				$value = wp_kses_post( $value );
 				break;
 			case 'checkbox':
+				// Detect if the option is trying to be set to an empty value.
+				if ( empty( $value ) ) {
+					$value = array();
+					break;
+				}
 				if ( array_key_exists( 'choice', $this->field ) ) {
+					if ( ! is_array( $value ) ) {
+						$value = array( strval( $value ) => $this->field['choice'] );
+					}
 					// If the choice value is present in the configuration and it is not a configured choice then it is a falsified choice.
-					if ( ! empty( $value ) && strval( array_key_first( $this->field['choice'] ) ) !== $value ) {
+					if ( ! empty( $value ) && array_key_first( $this->field['choice'] ) !== array_key_first( $value ) ) {
 						// Value is falsified.
 						$error = __( 'The value submitted is not the preconfigured value. Please use the preconfigured value or an empty string.', 'thoughtful-web' );
 					}
@@ -225,6 +245,11 @@ class Sanitize {
 			case 'select':
 				// Detect if this is a multiselect field.
 				$is_multiselect = array_key_exists( 'multiple', $data_args ) && false !== boolval( $data_args['multiple'] ) ? true : false;
+
+				// Detect if the option is trying to be set to an empty value.
+				if ( empty( $value ) ) {
+					break;
+				}
 
 				// Detect if the correct value format is provided.
 				if ( $is_multiselect && ! is_array( $value ) ) {
