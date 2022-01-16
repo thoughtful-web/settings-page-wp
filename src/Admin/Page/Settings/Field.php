@@ -124,6 +124,17 @@ class Field {
 		// Store the merged field.
 		$this->field = $field;
 
+		// Register the option.
+		if ( false === get_option( $field['id'] ) ) {
+			add_filter( "sanitize_option_{$field['id']}", array( $this, 'sanitize' ) );
+			add_filter( "default_option_{$field['id']}", array( $this, 'default_option' ) );
+			if ( array_key_exists( 'default', $field['data_args'] ) ) {
+				add_option( $field['id'], $field['data_args']['default'] );
+			} else {
+				add_option( $field['id'] );
+			}
+		}
+
 		/**
 		 * Register the setting.
 		 * Registers the following hooks, if applicable:
