@@ -80,11 +80,56 @@ class Settings {
 		add_action( 'admin_init', array( $this, 'settings_init' ) );
 
 		// Register the stylesheet if present.
-		if ( array_key_exists( 'stylesheet', $this->config ) && ! empty( $this->config['stylesheet'] ) ) {
-			$path_from_subfolder = dirname( __FILE__, 7 ) . '/config/thoughtful-web/settings/';
-			$file_path           = "{$path_from_subfolder}{$this->config['stylesheet']['file']}";
+		if ( $this->has_stylesheet() ) {
 			add_action( 'admin_init', array( $this, 'register_stylesheet' ) );
 		}
+
+		// Register the script if present.
+		if ( $this->has_script() ) {
+			add_action( 'admin_init', array( $this, 'register_script' ) );
+		}
+
+	}
+
+	/**
+	 * Detect if the config has valid stylesheet parameters.
+	 *
+	 * @return boolean
+	 */
+	private function has_stylesheet() {
+
+		$has_stylesheet = false;
+
+		if (
+			array_key_exists( 'stylesheet', $this->config )
+			&& ! empty( $this->config['stylesheet'] )
+			&& array_key_exists( 'file', $this->config['stylesheet'] )
+		) {
+			$has_stylesheet = true;
+		}
+
+		return $has_stylesheet;
+
+	}
+
+	/**
+	 * Detect if the config has valid script parameters.
+	 *
+	 * @return boolean
+	 */
+	private function has_script() {
+
+		$has_script = false;
+
+		if (
+			array_key_exists( 'script', $this->config )
+			&& ! empty( $this->config['script'] )
+			&& array_key_exists( 'file', $this->config['script'] )
+		) {
+			$has_script = true;
+		}
+
+		return $has_script;
 
 	}
 
@@ -110,11 +155,50 @@ class Settings {
 	/**
 	 * Enqueue the Settings page stylesheet.
 	 *
+	 * @param string $hook_suffix The current admin page.
+	 *
 	 * @return void
 	 */
-	public function enqueue_stylesheet() {
+	public function enqueue_stylesheet( $hook_suffix ) {
 
-		wp_enqueue_style( 'settings-' . $this->config['method_args']['menu_slug'] );
+		if ( false !== strpos( $hook_suffix, 'page-' . $this->config['method_args']['menu_slug'] ) ) {
+			wp_enqueue_style( 'settings-' . $this->config['method_args']['menu_slug'] );
+		}
+
+	}
+
+	/**
+	 * Enqueue the Settings page's script file.
+	 *
+	 * @return void
+	 */
+	public function register_script() {
+
+		$slug        = $this->config['method_args']['menu_slug'];
+		$plugin_root = dirname( __FILE__, 7 );
+		$config_path = '/config/thoughtful-web/settings/';
+		$deps        = array_key_exists( 'deps', $this->config['script'] ) ? $this->config['script']['deps'] : array();
+		$file_url    = plugins_url( basename( $plugin_root ) . $config_path . $this->config['script']['file'] );
+		$file_path   = $plugin_root . $config_path . $this->config['script']['file'];
+		$version     = filemtime( $file_path );
+		$in_footer   = array_key_exists( 'position', $this->config['script'] ) ? boolval( $this->config['script'] ) : false;
+		// Register the stylesheet.
+		wp_register_script( 'settings-' . $slug, $file_url, $deps, $version, $in_footer );
+
+	}
+
+	/**
+	 * Enqueue the Settings page script.
+	 *
+	 * @param string $hook_suffix The current admin page.
+	 *
+	 * @return void
+	 */
+	public function enqueue_script( $hook_suffix ) {
+
+		if ( false !== strpos( $hook_suffix, 'page-' . $this->config['method_args']['menu_slug'] ) ) {
+			wp_enqueue_style( 'settings-' . $this->config['method_args']['menu_slug'] );
+		}
 
 	}
 
@@ -310,7 +394,16 @@ class Settings {
 				$this->config['method_args']['position']
 			);
 		}
-		add_action( "admin_print_styles-{$page}", array( $this, 'enqueue_stylesheet' ) );
+
+
+		// Enqueue the stylesheet, if present.
+		if ( $this->has_stylesheet() ) {
+			add_action( "admin_enqueue_scripts", array( $this, 'enqueue_stylesheet' ) );
+		}
+		// Enqueue the stylesheet, if present.
+		if ( $this->has_script() ) {
+			add_action( "admin_enqueue_scripts", array( $this, 'enqueue_script' ) );
+		}
 
 	}
 
