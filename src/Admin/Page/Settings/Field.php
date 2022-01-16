@@ -186,6 +186,19 @@ class Field {
 	}
 
 	/**
+	 * Get the default value of the field.
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	public function default_option( $value ) {
+		if ( array_key_exists( 'default', $this->field['data_args'] ) ) {
+			$value = $this->field['data_args']['default'];
+		}
+		return $value;
+	}
+
+	/**
 	 * A callback function that sanitizes the field's database option value. Hooked to the filter
 	 * "sanitize_option_{$option_name}" with $option_name equal to this field's $id value. This
 	 * hook is run by the "sanitize_option()" function which is executed within Settings API
