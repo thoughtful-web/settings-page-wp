@@ -33,7 +33,6 @@ class Config {
 			'menu_title' => 'Thoughtful Settings',
 			'capability' => 'manage_options',
 			'menu_slug'  => 'thoughtful-settings',
-			'function'   => null,
 			'icon_url'   => 'dashicons-admin-settings',
 			'position'   => 2,
 		),

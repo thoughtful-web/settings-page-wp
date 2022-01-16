@@ -33,7 +33,9 @@
 	},
 	"readme": "README.md",
 	"autoload": {
-		"classmap": ["src/"]
+        "psr-4": {
+			"ThoughtfulWeb\\LibraryWP\\": "src/"
+		}
 	},
 	"config": {
 		"classmap-authoritative": true
