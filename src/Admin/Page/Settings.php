@@ -72,7 +72,7 @@ class Settings {
 
 		// Initialize.
 		if ( ! isset( $this->config['network'] ) || ! $this->config['network'] ) {
-			add_action( 'admin_menu', array( $this, 'add_settings' ) );
+			add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 		} else {
 			// add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
 			// add_action( 'network_admin_edit_' . $this->menu_slug, array( $this, 'save_network_option' ) );
@@ -245,7 +245,7 @@ class Settings {
 	 *
 	 * @return void
 	 */
-	public function add_settings() {
+	public function add_settings_page() {
 
 		// $options_form = $this->config['network'] ? 'network_options_form' : 'site_options_form';
 		$options_form = 'site_options_form';
