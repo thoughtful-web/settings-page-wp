@@ -170,10 +170,10 @@ class Field {
 	private function apply_defaults( $field ) {
 
 		foreach ( $this->default_field as $key => $default_value ) {
-			if ( 'data_args' === $key ) {
-				foreach( $default_value as $data_key => $default_data_value ) {
-					if ( ! array_key_exists( $data_key, $field[ $key ] ) ) {
-						$field[ $key ][ $data_key ] = $default_data_value;
+			if ( is_array( $default_value ) ) {
+				foreach( $default_value as $sub_key => $sub_value ) {
+					if ( ! array_key_exists( $sub_key, $field[ $key ] ) ) {
+						$field[ $key ][ $sub_key ] = $sub_value;
 					}
 				}
 			} elseif ( ! array_key_exists( $key, $field ) ) {
