@@ -39,7 +39,6 @@ class Config {
 		),
 		'description'  => 'A thoughtful settings page description.',
 		'option_group' => 'options',
-		'network'      => false,
 	);
 
 	/**

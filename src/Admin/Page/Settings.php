@@ -74,8 +74,8 @@ class Settings {
 		if ( ! isset( $this->config['network'] ) || ! $this->config['network'] ) {
 			add_action( 'admin_menu', array( $this, 'add_settings' ) );
 		} else {
-			add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
-			add_action( 'network_admin_edit_' . $this->menu_slug, array( $this, 'save_network_option' ) );
+			// add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
+			// add_action( 'network_admin_edit_' . $this->menu_slug, array( $this, 'save_network_option' ) );
 		}
 		add_action( 'admin_init', array( $this, 'settings_init' ) );
 
@@ -247,7 +247,8 @@ class Settings {
 	 */
 	public function add_settings() {
 
-		$options_form = $this->config['network'] ? 'network_options_form' : 'site_options_form';
+		// $options_form = $this->config['network'] ? 'network_options_form' : 'site_options_form';
+		$options_form = 'site_options_form';
 
 		if (
 			! isset( $this->config['method_args']['parent_slug'] )

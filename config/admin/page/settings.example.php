@@ -21,7 +21,6 @@ return array(
 	),
 	'description'  => 'A thoughtful settings page description.',
 	'option_group' => 'thoughtful_settings',
-	'network'      => false,
 	'sections'     => array(
 		array(
 			'section'     => 'unique-section-id-1',
