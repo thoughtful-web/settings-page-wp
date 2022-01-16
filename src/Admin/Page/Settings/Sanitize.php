@@ -167,7 +167,7 @@ class Sanitize {
 					}
 				}
 				break;
-			case 'phone':
+			case 'tel':
 				$value = trim( $value );
 				$value = sanitize_text_field( $value );
 				if ( array_key_exists( 'pattern', $data_args ) && ! empty( $data_args['pattern'] ) ) {
