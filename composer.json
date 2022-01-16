@@ -1,6 +1,6 @@
 {
     "name": "thoughtful-web/library-wp",
-    "description": "Helpful WordPress scripts released as free open source software under GNU GPL-2.0+ License",
+    "description": "Helpful WordPress scripts for plugin creation released as free open source software under GNU GPL-2.0+ License",
 	"version": "0.1.0",
     "type": "library",
 	"keywords": ["WordPress"],

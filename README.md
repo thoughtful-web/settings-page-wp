@@ -1,7 +1,7 @@
 # Thoughtful Web Library for WordPress
 
 by Zachary Kendall Watkins
-Published for free public use and access now and forever using the GNU GPL 2.0 and above software license.
+Helpful WordPress scripts for plugin creation released for free public use and access now and forever using the GNU GPL 2.0 and above software license.
 
 ## Requirements
 1. WordPress 5.4 and above.
