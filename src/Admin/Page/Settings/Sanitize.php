@@ -171,7 +171,7 @@ class Sanitize {
 				$value = trim( $value );
 				$value = sanitize_text_field( $value );
 				if ( array_key_exists( 'pattern', $data_args ) && ! empty( $data_args['pattern'] ) ) {
-					$match = preg_match( $data_args['pattern'], $value );
+					$match = preg_match( '#' . str_replace( '#', '\#', $data_args['pattern'] ) . '#i', $value );
 					if ( ! $match ) {
 						$error = __( 'The phone number value entered does not match the pattern of "' . esc_html( $data_args['pattern'] ) . '". Please enter a valid phone number.', 'thoughtful-web' );
 					}
