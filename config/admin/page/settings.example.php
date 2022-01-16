@@ -21,6 +21,15 @@ return array(
 	),
 	'description'  => 'A thoughtful settings page description.',
 	'option_group' => 'thoughtful_settings',
+	'stylesheet'   => array(
+		'file' => 'settings.css',
+		'deps' => array(),
+	),
+	'script'       => array(
+		'file'      => 'settings.js',
+		'deps'      => array(),
+		'in_footer' => true,
+	),
 	'sections'     => array(
 		array(
 			'section'     => 'unique-section-id-1',
