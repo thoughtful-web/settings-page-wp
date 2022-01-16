@@ -70,3 +70,20 @@ This class will load a file using an `include` statement if it is a PHP file or 
 I am still writing this documentation and Configuration file instructions are next on my list.
 
 For now, please use the example configuration file(s) at `./config/thoughtful-web/settings/settings.example.php` as a guide for how to declare the parameters. Refer to the class variables of each **Field** class file to determine what HTML attributes they support - these must be configured in a Field's `data_args` array member in `(string) key : (string) value` format.
+
+## Fields
+
+The following Field types are supported:
+
+1. Checkbox
+2. Checkboxes
+3. Color
+4. Email
+5. Number
+6. Phone
+7. Radio
+8. Select
+9. Text
+10. Textarea
+11. URL
+12. WP Editor (wysiwyg editor)
