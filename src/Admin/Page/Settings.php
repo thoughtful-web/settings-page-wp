@@ -128,7 +128,7 @@ class Settings {
 
 		foreach ( $this->config['sections'] as $section ) {
 
-			// SKip this section if it is missing fields.
+			// Skip this section if it is missing fields.
 			if ( ! array_key_exists( 'fields', $section ) ) {
 				continue;
 			}
