@@ -7,6 +7,15 @@ This library generates both a Settings page and fully qualified Options for each
 
 All HTML attributes for form fields are supported in the configuration and "pattern" attributes are validated for both the form and in the Option's sanitization filter hook. Each Field is a separate Option and all WordPress filters and actions which apply to Options can be used for them.
 
+## Features
+
+1. Settings page generation from a configuration file.
+2. Wrapped around the Core WordPress Settings and Options APIs.
+3. Each Field creates and updates an individual database Option, which has advantages when you use hooks and filters.
+4. Each Field is validated in a manner similar to how core WordPress options are validated.
+5. If a Field type supports it you can add the "pattern" attribute to further validate against a regular expression in both the form and the server simultaneously.
+6. Include stylesheet and/or script file parameters in the configuration file for the Settings page.
+
 ## Requirements
 
 1. WordPress 5.4 and above.
@@ -86,4 +95,4 @@ The following Field types are supported:
 9. Text
 10. Textarea
 11. URL
-12. WP Editor (wysiwyg editor)
+12. WP Editor (WYSIWYG editor)
