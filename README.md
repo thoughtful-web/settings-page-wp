@@ -12,9 +12,12 @@ All HTML attributes for form fields are supported in the configuration and "patt
 1. Settings page generation from a configuration file.
 2. Wrapped around the Core WordPress Settings and Options APIs.
 3. Each Field creates and updates an individual database Option, which has advantages when you use hooks and filters.
-4. Each Field is validated in a manner similar to how core WordPress options are validated.
-5. If a Field type supports it you can add the "pattern" attribute to further validate against a regular expression in both the form and the server simultaneously.
-6. Include stylesheet and/or script file parameters in the configuration file for the Settings page.
+4. Each Field is validated in a manner similar to Core WordPress options.
+5. If a Field type supports it you can add the "pattern" attribute to further validate against a regular expression in both the page and the server whenever calling `update_option`.
+6. Include stylesheet and/or script file parameters in the configuration file.
+7. Include default Field values to automatically load them into the database. If the field is ever emptied these values will load again.
+8. Zero dependencies beyond WordPress itself.
+9. Configure and generate multiple pages or subpages.
 
 ## Requirements
 
@@ -22,6 +25,8 @@ All HTML attributes for form fields are supported in the configuration and "patt
 2. PHP 7.3.5 and above.
 
 ## Installation
+
+`composer require thoughtful-web/settings-page-wp`
 
 To install this module from Github using Composer, add it as a repository to the composer.json file:
 
@@ -64,12 +69,15 @@ This class will load a file using an `include` statement if it is a PHP file or 
 
 1. **No parameter** assumes there is a configuration file located here: `./config/thoughtful-web/settings/settings.php`. Example:  
    i. `new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings();`  
+
 2. **File name** accepts a PHP or JSON file name and requires the file to be in the plugin's root directory at `./config/thoughtful-web/settings/`. Examples:  
    i. `new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings( 'filename.php' );`  
    ii. `new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings( 'filename.json' );`  
+
 3. **File path** can be any location on your server, as long as the `./src/Admin/Page/Settings/Config.php` class file has read access to it. Examples:  
    i. `new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings( '/config/settings.php' );`  
    i. `new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings( '/public_html/wp-content/plugins/wordpress-plugin-name/settings.json' );`  
+
 4. **Array** The configuration parameters in their final state.
 
 **Note:** Call the class without an action hook or within an action hook early enough in the execution order to not skip the WordPress actions, filters, and functions used in this feature's class files. It is yet to be determined which action hooks are compatible with this class's instantiation.
@@ -82,7 +90,7 @@ For now, please use the example configuration file(s) at `./config/thoughtful-we
 
 ## Fields
 
-The following Field types are supported:
+The following Field types are supported. Refer to their class files to see supported HTML attributes which may be declared in the "data_args" member of the field's configuration.
 
 1. Checkbox
 2. Checkboxes
