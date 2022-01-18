@@ -94,7 +94,34 @@ You may include a file by path reference in the Section configuration using the 
 
 ## Fields
 
-The following Field types are supported. Refer to their class files to see supported HTML attributes which may be declared in the "data_args" member of the field's configuration.
+Here is the most basic field declaration:
+
+```
+array(
+	'label' => 'My Text Field',
+	'id'    => 'unique_text_field_option',
+	'type'  => 'text',
+)
+```
+
+Here is an example field declaration:
+
+```
+array(
+	'label'       => 'My Text Field',
+	'id'          => 'unique_text_field_option',
+	'type'        => 'text',
+	'description' => 'My text field description',
+	'placeholder' => 'my placeholder',
+	'data_args'   => array( // Meaning you don't have to declare the data_args at all.
+		'default'       => 'A default value',
+		'data-lpignore' => 'true', // Accepts any data attribute. LastPass ignores fields with this data attribute.
+		'size'          => '40', // HTML "size" attribute.
+	),
+),
+```
+
+The following Field types are supported. Notes on each Field type's configuration and behavior follow. Refer to their class files to see supported HTML attributes which, if declared, must be in the "data_args" member of the field's configuration.
 
 1. Checkbox
 2. Checkboxes
@@ -108,6 +135,88 @@ The following Field types are supported. Refer to their class files to see suppo
 10. Textarea
 11. URL
 12. WP Editor (WYSIWYG editor)
+
+## Field Configuration
+
+Here is a guide for implementing each Field type. You may also wish to refer to the source code for each Field which has its own documentation in the files.
+
+### Checkbox
+
+The Checkbox field uses the "choice" declaration to configure a single checkbox field whose value is input into the database as a string. Multiple checkboxes may be declared using "choices" instead of "choice". Each choice therein follows a value => label format. The "default" data argument of the singular Checkbox configuration will be changed soon to imitate the multiple Checkbox declaration. Required values are: label, id, type, choice.
+
+```
+array(
+	'label'       => 'My Checkbox Field', // Required.
+	'id'          => 'unique_checkbox_field', // Required.
+	'type'        => 'checkbox', // Required.
+	'description' => 'My checkbox field description',
+	'choice'      => array( // Required.
+		'1' => 'My Choice',
+	),
+	'data_args'   => array(
+		'default' => array(
+			'1' => 'My Choice',
+		),
+	),
+),
+```
+
+Multiple checkboxes are declared as shown below:
+
+```
+array(
+	'label'       => 'My Checkbox Fields',
+	'id'          => 'unique_checkbox_fields',
+	'type'        => 'checkbox',
+	'description' => 'My checkbox fields description',
+	'choices'     => array(
+		'option_one'   => 'Option 1',
+		'option_two'   => 'Option 2',
+		'option_three' => 'Option 3',
+	),
+	'data_args' => array(
+		'default' => array(
+			'option_one',
+			'option_two',
+		),
+	),
+),
+```
+
+### Text
+
+The Text field is the simplest field to implement. Required values are: label, id, type.
+
+```
+array(
+	'label'       => 'My Text Field', // Required.
+	'id'          => 'unique_text_field',
+	'type'        => 'text',
+	'description' => 'My text field description',
+	'placeholder' => 'my placeholder',
+	'data_args'   => array(
+		'default'       => 'A thoughtful, optional, default value',
+		'data-lpignore' => 'true',
+		'size'          => '40',
+	),
+),
+```
+
+### Color
+
+The Color field uses Iris from WordPress's script files to render a color picker. Required values are: label, id, type.
+
+```
+array(
+	'label'       => 'My Color Field',
+	'id'          => 'unique_color_field',
+	'type'        => 'color',
+	'description' => 'My color field description',
+	'data_args'   => array(
+		'default' => '#000000',
+	),
+),
+```
 
 ## Roadmap
 
