@@ -192,9 +192,10 @@ class Sanitize {
 				if ( is_wp_error( $value ) ) {
 					$error = $value->get_error_message();
 				} elseif ( array_key_exists( 'pattern', $data_args ) && ! empty( $data_args['pattern'] ) ) {
-					if ( preg_match( '#' . str_replace( '#', '\#', $data_args['pattern'] ) . '#i', $value ) ) {
+					if ( preg_match( '/' . str_replace( '/', '\/', $data_args['pattern'] ) . '/i', $value ) ) {
 						$value = esc_url_raw( $value );
-					} else {
+					} elseif ( ! empty( $value ) ) {
+						error_log($value);
 						$error = __( 'The URL you entered does not match the pattern of "' . esc_html( $data_args['pattern'] ) . '". Please enter a valid URL.', 'thoughtful-web' );
 					}
 				}
