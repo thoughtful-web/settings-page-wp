@@ -88,6 +88,10 @@ I am still writing this documentation and Configuration file instructions are ne
 
 For now, please use the example configuration file(s) at `./config/thoughtful-web/settings/settings.example.php` as a guide for how to declare the parameters. Refer to the class variables of each **Field** class file to determine what HTML attributes they support - these must be configured in a Field's `data_args` array member in `(string) key : (string) value` format.
 
+## Sections
+
+You may include a file by path reference in the Section configuration using the "include" property, which accepts an absolute file path string.
+
 ## Fields
 
 The following Field types are supported. Refer to their class files to see supported HTML attributes which may be declared in the "data_args" member of the field's configuration.
@@ -112,4 +116,3 @@ Features, changes, and fixes which I plan on implementing:
 1. Have the "readonly" field optionally reject changes within the sanitization hook.
 2. Add documentation for the "include" parameter of sections.
 3. Fix issue where clearing a field doesn't reload the default value.
-4. Implement a password Field
