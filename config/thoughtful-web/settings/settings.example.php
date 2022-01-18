@@ -194,6 +194,15 @@ return array(
 						'pattern' => 'https://.*',
 					),
 				),
+				array(
+					'id'          => 'api_key',
+					'label'       => 'API Key',
+					'type'        => 'password',
+					'description' => 'An API key used to access data.',
+					'data_args'    => array(
+						'size'    => '70',
+					),
+				),
 			),
 		),
 	),
