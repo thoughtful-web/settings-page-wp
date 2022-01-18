@@ -61,7 +61,7 @@ class Url extends Field {
 			'readonly'     => true,
 			'required'     => true,
 			'size'         => true,
-			'type'         => 'text',
+			'type'         => 'url',
 			'value'        => true,
 		),
 	);
