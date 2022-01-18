@@ -231,7 +231,6 @@ class Field {
 		$value       = get_option( $args['id'] );
 		$extra_attrs = $this->get_optional_attributes( $args );
 
-		error_log('rendering a ' . $args['type'] . ' field.' );
 		// Render the form field output.
 		$output = sprintf(
 			'<input type="%1$s" id="%2$s" name="%3$s" value="%4$s" %5$s/>',
