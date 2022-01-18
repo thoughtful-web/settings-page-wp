@@ -104,3 +104,12 @@ The following Field types are supported. Refer to their class files to see suppo
 10. Textarea
 11. URL
 12. WP Editor (WYSIWYG editor)
+
+## Roadmap
+
+Features, changes, and fixes which I plan on implementing:
+
+1. Have the "readonly" field optionally reject changes within the sanitization hook.
+2. Add documentation for the "include" parameter of sections.
+3. Fix issue where clearing a field doesn't reload the default value.
+4. Implement a password Field
