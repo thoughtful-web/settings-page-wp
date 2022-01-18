@@ -36,7 +36,7 @@ class Field {
 			'show_in_rest'      => false,
 			'type'              => 'string',
 			'description'       => '',
-		)
+		),
 	);
 
 	/**
@@ -46,23 +46,23 @@ class Field {
 	 */
 	protected $allowed_html = array(
 		'input' => array(
-			'class'         => true,
-			'data-*'        => true,
-			'autocomplete'  => true,
-			'disabled'      => true,
-			'id'            => true,
-			'list'          => true,
-			'maxlength'     => true,
-			'minlength'     => true,
-			'name'          => true,
-			'pattern'       => true,
-			'placeholder'   => true,
-			'readonly'      => true,
-			'required'      => true,
-			'size'          => true,
-			'spellcheck'    => true,
-			'type'          => 'text',
-			'value'         => true,
+			'class'        => true,
+			'data-*'       => true,
+			'autocomplete' => true,
+			'disabled'     => true,
+			'id'           => true,
+			'list'         => true,
+			'maxlength'    => true,
+			'minlength'    => true,
+			'name'         => true,
+			'pattern'      => true,
+			'placeholder'  => true,
+			'readonly'     => true,
+			'required'     => true,
+			'size'         => true,
+			'spellcheck'   => true,
+			'type'         => 'text',
+			'value'        => true,
 		),
 	);
 
@@ -83,7 +83,7 @@ class Field {
 	/**
 	 * Constructor for the Field class.
 	 *
-	 * @param array $field {
+	 * @param array  $field {
 	 *     The field registration arguments.
 	 *
 	 *     @type string $label       Formatted title of the field. Shown as the label for the field during output. Required.
@@ -171,7 +171,7 @@ class Field {
 
 		foreach ( $this->default_field as $key => $default_value ) {
 			if ( is_array( $default_value ) ) {
-				foreach( $default_value as $sub_key => $sub_value ) {
+				foreach ( $default_value as $sub_key => $sub_value ) {
 					if ( ! array_key_exists( $sub_key, $field[ $key ] ) ) {
 						$field[ $key ][ $sub_key ] = $sub_value;
 					}
@@ -188,7 +188,7 @@ class Field {
 	/**
 	 * Get the default value of the field.
 	 *
-	 * @param mixed $value
+	 * @param mixed $value Option value passed to the method.
 	 * @return mixed
 	 */
 	public function default_option( $value ) {
@@ -217,19 +217,21 @@ class Field {
 	}
 
 	/**
-	* Get the settings option array and print one of its values.
-	* @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/text
-	*
-	* @param array $args The arguments needed to render the setting field.
-	*
-	* @return void
-	*/
+	 * Get the settings option array and print one of its values.
+	 *
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/text
+	 *
+	 * @param array $args The arguments needed to render the setting field.
+	 *
+	 * @return void
+	 */
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
 		$value       = get_option( $args['id'] );
 		$extra_attrs = $this->get_optional_attributes( $args );
 
+		error_log('rendering a ' . $args['type'] . ' field.' );
 		// Render the form field output.
 		$output = sprintf(
 			'<input type="%1$s" id="%2$s" name="%3$s" value="%4$s" %5$s/>',
@@ -255,7 +257,7 @@ class Field {
 	 *     @key string $desc The field description.
 	 * }
 	 *
-	 * @return string
+	 * @return void
 	 */
 	protected function output_description( $args ) {
 		if ( array_key_exists( 'description', $args ) && $args['description'] ) {
@@ -285,13 +287,13 @@ class Field {
 			'id',
 		);
 		if ( array_key_exists( 'placeholder', $field ) && ! empty( $field['placeholder'] ) ) {
-			$extra_attrs['placeholder']  = 'placeholder="' . esc_attr( $field['placeholder'] ) . '"';
+			$extra_attrs['placeholder'] = 'placeholder="' . esc_attr( $field['placeholder'] ) . '"';
 		}
 		// Then choose those among the data_args array members.
 		$field_allowed_html_key = array_keys( $this->allowed_html )[0];
 		$field_allowed_html     = $this->allowed_html[ $field_allowed_html_key ];
 		foreach ( $field['data_args'] as $attr => $attr_value ) {
-			if ( array_key_exists( $attr, $field_allowed_html ) && ! in_array( $attr, $disallowed_data_args_as_attrs ) ) {
+			if ( array_key_exists( $attr, $field_allowed_html ) && ! in_array( $attr, $disallowed_data_args_as_attrs, true ) ) {
 				$extra_attrs[ $attr ] = $attr . '="' . esc_attr( $attr_value ) . '"';
 			}
 		}
