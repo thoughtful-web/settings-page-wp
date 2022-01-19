@@ -192,10 +192,13 @@ class Field {
 	 * @return mixed
 	 */
 	public function default_option( $value ) {
+
 		if ( array_key_exists( 'default', $this->field['data_args'] ) ) {
 			$value = $this->field['data_args']['default'];
 		}
+		
 		return $value;
+
 	}
 
 	/**
