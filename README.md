@@ -19,6 +19,12 @@ All HTML attributes for form fields are supported in the configuration and "patt
 8. Zero dependencies beyond WordPress itself.
 9. Configure and generate multiple pages or subpages.
 
+## Roadmap
+
+Features, changes, and fixes which I plan on implementing:
+
+1. Continue developing the documentation.
+2. Change the default value configuration for the Checkbox field to mimic that of the Checkboxes field.
 ## Requirements
 
 1. WordPress 5.4 and above.
@@ -26,7 +32,9 @@ All HTML attributes for form fields are supported in the configuration and "patt
 
 ## Installation
 
-`composer require thoughtful-web/settings-page-wp`
+To install this module from Composer directly, use the command line. Then either use Composer's autoloader or require the class files directly in your PHP.
+
+`$ composer require thoughtful-web/settings-page-wp`
 
 To install this module from Github using Composer, add it as a repository to the composer.json file:
 
@@ -46,13 +54,13 @@ To install this module from Github using Composer, add it as a repository to the
 }
 ```
 
-Then either use Composer's autoloader or require the file directly in your PHP.
 
 ## Simplest Implementation
 
-The simplest implementation of this module is to include it with the autoloader or by direct file reference and add a configuration file at `./config/thoughtful-web/settings/settings.php` or `./config/thoughtful-web/settings/settings.json`. Then declare the Settings from that configuration file by creating a new instance of the Settings page in your Plugin's main file like this:  
+The simplest implementation of this module is to include it with the autoloader and add a configuration file at `./config/thoughtful-web/settings/settings.php` or `./config/thoughtful-web/settings/settings.json`. Then declare the Settings from that configuration file by creating a new instance of the Settings page in your Plugin's main file like this:  
 
 ```
+require __DIR__ . '/vendor/autoload.php;
 new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings();
 ```
 
@@ -78,44 +86,43 @@ This class will load a file using an `include` statement if it is a PHP file or 
    i. `new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings( '/config/settings.php' );`  
    i. `new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings( '/public_html/wp-content/plugins/wordpress-plugin-name/settings.json' );`  
 
-4. **Array** The configuration parameters in their final state.
+4. **Array** The configuration values in their final state.
 
 **Note:** Call the class without an action hook or within an action hook early enough in the execution order to not skip the WordPress actions, filters, and functions used in this feature's class files. It is yet to be determined which action hooks are compatible with this class's instantiation.
 
 ## Creating the Config File
 
-I am still writing this documentation and Configuration file instructions are on my list.
-
-Some documentation for creating a configuration file can be found below. You should check out the example configuration file(s) at `./config/thoughtful-web/settings/settings.example.php`. Consider checking out the class variables of each **Field** class file to see which HTML attributes they support - these must be configured in a Field's `data_args` array member in `(string) key : (string) value` format.
-
-## Topmost Configuration
+Documentation for this framework is a work in progress. Some documentation for creating a configuration file can be found below. You should check out the example configuration file(s) at `./config/thoughtful-web/settings/settings.example.php`. Consider checking out the class variables of each **Field** class file to see which HTML attributes they support - these must be configured in a Field's `data_args` array member.
 
 The topmost configuration array accepts six parameters: method_args, description, option_group, stylesheet, script, and sections.
 
 ### method_args
 
-The "method_args" parameter applies its parameters to the add_menu_page function, or the add_submenu_page function if instead of an "icon_url" parameter you provide a "parent_slug" parameter.
+The "method_args" key is an array and applies its values to the add_menu_page function, or the add_submenu_page function if instead of an "icon_url" parameter you provide a "parent_slug" parameter.
+
+Documentation:
+1. https://developer.wordpress.org/reference/functions/add_menu_page/
+2. https://developer.wordpress.org/reference/functions/add_submenu_page/
 
 ### description
 
-The "description" parameter is a text description of the menu page and appears just below the title.
+The "description" key is a text description of the menu page and appears just below the title.
 
 ### option_group
 
-The "option_group" parameter is the slug name of the option group which settings are registered to.
+The "option_group" key is the slug name of the option group which settings are registered to.
 
 ### stylesheet
 
-The "stylesheet" parameter allows you register and enqueue your stylesheet file for the Settings page.
-
-### stylesheet
-
-The "stylesheet" parameter allows you to register and enqueue your stylesheet file for the Settings page.
+The "stylesheet" key allows you to register and enqueue your stylesheet file for the Settings page.
 
 ### script
 
-The "script" parameter allows you to register and enqueue your javascript file for the Settings page.
+The "script" key allows you to register and enqueue your javascript file for the Settings page.
 
+### sections
+
+The "sections" key accepts an array of Section configurations, each with either an "include" or "fields" key to determine their main content.
 ```
 array(
 	'method_args'  => array(
@@ -154,7 +161,7 @@ array(
 
 ## Sections
 
-A Section declaration requires the "section" and "title" attributes and either a "fields" or "include" parameter. Example:
+A Section requires "section" and "title" values and either a "fields" or "include" value. Example:
 
 ```
 array(
@@ -169,7 +176,7 @@ array(
 ),
 ```
 
-You may include a file by path reference in the Section configuration using the "include" property, which accepts an absolute file path string. Example:
+You may include a file by path reference in the Section configuration using the "include" value, which accepts an absolute file path string. Example:
 
 ```
 array(
@@ -182,7 +189,7 @@ array(
 
 ## Fields
 
-Here is the most basic field declaration:
+Here is the most basic field configuration:
 
 ```
 array(
@@ -192,7 +199,7 @@ array(
 )
 ```
 
-Here is an example field declaration using optional parameters:
+Here is an example field configuration using optional values:
 
 ```
 array(
@@ -209,7 +216,7 @@ array(
 ),
 ```
 
-The following Field types are supported. Notes on each Field type's configuration and behavior follow. Refer to their class files to see supported HTML attributes which, if declared, must be in the "data_args" member of the field's configuration.
+The following Field types are supported. Notes on each Field type's configuration and behavior follow. Refer to their class files to see supported HTML attributes which, if declared, must be in the "data_args" value of the field's configuration (aside from "placeholder").
 
 1. Checkbox
 2. Checkboxes
@@ -230,7 +237,7 @@ Here is a guide for implementing each Field type. You may also wish to refer to 
 
 ### Checkbox
 
-The Checkbox field uses the "choice" declaration to configure a single checkbox field whose value is input into the database as a string. Multiple checkboxes may be declared using "choices" instead of "choice". Each choice therein follows a value => label format. The "default" data argument of the singular Checkbox configuration will be changed soon to imitate the multiple Checkbox declaration. Required values are: label, id, type, choice.
+The Checkbox field uses the "choice" value to configure a single checkbox field whose value is input into the database as a string. Multiple checkboxes may be configured using "choices" instead of "choice". Each choice follows a value => label format. The "default" data_args value of a singular Checkbox configuration will be changed soon to imitate the multiple Checkbox declaration. Required values are: label, id, type, choice.
 
 ```
 array(
@@ -249,7 +256,7 @@ array(
 ),
 ```
 
-Multiple checkboxes are declared as shown below:
+Multiple checkboxes are configured as shown below:
 
 ```
 array(
@@ -305,9 +312,3 @@ array(
 	),
 ),
 ```
-
-## Roadmap
-
-Features, changes, and fixes which I plan on implementing:
-
-1. Continue developing the documentation.
