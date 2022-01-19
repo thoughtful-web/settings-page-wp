@@ -95,6 +95,11 @@ class Sanitize {
 		$error        = '';
 		$data_args    = $this->field['data_args'];
 
+		// Reject attempts to change a readonly value.
+		if ( array_key_exists( 'readonly', $data_args ) && false !== $data_args['readonly'] ) {
+			$value = $option_value;
+		}
+
 		switch ( $this->field['type'] ) {
 			case 'color':
 				$match = preg_match( '#^\#[a-zA-Z0-9]{6}$#i', $value );
