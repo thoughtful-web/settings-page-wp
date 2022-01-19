@@ -196,7 +196,7 @@ class Field {
 		if ( array_key_exists( 'default', $this->field['data_args'] ) ) {
 			$value = $this->field['data_args']['default'];
 		}
-		
+
 		return $value;
 
 	}
