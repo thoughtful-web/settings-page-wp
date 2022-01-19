@@ -1,4 +1,14 @@
 <?php
+/**
+ * The example settings configuration file.
+ *
+ * @package    ThoughtfulWeb\LibraryWP
+ * @author     Zachary Kendall Watkins <watkinza@gmail.com>
+ * @copyright  Zachary Kendall Watkins 2022
+ * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
+ * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/config/thoughtful-web/settings/settings.example.php
+ * @since      0.1.0
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 
@@ -87,7 +97,7 @@ return array(
 						'option_two'   => 'Option 2',
 						'option_three' => 'Option 3',
 					),
-					'data_args' => array(
+					'data_args'   => array(
 						'default' => array(
 							'option_one',
 							'option_two',
@@ -199,8 +209,8 @@ return array(
 					'label'       => 'API Key',
 					'type'        => 'password',
 					'description' => 'An API key used to access data.',
-					'data_args'    => array(
-						'size'    => '70',
+					'data_args'   => array(
+						'size' => '70',
 					),
 				),
 			),
