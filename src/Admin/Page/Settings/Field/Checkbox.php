@@ -86,7 +86,7 @@ class Checkbox extends Field {
 				$checked = 'checked ';
 			} elseif ( is_string( $value ) && $value === $choice_value ) {
 				$checked = 'checked ';
-			} elseif ( is_int( $value ) && $value === intval( $choice_value ) ) {
+			} elseif ( is_int( $value ) && intval( $choice_value ) === $value ) {
 				$checked = 'checked ';
 			} elseif ( is_int( $choice_value ) && intval( $value ) === intval( $choice_value ) ) {
 				$checked = 'checked ';

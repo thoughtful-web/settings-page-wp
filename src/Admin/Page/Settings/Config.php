@@ -52,7 +52,7 @@ class Config {
 	 *
 	 * @param array $config The Settings page configuration parameters. Either a configuration file or an array.
 	 *
-	 * @return array
+	 * @return void
 	 */
 	public function __construct( $config ) {
 
@@ -108,7 +108,7 @@ class Config {
 	 *
 	 * @param array $config The Settings page configuration parameters.
 	 *
-	 * @return array
+	 * @return void
 	 */
 	private function preprocess( $config ) {
 
@@ -210,7 +210,7 @@ class Config {
 
 		foreach ( $config['sections'] as $section_key => $section ) {
 			if ( array_key_exists( 'fields', $section ) ) {
-				foreach( $section['fields'] as $field_key => $field ) {
+				foreach ( $section['fields'] as $field_key => $field ) {
 					if ( ! array_key_exists( 'data_args', $field ) ) {
 						$config['sections'][ $section_key ]['fields'][ $field_key ]['data_args'] = array(
 							'label_for' => $field['id'],
