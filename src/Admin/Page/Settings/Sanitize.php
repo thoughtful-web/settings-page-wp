@@ -19,11 +19,15 @@
 declare(strict_types=1);
 namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
 
+/**
+ * The Sanitize class, which ensures safe and correct values are achieved when the Option value is updated.
+ */
 class Sanitize {
 
 	/**
 	 * Validation settings.
 	 *
+	 * @var $default_field
 	 * @access private
 	 */
 	protected $default_field = array(
@@ -61,7 +65,7 @@ class Sanitize {
 
 		foreach ( $this->default_field as $key => $default_value ) {
 			if ( 'data_args' === $key ) {
-				foreach( $default_value as $data_key => $default_data_value ) {
+				foreach ( $default_value as $data_key => $default_data_value ) {
 					if ( ! array_key_exists( $data_key, $field[ $key ] ) ) {
 						$field[ $key ][ $data_key ] = $default_data_value;
 					}
@@ -112,7 +116,14 @@ class Sanitize {
 							$match = preg_match( '#' . str_replace( '#', '\#', $data_args['pattern'] ) . '#i', $value );
 						}
 						if ( ! $match ) {
-							$error = __( 'The email address entered did not match the pattern "' . esc_html( $data_args['pattern'] ) . '". Please enter a valid email address.', 'thoughtful-web' );
+							$error = sprintf(
+								// translators: The regular expression pattern.
+								__(
+									'The email address entered did not match the pattern "%s". Please enter a valid email address.',
+									'thoughtful-web'
+								),
+								esc_html( $data_args['pattern'] )
+							);
 						}
 					}
 				}
@@ -149,10 +160,24 @@ class Sanitize {
 						$schema['nval'] = $is_float ? floatval( $value ) : intval( $value );
 						if ( $schema['min'] && $schema['nval'] < $schema['min'] ) {
 							// Validate minimum value.
-							$error = __( 'The number value entered is less than the minimum allowed value of ' . $schema['min'] . '. Please enter a valid number.', 'thoughtful-web' );
+							$error = sprintf(
+								// translators: The minimum value.
+								__(
+									'The number value entered is less than the minimum allowed value of %s. Please enter a valid number.',
+									'thoughtful-web'
+								),
+								strval( $schema['min'] )
+							);
 						} elseif ( $schema['max'] && $schema['nval'] > $schema['max'] ) {
 							// Validate maximum value.
-							$error = __( 'The number value entered is greater than the maximum allowed value of ' . $schema['max'] . '. Please enter a valid number.', 'thoughtful-web' );
+							$error = sprintf(
+								// translators: The maximum value.
+								__(
+									'The number value entered is greater than the maximum allowed value of %s. Please enter a valid number.',
+									'thoughtful-web'
+								),
+								strval( $schema['max'] )
+							);
 						} elseif ( $schema['step'] ) {
 							// Validate the "step" attribute using an alternative to the "fmod" function.
 							if ( strval( floatval( $value ) ) === $schema['step'] ) {
@@ -161,7 +186,14 @@ class Sanitize {
 								$step_nval = intval( $value );
 							}
 							if ( 0.0 !== floatval( $schema['nval'] - intval( $schema['nval'] / $step_nval ) * $step_nval ) ) {
-								$error = __( 'The number value entered is not a multiple of the "step" value of ' . $schema['step'] . '. Please enter a valid number.', 'thoughtful-web' );
+								$error = sprintf(
+									// translators: The step value of the number field.
+									__(
+										'The number value entered is not a multiple of the "step" value of %s. Please enter a valid number.',
+										'thoughtful-web'
+									),
+									strval( $schema['step'] )
+								);
 							}
 						}
 					}
@@ -173,16 +205,23 @@ class Sanitize {
 				if ( array_key_exists( 'pattern', $data_args ) && ! empty( $data_args['pattern'] ) ) {
 					$match = preg_match( '#' . str_replace( '#', '\#', $data_args['pattern'] ) . '#i', $value );
 					if ( ! $match ) {
-						$error = __( 'The phone number value entered does not match the pattern of "' . esc_html( $data_args['pattern'] ) . '". Please enter a valid phone number.', 'thoughtful-web' );
+						$error = sprintf(
+							// translators: The regular expression pattern.
+							__(
+								'The phone number value entered does not match the pattern of "%s". Please enter a valid phone number.',
+								'thoughtful-web'
+							),
+							esc_html( $data_args['pattern'] )
+						);
 					}
 				}
 				break;
 			case 'text':
 				$email_pattern = '/(<)([^>@\s]+@[^>\s]+\.[a-zA-Z]+[^\/]+)(>)/';
-				$replaced = preg_replace( $email_pattern, '{l__}$2{__r}', $value );
-				$value = sanitize_text_field( $replaced );
-				$value = str_replace( '{l__}', '<', $value );
-				$value = str_replace( '{__r}', '>', $value );
+				$replaced      = preg_replace( $email_pattern, '{l__}$2{__r}', $value );
+				$value         = sanitize_text_field( $replaced );
+				$value         = str_replace( '{l__}', '<', $value );
+				$value         = str_replace( '{__r}', '>', $value );
 				break;
 			case 'textarea':
 				$value = sanitize_textarea_field( $value );
@@ -195,8 +234,14 @@ class Sanitize {
 					if ( preg_match( '/' . str_replace( '/', '\/', $data_args['pattern'] ) . '/i', $value ) ) {
 						$value = esc_url_raw( $value );
 					} elseif ( ! empty( $value ) ) {
-						error_log($value);
-						$error = __( 'The URL you entered does not match the pattern of "' . esc_html( $data_args['pattern'] ) . '". Please enter a valid URL.', 'thoughtful-web' );
+						$error = sprintf(
+							// translators: The regular expression pattern.
+							__(
+								'The URL you entered does not match the pattern of "%s". Please enter a valid URL.',
+								'thoughtful-web'
+							),
+							esc_html( $data_args['pattern'] )
+						);
 					}
 				}
 				break;
@@ -294,7 +339,11 @@ class Sanitize {
 			$value = $option_value;
 			if ( function_exists( 'add_settings_error' ) ) {
 				// Prepend the settings field label to the error message.
-				$error = __( 'The ' . $this->field['label'] . ' field encountered an error: ', 'thoughtful-web' ) . $error;
+				$error = sprintf(
+					// translators: The field label.
+					__( 'The %s field encountered an error: ', 'thoughtful-web' ) . $error,
+					$this->field['label']
+				);
 				// Add the error.
 				add_settings_error( $option, "invalid_{$option}", $error );
 			}
