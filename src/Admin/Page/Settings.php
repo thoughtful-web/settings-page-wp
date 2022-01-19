@@ -257,7 +257,7 @@ class Settings {
 
 			foreach ( $fields as $field ) {
 
-				switch( $field['type'] ) {
+				switch ( $field['type'] ) {
 					case 'text':
 						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Text(
 							$field,
@@ -358,11 +358,8 @@ class Settings {
 					default:
 						break;
 				}
-
 			}
-
 		}
-
 	}
 
 	/**
@@ -398,14 +395,13 @@ class Settings {
 			);
 		}
 
-
 		// Enqueue the stylesheet, if present.
 		if ( $this->has_stylesheet() ) {
-			add_action( "admin_enqueue_scripts", array( $this, 'enqueue_stylesheet' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_stylesheet' ) );
 		}
 		// Enqueue the stylesheet, if present.
 		if ( $this->has_script() ) {
-			add_action( "admin_enqueue_scripts", array( $this, 'enqueue_script' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_script' ) );
 		}
 
 	}
@@ -438,15 +434,6 @@ class Settings {
 					submit_button( 'Save Settings' );
 				?>
 			</form>
-			<?php
-			if ( wp_script_is( 'wp-color-picker', 'queue' ) ) {
-				?>
-				<script type="text/javascript">
-
-				</script>
-				<?php
-			}
-			?>
 		</div>
 		<?php
 
