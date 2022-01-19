@@ -84,13 +84,101 @@ This class will load a file using an `include` statement if it is a PHP file or 
 
 ## Creating the Config File
 
-I am still writing this documentation and Configuration file instructions are next on my list.
+I am still writing this documentation and Configuration file instructions are on my list.
 
-For now, please use the example configuration file(s) at `./config/thoughtful-web/settings/settings.example.php` as a guide for how to declare the parameters. Refer to the class variables of each **Field** class file to determine what HTML attributes they support - these must be configured in a Field's `data_args` array member in `(string) key : (string) value` format.
+Some documentation for creating a configuration file can be found below. You should check out the example configuration file(s) at `./config/thoughtful-web/settings/settings.example.php`. Consider checking out the class variables of each **Field** class file to see which HTML attributes they support - these must be configured in a Field's `data_args` array member in `(string) key : (string) value` format.
+
+## Topmost Configuration
+
+The topmost configuration array accepts six parameters: method_args, description, option_group, stylesheet, script, and sections.
+
+### method_args
+
+The "method_args" parameter applies its parameters to the add_menu_page function, or the add_submenu_page function if instead of an "icon_url" parameter you provide a "parent_slug" parameter.
+
+### description
+
+The "description" parameter is a text description of the menu page and appears just below the title.
+
+### option_group
+
+The "option_group" parameter is the slug name of the option group which settings are registered to.
+
+### stylesheet
+
+The "stylesheet" parameter allows you register and enqueue your stylesheet file for the Settings page.
+
+### stylesheet
+
+The "stylesheet" parameter allows you to register and enqueue your stylesheet file for the Settings page.
+
+### script
+
+The "script" parameter allows you to register and enqueue your javascript file for the Settings page.
+
+```
+array(
+	'method_args'  => array(
+		'page_title'  => __( 'My Settings', 'thoughtful-web' ),
+		'menu_title'  => __( 'My Settings', 'thoughtful-web' ),
+		'capability'  => 'manage_options',
+		'menu_slug'   => 'my-settings',
+		'icon_url'    => 'dashicons-admin-settings',
+		'position'    => 1,
+	),
+	'description'  => 'Settings for error monitoring features.',
+	'option_group' => 'debug_settings',
+	'stylesheet'   => array(
+		'file' => 'settings.css',
+		'deps' => array(),
+	),
+	'script'       => array(
+		'file'      => 'settings.js',
+		'deps'      => array(),
+		'in_footer' => true,
+	),
+	'sections'     => array(
+		array(
+			'section' => 'section_error_logs',
+			'title'   => __( 'Error Logs', 'thoughtful-web' ),
+			'fields'  => array(
+				array(
+					'label' => 'My text field',
+					'id'    => 'unique_text_field',
+					'type'  => 'text',
+			),
+		),
+	),
+);
+```
 
 ## Sections
 
-You may include a file by path reference in the Section configuration using the "include" property, which accepts an absolute file path string.
+A Section declaration requires the "section" and "title" attributes and either a "fields" or "include" parameter. Example:
+
+```
+array(
+	'section' => 'section_error_logs',
+	'title'   => __( 'Error Logs', 'thoughtful-web' ),
+	'fields'  => array(
+		array(
+			'label' => 'My text field',
+			'id'    => 'unique_text_field',
+			'type'  => 'text',
+	),
+),
+```
+
+You may include a file by path reference in the Section configuration using the "include" property, which accepts an absolute file path string. Example:
+
+```
+array(
+	'section'     => 'section_error_logs',
+	'title'       => __( 'Error Logs', 'thoughtful-web' ),
+	'description' => __( 'Displaying error logs.', 'thoughtful-web' ),
+	'include'     => __DIR__ . '/views/file.php',
+),
+```
 
 ## Fields
 
@@ -104,7 +192,7 @@ array(
 )
 ```
 
-Here is an example field declaration:
+Here is an example field declaration using optional parameters:
 
 ```
 array(
@@ -222,5 +310,4 @@ array(
 
 Features, changes, and fixes which I plan on implementing:
 
-1. Have the "readonly" field optionally reject changes within the sanitization hook.
-3. Fix issue where clearing a field doesn't reload the default value.
+1. Continue developing the documentation.
