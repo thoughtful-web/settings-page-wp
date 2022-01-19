@@ -2,7 +2,7 @@
     "name": "thoughtful-web/settings-page-wp",
     "description": "WordPress Settings page generator and validator released as free open source software under GNU GPL-2.0+ License",
     "type": "library",
-	"keywords": ["WordPress"],
+	"keywords": ["WordPress", "Settings API", "Options API", "Settings Page"],
 	"require": {
 		"php": ">=7.3.5"
 	},
