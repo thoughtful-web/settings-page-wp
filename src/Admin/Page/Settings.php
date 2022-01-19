@@ -74,9 +74,6 @@ class Settings {
 		// Initialize.
 		if ( ! isset( $this->config['network'] ) || ! $this->config['network'] ) {
 			add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
-		} else {
-			// add_action( 'network_admin_menu', array( $this, 'add_settings' ) );
-			// add_action( 'network_admin_edit_' . $this->menu_slug, array( $this, 'save_network_option' ) );
 		}
 		add_action( 'admin_init', array( $this, 'settings_init' ) );
 
@@ -377,9 +374,6 @@ class Settings {
 	 */
 	public function add_settings_page() {
 
-		// $options_form = $this->config['network'] ? 'network_options_form' : 'site_options_form';
-		$options_form = 'site_options_form';
-
 		if (
 			! isset( $this->config['method_args']['parent_slug'] )
 		) {
@@ -388,7 +382,7 @@ class Settings {
 				$this->config['method_args']['menu_title'],
 				$this->config['method_args']['capability'],
 				$this->config['method_args']['menu_slug'],
-				array( $this, $options_form ),
+				array( $this, 'site_options_form' ),
 				$this->config['method_args']['icon_url'],
 				$this->config['method_args']['position']
 			);
@@ -399,7 +393,7 @@ class Settings {
 				$this->config['method_args']['menu_title'],
 				$this->config['method_args']['capability'],
 				$this->config['method_args']['menu_slug'],
-				array( $this, $options_form ),
+				array( $this, 'site_options_form' ),
 				$this->config['method_args']['position']
 			);
 		}
@@ -455,77 +449,6 @@ class Settings {
 			?>
 		</div>
 		<?php
-
-	}
-
-	/**
-	 * Add content to the Admin settings page.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return void
-	 */
-	public function network_options_form() {
-
-		if ( ! current_user_can( $this->capability ) ) {
-			return;
-		}
-
-		?>
-		<div class="wrap">
-			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-			<?php settings_errors(); ?>
-			<form method="POST" action="edit.php?action=<?php echo $this->menu_slug ?>">
-				<?php
-					settings_fields( $this->option_group );
-					do_settings_sections( $this->menu_slug );
-					submit_button( 'Save Settings' );
-				?>
-			</form>
-			<?php
-			if ( wp_script_is( 'wp-color-picker', 'queue' ) ) {
-				?>
-				<script type="text/javascript">
-					jQuery(document).ready(
-						function($){
-							$('input[data-wp-color-picker]').wpColorPicker();
-						}
-					);
-				</script>
-				<?php
-			}
-			?>
-		</div>
-		<?php
-
-	}
-
-	public function save_network_option() {
-
-		// Verify nonce.
-		wp_verify_nonce( $_POST['_wpnonce'], 'update' );
-
-		// Save the option.
-		// Todo: filtering?
-		$option = $_POST[ $this->config['option_group'] ];
-		update_site_option( $this->config['option_group'], $option );
-
-		// Get the site or network admin URL.
-		$admin_url = admin_url( 'admin.php' );
-		if ( is_multisite() && is_super_admin() && $this->config['network'] ) {
-			$admin_url = network_admin_url( 'admin.php' );
-		}
-		// Redirect to settings page.
-		wp_safe_redirect(
-			add_query_arg(
-				array(
-					'page'    => $this->config['method_args']['menu_slug'],
-					'updated' => 'true',
-				),
-				$admin_url
-			)
-		);
-		exit;
 
 	}
 }
