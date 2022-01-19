@@ -298,6 +298,13 @@ class Sanitize {
 				// Add the error.
 				add_settings_error( $option, "invalid_{$option}", $error );
 			}
+		} elseif ( empty( $value ) && array_key_exists( 'default', $data_args ) ) {
+			// Return the default value.
+			// I spent a lot of time searching through the WordPress Core "option.php" file to figure out how best to restore
+			// the default value when it is emptied. The update_option function does not call the default_option_$option filter
+			// hook as of this writing, but it does call the sanitize_option function. This is why we consider applying the
+			// default value to an empty value a sanitization step.
+			$value = apply_filters( "default_option_{$option}", $data_args['default'], $option, false );
 		}
 
 		return $value;
