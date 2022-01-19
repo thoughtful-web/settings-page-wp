@@ -23,8 +23,9 @@ All HTML attributes for form fields are supported in the configuration and "patt
 
 Features, changes, and fixes which I plan on implementing:
 
-1. Continue developing the documentation.
-2. Change the default value configuration for the Checkbox field to mimic that of the Checkboxes field.
+1. Network admin settings page configuration.
+2. Continue developing the documentation.
+3. Change the default value configuration for the Checkbox field to mimic that of the Checkboxes field.
 ## Requirements
 
 1. WordPress 5.4 and above.
