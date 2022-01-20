@@ -29,9 +29,8 @@ class Checkboxes extends Field {
 	 * @var array $default The default field parameter member values.
 	 */
 	protected $default_field = array(
-		'type'        => 'checkbox',
-		'placeholder' => '',
-		'data_args'   => array(
+		'type'      => 'checkbox',
+		'data_args' => array(
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'type'              => 'string',
@@ -96,7 +95,7 @@ class Checkboxes extends Field {
 			);
 
 		}
-		$output = implode( '<br />', $output );
+		$output = implode( "\n", $output );
 		echo wp_kses( $output, $this->allowed_html );
 
 		// Render the description text.

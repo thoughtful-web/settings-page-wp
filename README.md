@@ -23,9 +23,10 @@ All HTML attributes for form fields are supported in the configuration and "patt
 
 Features, changes, and fixes which I plan on implementing:
 
-1. Network admin settings page configuration.
+1. Add a network admin settings page configuration.
 2. Continue developing the documentation.
 3. Change the default value configuration for the Checkbox field to mimic that of the Checkboxes field.
+4. Move the "placeholder" value to the data_args array.
 ## Requirements
 
 1. WordPress 5.4 and above.
@@ -203,8 +204,8 @@ array(
 	'id'          => 'unique_text_field_option',
 	'type'        => 'text',
 	'description' => 'My text field description',
-	'placeholder' => 'my placeholder',
 	'data_args'   => array( // Meaning you don't have to declare the data_args at all.
+		'placeholder'   => 'my placeholder',
 		'default'       => 'A default value',
 		'data-lpignore' => 'true', // Accepts any data attribute. LastPass ignores fields with this data attribute.
 		'size'          => '40', // HTML "size" attribute.
@@ -212,7 +213,7 @@ array(
 ),
 ```
 
-The following Field types are supported. Notes on each Field type's configuration and behavior follow. Refer to their class files to see supported HTML attributes which, if declared, must be in the "data_args" value of the field's configuration (aside from "placeholder").
+The following Field types are supported. Notes on each Field type's configuration and behavior follow. Refer to their class files to see supported HTML attributes which, if declared, must be in the "data_args" value of the field's configuration.
 
 1. Checkbox
 2. Checkboxes
@@ -284,8 +285,8 @@ array(
 	'id'          => 'unique_text_field',
 	'type'        => 'text',
 	'description' => 'My text field description',
-	'placeholder' => 'my placeholder',
 	'data_args'   => array(
+		'placeholder'   => 'my placeholder',
 		'default'       => 'A thoughtful, optional, default value',
 		'data-lpignore' => 'true',
 		'size'          => '40',

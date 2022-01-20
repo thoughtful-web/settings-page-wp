@@ -30,7 +30,6 @@ class Field {
 	 */
 	protected $default_field = array(
 		'type'        => 'text',
-		'placeholder' => '',
 		'data_args'   => array(
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,
@@ -90,7 +89,6 @@ class Field {
 	 *     @type string $id          Slug-name to identify the field. Used in the 'id' attribute of tags. Required.
 	 *     @type string $type        The type attribute. Required.
 	 *     @type string $description The description shown beneath the form field. Optional.
-	 *     @type mixed  $placeholder The placeholder text, if applicable. Optional.
 	 *     @type mixed  $label_for   When supplied, the setting title will be wrapped in a `<label>` element, its `for` attribute populated with this value. Optional.
 	 *     @type mixed  $class       CSS Class to be added to the `<tr>` element when the field is output. Optional.
 	 *     @type array  $data_args {
@@ -291,9 +289,6 @@ class Field {
 			'name',
 			'id',
 		);
-		if ( array_key_exists( 'placeholder', $field ) && ! empty( $field['placeholder'] ) ) {
-			$extra_attrs['placeholder'] = 'placeholder="' . esc_attr( $field['placeholder'] ) . '"';
-		}
 		// Then choose those among the data_args array members.
 		$field_allowed_html_key = array_keys( $this->allowed_html )[0];
 		$field_allowed_html     = $this->allowed_html[ $field_allowed_html_key ];

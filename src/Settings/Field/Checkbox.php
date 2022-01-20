@@ -30,7 +30,6 @@ class Checkbox extends Field {
 	 */
 	protected $default_field = array(
 		'type'        => 'checkbox',
-		'placeholder' => '',
 		'data_args'   => array(
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,

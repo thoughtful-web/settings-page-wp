@@ -30,7 +30,6 @@ class Email extends Field {
 	 */
 	protected $default_field = array(
 		'type'        => 'email',
-		'placeholder' => '',
 		'data_args'   => array(
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,

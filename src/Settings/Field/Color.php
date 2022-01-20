@@ -30,7 +30,6 @@ class Color extends Field {
 	 */
 	protected $default_field = array(
 		'type'        => 'color',
-		'placeholder' => '',
 		'data_args'   => array(
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,
@@ -71,7 +70,6 @@ class Color extends Field {
 	 *     @type string $id          Slug-name to identify the field. Used in the 'id' attribute of tags. Required.
 	 *     @type string $type        The type attribute. Required.
 	 *     @type string $desc        The description. Optional.
-	 *     @type mixed  $placeholder The placeholder text, if applicable. Optional.
 	 *     @type string $default     The default value. Optional.
 	 *     @type mixed  $label_for   When supplied, the setting title will be wrapped in a `<label>` element, its `for` attribute populated with this value. Optional.
 	 *     @type mixed  $class       CSS Class to be added to the `<tr>` element when the field is output. Optional.

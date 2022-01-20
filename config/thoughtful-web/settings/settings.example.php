@@ -50,8 +50,8 @@ return array(
 					'id'          => 'unique_text_field',
 					'type'        => 'text',
 					'description' => 'My text field description',
-					'placeholder' => 'my placeholder',
 					'data_args'   => array(
+						'placeholder'   => 'my placeholder',
 						'default'       => 'A thoughtful, optional, default value',
 						'data-lpignore' => 'true',
 						'size'          => '40',
@@ -71,7 +71,9 @@ return array(
 					'id'          => 'unique_textarea_field',
 					'type'        => 'textarea',
 					'description' => 'My textarea field',
-					'placeholder' => 'my placeholder',
+					'data_args'   => array(
+						'placeholder' => 'my placeholder',
+					)
 				),
 				array(
 					'label'       => 'My Checkbox Field',
@@ -117,7 +119,7 @@ return array(
 					'type'        => 'wp_editor',
 					'description' => 'My WP Editor field description',
 					'data_args'   => array(
-						'default' => 'my placeholder',
+						'default' => 'my default value',
 					),
 				),
 				array(
@@ -125,11 +127,11 @@ return array(
 					'id'          => 'unique_decimal_number_field',
 					'type'        => 'number',
 					'description' => 'My number field description',
-					'placeholder' => 'Multiple of 0.1',
 					'data_args'   => array(
-						'step' => '0.1',
-						'min'  => '0',
-						'max'  => '10',
+						'placeholder' => 'Multiple of 0.1',
+						'step'        => '0.1',
+						'min'         => '0',
+						'max'         => '10',
 					),
 				),
 				array(
@@ -137,11 +139,11 @@ return array(
 					'id'          => 'unique_negative_number_field',
 					'type'        => 'number',
 					'description' => 'My negative number field description',
-					'placeholder' => 'Multiple of -1',
 					'data_args'   => array(
-						'step' => '1',
-						'min'  => '-10',
-						'max'  => '0',
+						'placeholder' => 'Multiple of -1',
+						'step'        => '1',
+						'min'         => '-10',
+						'max'         => '0',
 					),
 				),
 				array(
@@ -182,16 +184,18 @@ return array(
 					'id'          => 'unique_email_field',
 					'type'        => 'email',
 					'description' => 'My email field description',
-					'placeholder' => 'my placeholder',
+					'data_args'   => array(
+						'placeholder' => 'my placeholder',
+					)
 				),
 				array(
 					'label'       => 'My Phone Field',
 					'id'          => 'unique_phone_field',
 					'type'        => 'tel',
 					'description' => 'Example: 555-555-5555',
-					'placeholder' => '555-555-5555',
 					'data_args'   => array(
-						'pattern' => '[0-9]{3}-[0-9]{3}-[0-9]{4}',
+						'placeholder' => '555-555-5555',
+						'pattern'     => '[0-9]{3}-[0-9]{3}-[0-9]{4}',
 					),
 				),
 				array(
@@ -199,9 +203,9 @@ return array(
 					'id'          => 'unique_url_field',
 					'type'        => 'url',
 					'description' => 'Must have the "https" protocol. Example: https://example.com/',
-					'placeholder' => 'https://example.com/',
 					'data_args'   => array(
-						'pattern' => 'https://.*',
+						'placeholder' => 'https://example.com/',
+						'pattern'     => 'https://.*',
 					),
 				),
 				array(
