@@ -2,21 +2,22 @@
 /**
  * The file that extends WP_Error notification capabilities.
  *
- * @package    ThoughtfulWeb\LibraryWP
+ * @package    ThoughtfulWeb\SettingsPageWP
  * @subpackage Settings
  * @author     Zachary Kendall Watkins <watkinza@gmail.com>
  * @copyright  Zachary Kendall Watkins 2022
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Admin/Page/Settings.php
+ * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Settings.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Admin\Page;
+namespace ThoughtfulWeb\SettingsPageWP;
 
-use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Config;
-use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section;
-use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\TextField;
+use \ThoughtfulWeb\SettingsPageWP\Settings\Config;
+use \ThoughtfulWeb\SettingsPageWP\Settings\Section;
+use \ThoughtfulWeb\SettingsPageWP\Settings\TextField;
+
 /**
  * The Admin Settings Page Class.
  *
@@ -63,7 +64,7 @@ class Settings {
 	public function __construct( $config = array() ) {
 
 		// Store attributes from the compiled parameters.
-		$config_obj = new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Config( $config );
+		$config_obj = new \ThoughtfulWeb\SettingsPageWP\Settings\Config( $config );
 
 		// Assign compiled values.
 		$this->config       = $config_obj->get();
@@ -224,7 +225,7 @@ class Settings {
 	private function add_sections() {
 
 		foreach ( $this->config['sections'] as $id => $section ) {
-			new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Section(
+			new \ThoughtfulWeb\SettingsPageWP\Settings\Section(
 				$id,
 				$section['title'],
 				$section['description'],
@@ -259,7 +260,7 @@ class Settings {
 
 				switch ( $field['type'] ) {
 					case 'text':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Text(
+						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Text(
 							$field,
 							$this->menu_slug,
 							$section_id,
@@ -267,7 +268,7 @@ class Settings {
 						);
 						break;
 					case 'textarea':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Textarea(
+						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Textarea(
 							$field,
 							$this->menu_slug,
 							$section_id,
@@ -275,7 +276,7 @@ class Settings {
 						);
 						break;
 					case 'number':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Number(
+						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Number(
 							$field,
 							$this->menu_slug,
 							$section_id,
@@ -284,14 +285,14 @@ class Settings {
 						break;
 					case 'checkbox':
 						if ( array_key_exists( 'choice', $field ) ) {
-							new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Checkbox(
+							new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Checkbox(
 								$field,
 								$this->menu_slug,
 								$section_id,
 								$this->option_group
 							);
 						} elseif ( array_key_exists( 'choices', $field ) ) {
-							new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Checkboxes(
+							new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Checkboxes(
 								$field,
 								$this->menu_slug,
 								$section_id,
@@ -300,7 +301,7 @@ class Settings {
 						}
 						break;
 					case 'wp_editor':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\WP_Editor(
+						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\WP_Editor(
 							$field,
 							$this->menu_slug,
 							$section_id,
@@ -308,7 +309,7 @@ class Settings {
 						);
 						break;
 					case 'color':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Color(
+						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Color(
 							$field,
 							$this->menu_slug,
 							$section_id,
@@ -316,7 +317,7 @@ class Settings {
 						);
 						break;
 					case 'email':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Email(
+						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Email(
 							$field,
 							$this->menu_slug,
 							$section_id,
@@ -324,7 +325,7 @@ class Settings {
 						);
 						break;
 					case 'select':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Select(
+						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Select(
 							$field,
 							$this->menu_slug,
 							$section_id,
@@ -332,7 +333,7 @@ class Settings {
 						);
 						break;
 					case 'tel':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Phone(
+						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Phone(
 							$field,
 							$this->menu_slug,
 							$section_id,
@@ -340,7 +341,7 @@ class Settings {
 						);
 						break;
 					case 'url':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Url(
+						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Url(
 							$field,
 							$this->menu_slug,
 							$section_id,
@@ -348,7 +349,7 @@ class Settings {
 						);
 						break;
 					case 'password':
-						new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field\Password(
+						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Password(
 							$field,
 							$this->menu_slug,
 							$section_id,

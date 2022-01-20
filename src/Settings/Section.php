@@ -2,17 +2,17 @@
 /**
  * The file that creates a Section for the Settings page.
  *
- * @package    ThoughtfulWeb\LibraryWP
+ * @package    ThoughtfulWeb\SettingsPageWP
  * @subpackage Section
  * @author     Zachary Kendall Watkins <watkinza@gmail.com>
  * @copyright  Zachary Kendall Watkins 2022
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Admin/Page/Settings/Section.php
+ * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Settings/Section.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
+namespace ThoughtfulWeb\SettingsPageWP\Settings;
 
 /**
  * The Section class, which registers the section and outputs a description.

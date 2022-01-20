@@ -1,27 +1,27 @@
 <?php
 /**
- * The file that extends the Field class into a WP Editor Field for the Settings API.
+ * The file that extends the Field class into a Select Field with multiselect support for the Settings API.
  *
- * @package    ThoughtfulWeb\LibraryWP
- * @subpackage Field
+ * @package    ThoughtfulWeb\SettingsPageWP
+ * @subpackage Settings
  * @author     Zachary Kendall Watkins <watkinza@gmail.com>
  * @copyright  Zachary Kendall Watkins 2022
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Admin/Page/Settings/Field/WP_Editor.php
+ * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Settings/Field/Select.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
+namespace ThoughtfulWeb\SettingsPageWP\Settings\Field;
 
-use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
+use \ThoughtfulWeb\SettingsPageWP\Settings\Field;
 
 /**
- * The WP_Editor Field class.
+ * The Checkboxes Field class.
  *
  * @since 0.1.0
  */
-class WP_Editor extends Field {
+class Select extends Field {
 
 	/**
 	 * The default values for required $field members.
@@ -29,24 +29,47 @@ class WP_Editor extends Field {
 	 * @var array $default The default field parameter member values.
 	 */
 	protected $default_field = array(
-		'type'      => 'wp_editor',
+		'type'      => 'select',
+		'prompt'    => 'Please choose an option',
 		'data_args' => array(
-			'type'              => 'string',
-			'sanitize_callback' => true,
 			'show_in_rest'      => false,
+			'sanitize_callback' => true,
+			'type'              => 'string',
 			'description'       => '',
 		),
 	);
 
 	/**
-	 * Allowed HTML. Defined during construction.
+	 * Allowed HTML.
 	 *
 	 * @var array $allowed_html The allowed HTML for the element produced by this class.
 	 */
-	protected $allowed_html;
+	protected $allowed_html = array(
+		'select' => array(
+			'autocomplete' => true,
+			'class'        => true,
+			'data-*'       => true,
+			'disabled'     => true,
+			'multiple'     => true,
+			'id'           => true,
+			'name'         => true,
+			'required'     => true,
+			'size'         => true,
+		),
+		'option' => array(
+			'disabled' => true,
+			'label'    => true,
+			'selected' => true,
+			'value'    => true,
+		),
+		'label'  => array(
+			'for' => true,
+		),
+		'br'     => true,
+	);
 
 	/**
-	 * Constructor for the WP_Editor Field class.
+	 * Constructor for the Color Field class.
 	 *
 	 * @param array  $field {
 	 *     The field registration arguments.
@@ -79,15 +102,22 @@ class WP_Editor extends Field {
 		// Call the Field::construct() method.
 		parent::__construct( $field, $menu_slug, $section_id, $option_group );
 
-		// Define the allowed HTML.
-		$this->allowed_html = wp_kses_allowed_html( 'post' );
+		// Ensure the correct default is present.
+		if (
+			array_key_exists( 'multiple', $this->field['data_args'] )
+			&& array_key_exists( 'default', $this->field['data_args'] )
+			&& ! is_array( $this->field['data_args']['default'] )
+		) {
+			$this->field['data_args']['default'] = array( $this->field['data_args']['default'] );
+		}
 
 	}
 
 	/**
 	 * Get the settings option array and print one of its values.
 	 *
-	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/option
 	 *
 	 * @param array $args The arguments needed to render the setting field.
 	 *
@@ -96,29 +126,43 @@ class WP_Editor extends Field {
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
-		$value     = get_option( $args['id'] );
-		$content   = stripslashes( $value );
-		$editor_id = $args['id'];
-		$settings  = array(
-			'textarea_name' => $args['id'],
-		);
+		$value       = get_option( $args['id'] );
+		$value_arr   = is_array( $value ) ? $value : array( $value );
+		$extra_attrs = $this->get_optional_attributes( $args );
+		$multi_mod   = array_key_exists( 'multiple', $args['data_args'] ) ? '[]' : '';
 
 		// Render the form field output.
-		$settings_default = array(
-			'tinymce'        => array(
-				'toolbar1'                     => 'formatselect,bold,italic,underline,bullist,numlist,blockquote,hr,separator,alignleft,aligncenter,alignright,alignjustify,indent,outdent,charmap,link,unlink,undo,redo,fullscreen,wp_help',
-				'toolbar2'                     => '',
-				'paste_remove_styles'          => true,
-				'paste_remove_spans'           => true,
-				'paste_strip_class_attributes' => 'all',
-			),
-			'default_editor' => '',
-			'textarea_rows'  => 10,
-			'editor_css'     => '<style>body{background-color:#FFF;}</style>',
+		$output   = array();
+		$output[] = sprintf(
+			'<select id="%1$s" name="%1$s%2$s" %3$s>',
+			esc_attr( $args['id'] ),
+			$multi_mod,
+			$extra_attrs
 		);
-		$settings         = array_merge( $settings_default, $settings );
+		if ( $args['prompt'] ) {
+			$output[] = sprintf(
+				'<option value="">%1$s</option>',
+				$args['prompt']
+			);
+		}
+		foreach ( $args['choices'] as $option_value => $option_text ) {
+			$selected = '';
+			if ( $value && in_array( $option_value, $value_arr, true ) ) {
+				$selected = 'selected ';
+			}
+			$extra_attrs = $this->get_optional_attributes( $args );
+			$output[]    = sprintf(
+				'<option value="%1$s" %2$s%3$s/>%4$s</option>',
+				$option_value,
+				$selected,
+				$extra_attrs,
+				$option_text
+			);
 
-		wp_editor( $content, $editor_id, $settings );
+		}
+		$output[] = '</select>';
+		$output = implode( '', $output );
+		echo wp_kses( $output, $this->allowed_html );
 
 		// Render the description text.
 		$this->output_description( $args );

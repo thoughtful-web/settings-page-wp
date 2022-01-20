@@ -7,17 +7,17 @@
  *
  * @todo Make error messages configurable via a file with sprintf-compatible string template characters.
  *
- * @package    ThoughtfulWeb\LibraryWP
+ * @package    ThoughtfulWeb\SettingsPageWP
  * @subpackage Settings
  * @author     Zachary Kendall Watkins <watkinza@gmail.com>
  * @copyright  2022 Zachary Kendall Watkins
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Admin/Page/Settings/Sanitize.php
+ * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Settings/Sanitize.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
+namespace ThoughtfulWeb\SettingsPageWP\Settings;
 
 /**
  * The Sanitize class, which ensures safe and correct values are achieved when the Option value is updated.

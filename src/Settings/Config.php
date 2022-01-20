@@ -2,17 +2,17 @@
 /**
  * The file that extends WP_Error notification capabilities.
  *
- * @package    ThoughtfulWeb\LibraryWP
+ * @package    ThoughtfulWeb\SettingsPageWP
  * @subpackage Settings
  * @author     Zachary Kendall Watkins <watkinza@gmail.com>
  * @copyright  Zachary Kendall Watkins 2022
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Admin/Page/Settings/Config.php
+ * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Settings/Config.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings;
+namespace ThoughtfulWeb\SettingsPageWP\Settings;
 
 /**
  * The Settings Page Parameter Compiler Class.
@@ -73,7 +73,7 @@ class Config {
 
 		$try_loading_file = empty( $config ) || is_string( $config ) ? true : false;
 		if ( $try_loading_file ) {
-			$path_from_subfolder = dirname( __FILE__, 8 ) . '/config/thoughtful-web/settings/';
+			$path_from_subfolder = dirname( __FILE__, 6 ) . '/config/thoughtful-web/settings/';
 			$is_json             = false;
 			if ( is_string( $config ) && ! empty( $config ) && preg_match( '/(\.php|\.json)$/', $config ) ) {
 				// Load a file from the path provided by the user.

@@ -2,19 +2,19 @@
 /**
  * The file that extends the Field class into a Text Field for the Settings API.
  *
- * @package    ThoughtfulWeb\LibraryWP
+ * @package    ThoughtfulWeb\SettingsPageWP
  * @subpackage Field
  * @author     Zachary Kendall Watkins <watkinza@gmail.com>
  * @copyright  Zachary Kendall Watkins 2022
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Admin/Page/Settings/Field/Textarea.php
+ * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Settings/Field/Textarea.php
  * @since      0.1.0
  */
 
 declare(strict_types=1);
-namespace ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
+namespace ThoughtfulWeb\SettingsPageWP\Settings\Field;
 
-use \ThoughtfulWeb\LibraryWP\Admin\Page\Settings\Field;
+use \ThoughtfulWeb\SettingsPageWP\Settings\Field;
 
 /**
  * The Textarea Field class.

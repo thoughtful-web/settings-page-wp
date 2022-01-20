@@ -62,7 +62,7 @@ The simplest implementation of this module is to include it with the autoloader 
 
 ```
 require __DIR__ . '/vendor/autoload.php;
-new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings();
+new \ThoughtfulWeb\SettingsPageWP\Settings();
 ```
 
 ## Implementing The Class
@@ -77,15 +77,15 @@ To load the Settings class with (or without) a configuration parameter you shoul
 This class will load a file using an `include` statement if it is a PHP file or using `file_read_contents` it is a JSON file. Here is an explanation of the possible values for this parameter:
 
 1. **No parameter** assumes there is a configuration file located here: `./config/thoughtful-web/settings/settings.php`. Example:  
-   i. `new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings();`  
+   i. `new \ThoughtfulWeb\SettingsPageWP\Settings();`  
 
 2. **File name** accepts a PHP or JSON file name and requires the file to be in the plugin's root directory at `./config/thoughtful-web/settings/`. Examples:  
-   i. `new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings( 'filename.php' );`  
-   ii. `new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings( 'filename.json' );`  
+   i. `new \ThoughtfulWeb\SettingsPageWP\Settings( 'filename.php' );`  
+   ii. `new \ThoughtfulWeb\SettingsPageWP\Settings( 'filename.json' );`  
 
 3. **File path** can be any location on your server, as long as the `./src/Admin/Page/Settings/Config.php` class file has read access to it. Examples:  
-   i. `new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings( '/config/settings.php' );`  
-   i. `new \ThoughtfulWeb\LibraryWP\Admin\Page\Settings( '/public_html/wp-content/plugins/wordpress-plugin-name/settings.json' );`  
+   i. `new \ThoughtfulWeb\SettingsPageWP\Settings( '/config/settings.php' );`  
+   i. `new \ThoughtfulWeb\SettingsPageWP\Settings( '/public_html/wp-content/plugins/wordpress-plugin-name/settings.json' );`  
 
 4. **Array** The configuration values in their final state.
 
