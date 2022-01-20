@@ -1,7 +1,7 @@
 # Thoughtful Web Settings Pages for WordPress
 
->Copyright Zachary Kendall Watkins 2022.  
 >Free open source software under the GNU GPL-2.0+ License.  
+>Copyright Zachary Kendall Watkins 2022.  
 
 This library generates both a Settings page and fully qualified Options for each of its fields from a single configuration file.
 
@@ -12,12 +12,12 @@ All HTML attributes for form fields are supported in the configuration and "patt
 1. Settings page generation from a configuration file.
 2. Wrapped around the Core WordPress Settings and Options APIs.
 3. Each Field creates and updates an individual database Option, which has advantages when you use hooks and filters.
-4. Each Field is validated in a manner similar to Core WordPress options.
-5. If a Field type supports it you can add the "pattern" attribute to further validate against a regular expression in both the page and the server whenever calling `update_option`.
-6. Include stylesheet and/or script file parameters in the configuration file.
-7. Include default Field values to automatically load them into the database. If the field is ever emptied these values will load again.
-8. Zero dependencies beyond WordPress itself.
-9. Configure and generate multiple pages or subpages.
+4. Each Field is validated in a manner similar to Core WordPress options and failed server-side validation emits a Settings Page error notice.
+5. If a Field type supports it you can add the "pattern" attribute to further validate against a regular expression in both the page and the server. This works on the Settings page and also when a script calls `update_option( $option, $value )`.
+6. Configure stylesheet and/or script file assets.
+7. Configure default Field values to automatically load them into the database. If the field is ever emptied these values will load instead.
+8. Zero production dependencies beyond PHP, WordPress, and WordPress included JavaScript Iris for the color picker field.
+9. Configure and create multiple pages or subpages.
 
 ## Roadmap
 
@@ -54,7 +54,6 @@ To install this module from Github using Composer, add it as a repository to the
 	}
 }
 ```
-
 
 ## Simplest Implementation
 
