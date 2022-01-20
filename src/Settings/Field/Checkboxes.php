@@ -95,7 +95,7 @@ class Checkboxes extends Field {
 			);
 
 		}
-		$output = implode( "\n", $output );
+		$output = implode( "<br />", $output );
 		echo wp_kses( $output, $this->allowed_html );
 
 		// Render the description text.
