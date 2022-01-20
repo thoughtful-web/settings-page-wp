@@ -94,6 +94,50 @@ This class will load a file using an `include` statement if it is a PHP file or 
 
 Documentation for this framework is a work in progress. Some documentation for creating a configuration file can be found below. You should check out the example configuration file(s) at `./config/thoughtful-web/settings/settings.example.php`. Consider checking out the class variables of each **Field** class file to see which HTML attributes they support - these must be configured in a Field's `data_args` array member.
 
+
+```
+array(
+	'method_args'  => array(
+		'page_title'  => __( 'My Plugin Settings', 'thoughtful-web' ),
+		'menu_title'  => __( 'My Settings', 'thoughtful-web' ),
+		'capability'  => 'manage_options',
+		'menu_slug'   => 'my-plugin-settings',
+		'icon_url'    => 'dashicons-admin-settings',
+		'position'    => 1,
+	),
+	'description'  => 'Settings for my awesome plugin.',
+	'option_group' => 'my_plugin_settings',
+	'stylesheet'   => array(
+		'file' => 'settings.css',
+		'deps' => array(),
+	),
+	'script'       => array(
+		'file'      => 'settings.js',
+		'deps'      => array(),
+		'in_footer' => true,
+	),
+	'sections'     => array(
+		array(
+			'section' => 'unique_section_id',
+			'title'   => __( 'My Section', 'thoughtful-web' ),
+			'fields'  => array(
+				array(
+					'label' => 'My text field',
+					'id'    => 'unique_text_field',
+					'type'  => 'text',
+				),
+			),
+		),
+		array(
+			'section'     => 'unique_section_two_id',
+			'title'       => __( 'Included File', 'thoughtful-web' ),
+			'description' => __( 'Displaying a helpful file.', 'thoughtful-web' ),
+			'include'     => __DIR__ . '/views/file.php',
+		),
+	),
+);
+```
+
 The topmost configuration array accepts six parameters: method_args, description, option_group, stylesheet, script, and sections.
 
 ### method_args
@@ -123,58 +167,10 @@ The "script" key allows you to register and enqueue your javascript file for the
 ### sections
 
 The "sections" key accepts an array of Section configurations, each with either an "include" or "fields" key to determine their main content.
-```
-array(
-	'method_args'  => array(
-		'page_title'  => __( 'My Settings', 'thoughtful-web' ),
-		'menu_title'  => __( 'My Settings', 'thoughtful-web' ),
-		'capability'  => 'manage_options',
-		'menu_slug'   => 'my-settings',
-		'icon_url'    => 'dashicons-admin-settings',
-		'position'    => 1,
-	),
-	'description'  => 'Settings for error monitoring features.',
-	'option_group' => 'debug_settings',
-	'stylesheet'   => array(
-		'file' => 'settings.css',
-		'deps' => array(),
-	),
-	'script'       => array(
-		'file'      => 'settings.js',
-		'deps'      => array(),
-		'in_footer' => true,
-	),
-	'sections'     => array(
-		array(
-			'section' => 'section_error_logs',
-			'title'   => __( 'Error Logs', 'thoughtful-web' ),
-			'fields'  => array(
-				array(
-					'label' => 'My text field',
-					'id'    => 'unique_text_field',
-					'type'  => 'text',
-			),
-		),
-	),
-);
-```
 
 ## Sections
 
 A Section requires "section" and "title" values and either a "fields" or "include" value. Example:
-
-```
-array(
-	'section' => 'section_error_logs',
-	'title'   => __( 'Error Logs', 'thoughtful-web' ),
-	'fields'  => array(
-		array(
-			'label' => 'My text field',
-			'id'    => 'unique_text_field',
-			'type'  => 'text',
-	),
-),
-```
 
 You may include a file by path reference in the Section configuration using the "include" value, which accepts an absolute file path string. Example:
 
