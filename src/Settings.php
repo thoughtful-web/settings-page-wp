@@ -140,7 +140,7 @@ class Settings {
 	public function register_stylesheet() {
 
 		$slug        = $this->config['method_args']['menu_slug'];
-		$plugin_root = dirname( __FILE__, 7 );
+		$plugin_root = dirname( __FILE__, 5 );
 		$config_path = '/config/thoughtful-web/settings/';
 		$deps        = array_key_exists( 'deps', $this->config['stylesheet'] ) ? $this->config['stylesheet']['deps'] : array();
 		$file_url    = plugins_url( basename( $plugin_root ) . $config_path . $this->config['stylesheet']['file'] );
@@ -174,7 +174,7 @@ class Settings {
 	public function register_script() {
 
 		$slug        = $this->config['method_args']['menu_slug'];
-		$plugin_root = dirname( __FILE__, 7 );
+		$plugin_root = dirname( __FILE__, 5 );
 		$config_path = '/config/thoughtful-web/settings/';
 		$deps        = array_key_exists( 'deps', $this->config['script'] ) ? $this->config['script']['deps'] : array();
 		$file_url    = plugins_url( basename( $plugin_root ) . $config_path . $this->config['script']['file'] );
