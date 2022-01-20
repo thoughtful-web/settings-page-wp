@@ -27,6 +27,7 @@ Features, changes, and fixes which I plan on implementing:
 2. Continue developing the documentation.
 3. Change the default value configuration for the Checkbox field to mimic that of the Checkboxes field.
 4. Move the "placeholder" value to the data_args array.
+5. Fix data attribute output being filtered out of valid HTML using the wildcard "data-*" value.
 ## Requirements
 
 1. WordPress 5.4 and above.

@@ -282,8 +282,8 @@ class Field {
 
 		// Determine additional HTML attributes to append to the element.
 		$extra_attrs = array();
-		// First choose those among the top-level array members.
-		$disallowed_data_args_as_attrs = array(
+		// Disallow some valid attributes from being configured, which our library already handles.
+		$disallowed_config_attrs = array(
 			'type',
 			'value',
 			'name',
@@ -293,8 +293,18 @@ class Field {
 		$field_allowed_html_key = array_keys( $this->allowed_html )[0];
 		$field_allowed_html     = $this->allowed_html[ $field_allowed_html_key ];
 		foreach ( $field['data_args'] as $attr => $attr_value ) {
-			if ( array_key_exists( $attr, $field_allowed_html ) && ! in_array( $attr, $disallowed_data_args_as_attrs, true ) ) {
-				$extra_attrs[ $attr ] = $attr . '="' . esc_attr( $attr_value ) . '"';
+			// Test the data_arg to see if it is an allowable HTML attribute.
+			if ( array_key_exists( $attr, $field_allowed_html ) && ! in_array( $attr, $disallowed_config_attrs, true ) ) {
+				// Output the attribute if it is a string or true.
+				if ( is_string( $attr ) || true === $attr ) {
+					$output_attr = $attr;
+				}
+				// Output the attribute value if it is a non-empty string.
+				if ( is_string( $attr_value ) && ! empty( $attr_value ) ) {
+					$output_attr .= '="' . esc_attr( $attr_value ) . '"';
+				}
+				// Append the output.
+				$extra_attrs[ $attr ] = $output_attr;
 			}
 		}
 		// Then combine the results into a string.
