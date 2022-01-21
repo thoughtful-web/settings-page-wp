@@ -23,13 +23,19 @@ All HTML attributes for form fields are supported in the configuration and "patt
 
 Features, changes, and fixes which I plan on implementing:
 
-1. Add a network admin settings page configuration.
-2. Continue developing the documentation.
+1. Continue developing the documentation.
+2. Create a form to generate a configuration file with.
+3. Add a network admin settings page configuration.
 
 ## Requirements
 
 1. WordPress 5.4 and above.
 2. PHP 7.3.5 and above.
+
+## Development Requirements
+
+1. PHP Codesniffer composer module
+2. WP Coding Standards composer module
 
 ## Installation
 
