@@ -28,8 +28,8 @@ return array(
 		'icon_url'   => 'dashicons-admin-settings',
 		'position'   => 2,
 	),
-	'description'  => 'A thoughtful settings page description.',
 	'option_group' => 'thoughtful_settings',
+	'description'  => 'A thoughtful settings page description.',
 	'stylesheet'   => array(
 		'file' => 'settings.css',
 		'deps' => array(),

@@ -26,6 +26,12 @@ Features, changes, and fixes which I plan on implementing:
 1. Continue developing the documentation.
 2. Create a form to generate a configuration file with.
 3. Add a network admin settings page configuration.
+4. Add a filter to the Select Field configuration to enable populating choices with data like:  
+   a) Users  
+   b) User Roles  
+   c) Post Types  
+   d) Taxonomies  
+   e) Image Sizes  
 
 ## Requirements
 
@@ -111,8 +117,8 @@ array(
 		'icon_url'    => 'dashicons-admin-settings',
 		'position'    => 1,
 	),
-	'description'  => 'Settings for my awesome plugin.',
 	'option_group' => 'my_plugin_settings',
+	'description'  => 'Settings for my awesome plugin.',
 	'stylesheet'   => array(
 		'file' => 'settings.css',
 		'deps' => array(),
