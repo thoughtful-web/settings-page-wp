@@ -32,6 +32,7 @@ Features, changes, and fixes which I plan on implementing:
    c) Post Types  
    d) Taxonomies  
    e) Image Sizes  
+5. Have the Color field use Iris if the current browser doesn't support the color input type. This will not be implemented if default browser color inputs lack essential features that Iris provides.
 
 ## Requirements
 
