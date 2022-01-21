@@ -32,7 +32,7 @@
                     "data_args": {
                         "placeholder": "my placeholder",
                         "default": "A thoughtful, optional, default value",
-                        "data-lpignore": true,
+                        "data-lpignore": "true",
                         "size": "40"
                     }
                 },

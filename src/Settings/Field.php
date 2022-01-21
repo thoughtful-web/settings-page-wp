@@ -294,7 +294,17 @@ class Field {
 		$field_allowed_html     = $this->allowed_html[ $field_allowed_html_key ];
 		foreach ( $field['data_args'] as $attr => $attr_value ) {
 			// Test the data_arg to see if it is an allowable HTML attribute.
-			if ( array_key_exists( $attr, $field_allowed_html ) && ! in_array( $attr, $disallowed_config_attrs, true ) ) {
+			$apply_attr = false;
+			if ( array_key_exists( $attr, $field_allowed_html )
+				&& ! in_array( $attr, $disallowed_config_attrs, true ) ) {
+				// This attribute is explicitly declared in the allowed_html class variable and
+				// not in the disallow list.
+				$apply_attr = true;
+			} elseif ( strpos( $attr, 'data-' ) === 0 ) {
+				// This is a data attribute.
+				$apply_attr = true;
+			}
+			if ( $apply_attr ) {
 				// Output the attribute if it is a string or true.
 				if ( is_string( $attr ) || true === $attr ) {
 					$output_attr = $attr;
