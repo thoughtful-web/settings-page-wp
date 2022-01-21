@@ -25,7 +25,6 @@ Features, changes, and fixes which I plan on implementing:
 
 1. Add a network admin settings page configuration.
 2. Continue developing the documentation.
-3. Change the default value configuration for the Checkbox field to mimic that of the Checkboxes field.
 
 ## Requirements
 
@@ -234,7 +233,7 @@ Here is a guide for implementing each Field type. You may also wish to refer to 
 
 ### Checkbox
 
-The Checkbox field uses the "choice" value to configure a single checkbox field whose value is input into the database as a string. Multiple checkboxes may be configured using "choices" instead of "choice". Each choice follows a value => label format. The "default" data_args value of a singular Checkbox configuration will be changed soon to imitate the multiple Checkbox declaration. Required values are: label, id, type, choice.
+The Checkbox field uses the "choice" value to configure a single checkbox field whose value is input into the database as a string. Multiple checkboxes may be configured using "choices" instead of "choice". Each choice follows a "value => label" format. The "default" data_args value of a singular Checkbox configuration accepts a string and the multiple Checkbox configuration accepts an array of choice values. Required values are: label, id, type, choice.
 
 ```
 array(
@@ -246,9 +245,7 @@ array(
 		'1' => 'My Choice',
 	),
 	'data_args'   => array(
-		'default' => array(
-			'1' => 'My Choice',
-		),
+		'default' => '1',
 	),
 ),
 ```
