@@ -254,19 +254,27 @@ class Sanitize {
 				$value = wp_kses_post( $value );
 				break;
 			case 'checkbox':
-				error_log('checkbox:' . serialize($value));
+				// Detect if this is for a singular checkbox field or not.
+				$is_singular = array_key_exists( 'choice', $this->field );
 				// Allow empty arrays and strings.
-				if ( empty( $value ) && ( is_array( $value ) || is_string( $value ) ) ) {
-					break;
+				if ( empty( $value ) ) {
+					// Handle passed null values.
+					if ( is_null( $value ) ) {
+						$value = $is_singular ? '' : array();
+					}
+					// pass on empty values.
+					if ( is_string( $value ) || is_array( $value ) ) {
+						break;
+					}
 				}
-				if ( array_key_exists( 'choice', $this->field ) ) {
+				if ( $is_singular ) {
 					// Detect if the option is trying to be set to an empty value.
 					$possible_values = array( strval( array_key_first( $this->field['choice'] ) ), '' );
 					if ( ! in_array( $value, $possible_values ) ) {
 						// The value is not the preconfigured value.
 						$error = __( 'The value submitted is not a choice. Please provide the preconfigured value or an empty string.', 'thoughtful-web' );
 					}
-				} elseif ( array_key_exists( 'choices', $this->field ) ) {
+				} else {
 					// Get the predefined choices from the configuration variable.
 					$config_choices = array_keys( $this->field['choices'] );
 					$final_choices  = array();
@@ -358,7 +366,7 @@ class Sanitize {
 			// default value to an empty value a sanitization step.
 			$value = apply_filters( "default_option_{$option}", $data_args['default'], $option, false );
 			// Add a notice.
-			add_settings_error( $option, "default_{$option}", "Restoring the default option for {$this->field['label']}." );
+			add_settings_error( $option, "default_{$option}", "Restoring the default value for {$this->field['label']}." );
 		}
 
 		return $value;
