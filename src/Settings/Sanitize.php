@@ -254,19 +254,17 @@ class Sanitize {
 				$value = wp_kses_post( $value );
 				break;
 			case 'checkbox':
-				// Detect if the option is trying to be set to an empty value.
-				if ( empty( $value ) ) {
-					$value = array();
+				error_log('checkbox:' . serialize($value));
+				// Allow empty arrays and strings.
+				if ( empty( $value ) && ( is_array( $value ) || is_string( $value ) ) ) {
 					break;
 				}
 				if ( array_key_exists( 'choice', $this->field ) ) {
-					if ( ! is_array( $value ) ) {
-						$value = array( strval( $value ) => $this->field['choice'] );
-					}
-					// If the choice value is present in the configuration and it is not a configured choice then it is a falsified choice.
-					if ( ! empty( $value ) && array_key_first( $this->field['choice'] ) !== array_key_first( $value ) ) {
-						// Value is falsified.
-						$error = __( 'The value submitted is not the preconfigured value. Please use the preconfigured value or an empty string.', 'thoughtful-web' );
+					// Detect if the option is trying to be set to an empty value.
+					$possible_values = array( strval( array_key_first( $this->field['choice'] ) ), '' );
+					if ( ! in_array( $value, $possible_values ) ) {
+						// The value is not the preconfigured value.
+						$error = __( 'The value submitted is not a choice. Please provide the preconfigured value or an empty string.', 'thoughtful-web' );
 					}
 				} elseif ( array_key_exists( 'choices', $this->field ) ) {
 					// Get the predefined choices from the configuration variable.
@@ -356,9 +354,11 @@ class Sanitize {
 			// Return the default value.
 			// I spent a lot of time searching through the WordPress Core "option.php" file to figure out how best to restore
 			// the default value when it is emptied. The update_option function does not call the default_option_$option filter
-			// hook as of this writing, but it does call the sanitize_option function. This is why we consider applying the
+			// hook as of this writing, but it does call the sanitize_option function. This is why I consider applying the
 			// default value to an empty value a sanitization step.
 			$value = apply_filters( "default_option_{$option}", $data_args['default'], $option, false );
+			// Add a notice.
+			add_settings_error( $option, "default_{$option}", "Restoring the default option for {$this->field['label']}." );
 		}
 
 		return $value;

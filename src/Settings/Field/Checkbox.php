@@ -74,33 +74,25 @@ class Checkbox extends Field {
 	public function output( $args ) {
 
 		// Assemble the variables necessary to output the form field from settings.
-		$value       = get_option( $args['id'] );
-		$extra_attrs = $this->get_optional_attributes( $args );
+		$value            = get_option( $args['id'] );
+		$value_if_checked = strval( array_key_first( $args['choice'] ) );
+		$extra_attrs      = $this->get_optional_attributes( $args );
 
 		// Render the form field output.
-		$output = array();
-		foreach ( $args['choice'] as $choice_value => $choice_label ) {
-			$checked = '';
-			if ( is_array( $value ) && ! empty( $value ) && in_array( $choice_value, $value, true ) ) {
-				$checked = 'checked ';
-			} elseif ( is_string( $value ) && $value === $choice_value ) {
-				$checked = 'checked ';
-			} elseif ( is_int( $value ) && intval( $choice_value ) === $value ) {
-				$checked = 'checked ';
-			} elseif ( is_int( $choice_value ) && intval( $value ) === intval( $choice_value ) ) {
-				$checked = 'checked ';
-			}
-			$output[] = sprintf(
-				'<input type="checkbox" id="%1$s__%2$s" name="%1$s" value="%2$s" %3$s%4$s/> <label for="%1$s__%2$s" />%5$s</label>',
-				esc_attr( $args['id'] ),
-				$choice_value,
-				$checked,
-				$extra_attrs,
-				$choice_label
-			);
-
+		$output  = array();
+		$checked = '';
+		if ( $value === $value_if_checked ) {
+			$checked = 'checked ';
 		}
-		$output = implode( '<br />', $output );
+		// Render the output.
+		$output = sprintf(
+			'<input type="checkbox" id="%1$s" name="%1$s" value="%2$s" %3$s%4$s/> <label for="%1$s__%2$s" />%5$s</label>',
+			esc_attr( $args['id'] ),
+			esc_attr( strval( array_key_first( $args['choice'] ) ) ),
+			$checked,
+			$extra_attrs,
+			array_values( $args['choice'] )[0]
+		);
 		echo wp_kses( $output, $this->allowed_html );
 
 		// Render the description text.

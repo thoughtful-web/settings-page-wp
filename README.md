@@ -26,6 +26,7 @@ Features, changes, and fixes which I plan on implementing:
 1. Add a network admin settings page configuration.
 2. Continue developing the documentation.
 3. Change the default value configuration for the Checkbox field to mimic that of the Checkboxes field.
+
 ## Requirements
 
 1. WordPress 5.4 and above.
