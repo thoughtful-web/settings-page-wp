@@ -97,6 +97,11 @@ class Page {
 
 		$has_stylesheet = false;
 
+		// Exit early if the user lacks the capability provided.
+		if ( ! current_user_can( $this->config['method_args']['capability'] ) ) {
+			return $has_stylesheet;
+		}
+
 		if (
 			array_key_exists( 'stylesheet', $this->config )
 			&& ! empty( $this->config['stylesheet'] )
@@ -118,6 +123,11 @@ class Page {
 
 		$has_script = false;
 
+		// Exit early if the user lacks the capability provided.
+		if ( ! current_user_can( $this->config['method_args']['capability'] ) ) {
+			return $has_script;
+		}
+
 		if (
 			array_key_exists( 'script', $this->config )
 			&& ! empty( $this->config['script'] )
@@ -136,11 +146,6 @@ class Page {
 	 * @return void
 	 */
 	public function register_stylesheet() {
-
-		// Exit early if the user lacks the capability provided.
-		if ( ! current_user_can( $this->config['method_args']['capability'] ) ) {
-			return;
-		}
 
 		$slug        = $this->config['method_args']['menu_slug'];
 		$plugin_root = dirname( __FILE__, 5 );
@@ -163,11 +168,6 @@ class Page {
 	 */
 	public function enqueue_stylesheet( $hook_suffix ) {
 
-		// Exit early if the user lacks the capability provided.
-		if ( ! current_user_can( $this->config['method_args']['capability'] ) ) {
-			return;
-		}
-
 		if ( false !== strpos( $hook_suffix, 'page_' . $this->config['method_args']['menu_slug'] ) ) {
 			wp_enqueue_style( 'settings-' . $this->config['method_args']['menu_slug'] );
 		}
@@ -180,11 +180,6 @@ class Page {
 	 * @return void
 	 */
 	public function register_script() {
-
-		// Exit early if the user lacks the capability provided.
-		if ( ! current_user_can( $this->config['method_args']['capability'] ) ) {
-			return;
-		}
 
 		$slug        = $this->config['method_args']['menu_slug'];
 		$plugin_root = dirname( __FILE__, 5 );
@@ -207,11 +202,6 @@ class Page {
 	 * @return void
 	 */
 	public function enqueue_script( $hook_suffix ) {
-
-		// Exit early if the user lacks the capability provided.
-		if ( ! current_user_can( $this->config['method_args']['capability'] ) ) {
-			return;
-		}
 
 		if ( false !== strpos( $hook_suffix, 'page_' . $this->config['method_args']['menu_slug'] ) ) {
 			wp_enqueue_style( 'settings-' . $this->config['method_args']['menu_slug'] );
