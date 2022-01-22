@@ -23,18 +23,17 @@ All HTML attributes for form fields are supported in the configuration and "patt
 
 Features, changes, and fixes which I plan on implementing:
 
-1. Fix default value for Select fields to be a singular value unless it is a multiselect field.
-2. Continue developing the documentation.
-3. Create a form to generate a configuration file with.
-4. Add a network admin settings page configuration.
-5. Add a filter to the Select Field configuration to enable populating choices with data like:  
+1. Continue developing the documentation.
+2. Create a form to generate a configuration file with.
+3. Add a network admin settings page configuration.
+4. Add a filter to the Select Field configuration to enable populating choices with data like:  
    a) Users  
    b) User Roles  
    c) Post Types  
    d) Taxonomies  
    e) Image Sizes  
-6. Allow disabling or removing "choices" from Fields with this value in case we need to scope access to updating these values. Perhaps this should be a filter for the configuration preprocessor.
-7. Consider having the Color field use Iris if the current browser doesn't support the color input type. This will not be implemented if default browser color inputs lack essential features that Iris provides.
+5. Allow disabling or removing "choices" from Fields with this value in case we need to scope access to updating these values. Perhaps this should be a filter for the configuration preprocessor.
+6. Consider having the Color field use Iris if the current browser doesn't support the color input type. This will not be implemented if default browser color inputs lack essential features that Iris provides.
 
 ## Requirements
 
