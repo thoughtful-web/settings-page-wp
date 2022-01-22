@@ -153,15 +153,15 @@ class Field {
 		register_setting( $option_group, $field['id'], $field['data_args'] );
 
 		// Detect the user capability requirement of the field.
-		if ( $capability ) {
-			$this->capability = $capability;
-		} elseif ( array_key_exists( 'capability', $field['data_args'] ) && ! empty( $field['data_args']['capability'] ) ) {
+		if ( array_key_exists( 'capability', $field['data_args'] ) && ! empty( $field['data_args']['capability'] ) ) {
 			$this->capability = $field['data_args']['capability'];
+		} elseif ( $capability ) {
+			$this->capability = $capability;
 		}
 
 		// If the user is not capable of modifying the field, then
 		// only ensure the option is sanitized and defaulted properly.
-		if ( current_user_can( $capability ) ) {
+		if ( current_user_can( $this->capability ) ) {
 
 			// Register the field.
 			add_settings_field(
