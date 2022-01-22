@@ -74,7 +74,7 @@ class Page {
 		$config     = $config_obj->get();
 
 		$settings_obj = new \ThoughtfulWeb\SettingsPageWP\Settings( $config );
-		$this->settings_form_callable = $settings_obj->get_callable_form();
+		$this->settings_form_callable = $settings_obj->settings_form_callable();
 
 		// Assign compiled values.
 		$this->config       = $config;
