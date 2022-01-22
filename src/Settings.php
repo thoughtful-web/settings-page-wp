@@ -26,6 +26,13 @@ use \ThoughtfulWeb\SettingsPageWP\Settings\Field;
 class Settings {
 
 	/**
+	 * User capability requirement for accessing the settings page.
+	 *
+	 * @var string $capability The user capability string.
+	 */
+	private $capability = 'manage_options';
+
+	/**
 	 * Settings page and field Parameters.
 	 *
 	 * @var array $config The Settings page and fieldset parameters.
@@ -36,6 +43,9 @@ class Settings {
 	
 		// Store the configuration.
 		$this->config = $config;
+
+		// Store the capability.
+		$this->capability = $config['method_args']['capability'];
 
 		add_action( 'admin_init', array( $this, 'settings_init' ) );
 	
