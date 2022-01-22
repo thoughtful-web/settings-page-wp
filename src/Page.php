@@ -86,18 +86,6 @@ class Page {
 		// Initialize.
 		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 
-		// Register the stylesheet if present.
-		if ( $this->has_stylesheet() ) {
-			add_action( 'admin_init', array( $this, 'register_stylesheet' ) );
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_stylesheet' ) );
-		}
-		
-		// Register the script if present.
-		if ( $this->has_script() ) {
-			add_action( 'admin_init', array( $this, 'register_script' ) );
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_script' ) );
-		}
-
 	}
 
 	/**
@@ -262,6 +250,18 @@ class Page {
 				$this->settings_form_callable,
 				$this->config['method_args']['position']
 			);
+		}
+
+		// Register the stylesheet if present.
+		if ( $this->has_stylesheet() ) {
+			add_action( 'admin_init', array( $this, 'register_stylesheet' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_stylesheet' ) );
+		}
+		
+		// Register the script if present.
+		if ( $this->has_script() ) {
+			add_action( 'admin_init', array( $this, 'register_script' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_script' ) );
 		}
 
 	}
