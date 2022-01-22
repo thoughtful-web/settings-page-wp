@@ -54,7 +54,7 @@ class Config {
 	 *
 	 * @return void
 	 */
-	public function __construct( $config ) {
+	public function __construct( $config = array() ) {
 
 		$config = $this->maybe_autoload_file( $config );
 
