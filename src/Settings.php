@@ -33,6 +33,20 @@ class Settings {
 	private $capability = 'manage_options';
 
 	/**
+	 * Name the group of database options which the fields represent.
+	 *
+	 * @var string $option_group The database option group name. Lowercase letters and underscores only. If not configured it will default  to the menu_slug method argument with hyphens replaced with underscores.
+	 */
+	private $option_group = 'options';
+
+	/**
+	 * The menu page slug.
+	 *
+	 * @var string $menu_slug The settings page slug for a URL.
+	 */
+	private $menu_slug;
+
+	/**
 	 * Settings page and field Parameters.
 	 *
 	 * @var array $config The Settings page and fieldset parameters.
@@ -41,11 +55,11 @@ class Settings {
 
 	public function construct( $config ) {
 	
-		// Store the configuration.
-		$this->config = $config;
-
-		// Store the capability.
-		$this->capability = $config['method_args']['capability'];
+		// Store the configuration and its key parameters for this file.
+		$this->config       = $config;
+		$this->capability   = $config['method_args']['capability'];
+		$this->menu_slug    = $config['method_args']['menu_slug'];
+		$this->option_group = $config['option_group'];
 
 		add_action( 'admin_init', array( $this, 'settings_init' ) );
 	
