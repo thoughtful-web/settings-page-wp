@@ -33,8 +33,8 @@ Features, changes, and fixes which I plan on implementing:
    c) Post Types  
    d) Taxonomies  
    e) Image Sizes  
-6. Have the Color field use Iris if the current browser doesn't support the color input type. This will not be implemented if default browser color inputs lack essential features that Iris provides.
-7. Allow disabling or removing "choices" from Fields with this value in case we need to scope access to updating these values. Perhaps this should be a filter for the configuration preprocessor.
+6. Allow disabling or removing "choices" from Fields with this value in case we need to scope access to updating these values. Perhaps this should be a filter for the configuration preprocessor.
+7. Consider having the Color field use Iris if the current browser doesn't support the color input type. This will not be implemented if default browser color inputs lack essential features that Iris provides.
 
 ## Requirements
 
