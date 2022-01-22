@@ -7,7 +7,7 @@
  * @author     Zachary Kendall Watkins <watkinza@gmail.com>
  * @copyright  Zachary Kendall Watkins 2022
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Settings.php
+ * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Page.php
  * @since      0.1.0
  */
 
@@ -54,6 +54,12 @@ class Page {
 	private $menu_slug;
 
 	/**
+	 * The Settings class page form hook.
+	 * 
+	 * @var array $settings_form_callable The Settings class callable form.
+	 */
+
+	/**
 	 * Admin settings class constructor.
 	 *
 	 * @since 0.1.0
@@ -65,16 +71,19 @@ class Page {
 
 		// Store attributes from the compiled parameters.
 		$config_obj = new \ThoughtfulWeb\SettingsPageWP\Settings\Config( $config );
+		$config     = $config_obj->get();
+
+		$settings_obj = new \ThoughtfulWeb\SettingsPageWP\Settings( $config );
+		$this->settings_form_callable = $settings_obj->get_callable_form();
 
 		// Assign compiled values.
-		$this->config       = $config_obj->get();
+		$this->config       = $config;
 		$this->capability   = $this->config['method_args']['capability'];
 		$this->menu_slug    = $this->config['method_args']['menu_slug'];
 		$this->option_group = $this->config['option_group'];
 
 		// Initialize.
 		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
-		add_action( 'admin_init', array( $this, 'settings_init' ) );
 
 		// Register the stylesheet if present.
 		if ( $this->has_stylesheet() ) {
@@ -200,180 +209,6 @@ class Page {
 	}
 
 	/**
-	 * Register settings, add sections, and add fields to those sections.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return void
-	 */
-	public function settings_init() {
-
-		$this->add_sections();
-		$this->add_fields();
-
-	}
-
-	/**
-	 * Add settings sections.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return void
-	 */
-	private function add_sections() {
-
-		foreach ( $this->config['sections'] as $id => $section ) {
-			new \ThoughtfulWeb\SettingsPageWP\Settings\Section(
-				$id,
-				$section['title'],
-				$section['description'],
-				$this->menu_slug,
-				$this->capability,
-				$section,
-			);
-		}
-
-	}
-
-	/**
-	 * Add each settings field to the page.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return void
-	 */
-	public function add_fields() {
-
-		foreach ( $this->config['sections'] as $section ) {
-
-			// Skip this section if it is missing fields.
-			if ( ! array_key_exists( 'fields', $section ) ) {
-				continue;
-			}
-
-			$section_id = $section['section'];
-			$fields     = $section['fields'];
-
-			foreach ( $fields as $field ) {
-
-				switch ( $field['type'] ) {
-					case 'text':
-						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Text(
-							$field,
-							$this->menu_slug,
-							$section_id,
-							$this->option_group,
-							$this->capability
-						);
-						break;
-					case 'textarea':
-						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Textarea(
-							$field,
-							$this->menu_slug,
-							$section_id,
-							$this->option_group,
-							$this->capability
-						);
-						break;
-					case 'number':
-						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Number(
-							$field,
-							$this->menu_slug,
-							$section_id,
-							$this->option_group,
-							$this->capability
-						);
-						break;
-					case 'checkbox':
-						if ( array_key_exists( 'choice', $field ) ) {
-							new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Checkbox(
-								$field,
-								$this->menu_slug,
-								$section_id,
-								$this->option_group,
-								$this->capability
-							);
-						} elseif ( array_key_exists( 'choices', $field ) ) {
-							new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Checkboxes(
-								$field,
-								$this->menu_slug,
-								$section_id,
-								$this->option_group,
-								$this->capability
-							);
-						}
-						break;
-					case 'wp_editor':
-						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\WP_Editor(
-							$field,
-							$this->menu_slug,
-							$section_id,
-							$this->option_group,
-							$this->capability
-						);
-						break;
-					case 'color':
-						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Color(
-							$field,
-							$this->menu_slug,
-							$section_id,
-							$this->option_group,
-							$this->capability
-						);
-						break;
-					case 'email':
-						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Email(
-							$field,
-							$this->menu_slug,
-							$section_id,
-							$this->option_group,
-							$this->capability
-						);
-						break;
-					case 'select':
-						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Select(
-							$field,
-							$this->menu_slug,
-							$section_id,
-							$this->option_group,
-							$this->capability
-						);
-						break;
-					case 'tel':
-						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Phone(
-							$field,
-							$this->menu_slug,
-							$section_id,
-							$this->option_group,
-							$this->capability
-						);
-						break;
-					case 'url':
-						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Url(
-							$field,
-							$this->menu_slug,
-							$section_id,
-							$this->option_group,
-							$this->capability
-						);
-						break;
-					case 'password':
-						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Password(
-							$field,
-							$this->menu_slug,
-							$section_id,
-							$this->option_group,
-							$this->capability
-						);
-						break;
-					default:
-						break;
-				}
-			}
-		}
-	}
-
-	/**
 	 * Add the settings page to the Admin navigation menu.
 	 *
 	 * @since 0.1.0
@@ -390,7 +225,7 @@ class Page {
 				$this->config['method_args']['menu_title'],
 				$this->config['method_args']['capability'],
 				$this->config['method_args']['menu_slug'],
-				array( $this, 'site_options_form' ),
+				$this->settings_form_callable,
 				$this->config['method_args']['icon_url'],
 				$this->config['method_args']['position']
 			);
@@ -401,7 +236,7 @@ class Page {
 				$this->config['method_args']['menu_title'],
 				$this->config['method_args']['capability'],
 				$this->config['method_args']['menu_slug'],
-				array( $this, 'site_options_form' ),
+				$this->settings_form_callable,
 				$this->config['method_args']['position']
 			);
 		}
@@ -414,39 +249,6 @@ class Page {
 		if ( $this->has_script() ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_script' ) );
 		}
-
-	}
-
-	/**
-	 * Add content to the Admin settings page.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return void
-	 */
-	public function site_options_form() {
-
-		if ( ! current_user_can( $this->capability ) ) {
-			return;
-		}
-
-		?>
-		<div class="wrap">
-			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-			<?php settings_errors(); ?>
-			<form action="options.php" method="post">
-				<?php
-					// Output security fields for the registered setting.
-					settings_fields( $this->option_group );
-					// Output setting sections and their fields.
-					// (Sections are registered for "$this->menu_slug", each field is registered to a specific section).
-					do_settings_sections( $this->menu_slug );
-					// Output save settings button.
-					submit_button( 'Save Settings' );
-				?>
-			</form>
-		</div>
-		<?php
 
 	}
 }
