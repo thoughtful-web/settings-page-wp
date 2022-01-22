@@ -14,16 +14,16 @@
 declare(strict_types=1);
 namespace ThoughtfulWeb\SettingsPageWP;
 
-use \ThoughtfulWeb\SettingsPageWP\Settings\Config;
 use \ThoughtfulWeb\SettingsPageWP\Settings\Section;
-use \ThoughtfulWeb\SettingsPageWP\Settings\TextField;
+use \ThoughtfulWeb\SettingsPageWP\Settings\Config;
+use \ThoughtfulWeb\SettingsPageWP\Settings\Field;
 
 /**
  * The Admin Settings Page Class.
  *
  * @since 0.1.0
  */
-class Settings {
+class Page {
 
 	/**
 	 * Settings page and field Parameters.
@@ -73,9 +73,7 @@ class Settings {
 		$this->option_group = $this->config['option_group'];
 
 		// Initialize.
-		if ( ! isset( $this->config['network'] ) || ! $this->config['network'] ) {
-			add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
-		}
+		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 		add_action( 'admin_init', array( $this, 'settings_init' ) );
 
 		// Register the stylesheet if present.
@@ -260,7 +258,7 @@ class Settings {
 
 				switch ( $field['type'] ) {
 					case 'text':
-						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Text(
+						new \ThoughtfulWeb\SettingsPageWP\Page\Field\Text(
 							$field,
 							$this->menu_slug,
 							$section_id,
