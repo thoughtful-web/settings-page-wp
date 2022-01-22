@@ -305,7 +305,7 @@ class Sanitize {
 				break;
 			case 'select':
 				// Detect if this is a multiselect field.
-				$is_multiselect = array_key_exists( 'multiple', $data_args ) && false !== boolval( $data_args['multiple'] ) ? true : false;
+				$is_multiselect = array_key_exists( 'multiple', $data_args ) && false !== $data_args['multiple'] ? true : false;
 
 				// Detect if the option is trying to be set to an empty value.
 				if ( empty( $value ) ) {

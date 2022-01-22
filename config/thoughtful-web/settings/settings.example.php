@@ -171,12 +171,16 @@ return array(
 				array(
 					'label'       => 'My Multi-select Field',
 					'id'          => 'unique_multiselect_field',
-					'type'        => 'multiselect',
+					'type'        => 'select',
 					'description' => 'My multi-select field description',
 					'choices'     => array(
 						'option_one'   => 'Option 1',
 						'option_two'   => 'Option 2',
 						'option_three' => 'Option 3',
+					),
+					'data_args'   => array(
+						'multiple' => true,
+						'default'  => array('option_one', 'option_two'),
 					),
 				),
 				array(

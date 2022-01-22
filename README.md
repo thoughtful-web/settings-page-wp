@@ -326,6 +326,10 @@ array(
 
 The Select field supports a "prompt" configuration value for customizing the first `<option>` element's label to describe what a user should do. The default value is "Please choose an option".
 
+**Multiselect**
+
+If you configure the field as a multiselect field, and choose to configure a default value, then you must declare the default value as an array of values.
+
 ```
 array(
 	'label'       => 'My Select Field',
