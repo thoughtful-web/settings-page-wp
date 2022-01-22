@@ -80,6 +80,13 @@ class Field {
 	protected $option_group;
 
 	/**
+	 * User capability
+	 * 
+	 * @var string $capability Capability needed to update the option.
+	 */
+	protected $capability = 'manage_options';
+
+	/**
 	 * Constructor for the Field class.
 	 *
 	 * @param array  $field {
@@ -105,10 +112,17 @@ class Field {
 	 * @param string $menu_slug    The slug-name of the settings page on which to show the section (general, reading, writing, ...).
 	 * @param string $section_id   The slug-name of the section of the settings page in which to show the box.
 	 * @param string $option_group Name the group of database options which the fields represent.
+	 * @param string $capability   The capability needed to update the option.
 	 */
-	public function __construct( $field, $menu_slug, $section_id, $option_group ) {
+	public function __construct( $field, $menu_slug, $section_id, $option_group, $capability ) {
 
 		$this->option_group = $option_group;
+		$this->capability   = array_key_exists( 'capability', $field['data_args'] ) ? $field['data_args']['capability'] : $capability;
+
+		// Render the field if the user is capable.
+		if ( ! current_user_can( $capability ) ) {
+			return;
+		}
 
 		// Merge user-defined field values with default values.
 		$field = $this->apply_defaults( $field );
@@ -211,7 +225,7 @@ class Field {
 	 */
 	public function sanitize( $value ) {
 
-		$sanitizer = new Sanitize( $this->field );
+		$sanitizer = new Sanitize( $this->field, $this->capability );
 		$value     = $sanitizer->sanitize( $value );
 		return $value;
 

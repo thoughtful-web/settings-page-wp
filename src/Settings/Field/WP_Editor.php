@@ -72,11 +72,12 @@ class WP_Editor extends Field {
 	 * @param string $menu_slug         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
 	 * @param string $section_id   The slug-name of the section of the settings page in which to show the box.
 	 * @param string $option_group Name the group of database options which the fields represent.
+	 * @param string $capability   The capability needed to update the option.
 	 */
-	public function __construct( $field, $menu_slug, $section_id, $option_group ) {
+	public function __construct( $field, $menu_slug, $section_id, $option_group, $capability ) {
 
 		// Call the Field::construct() method.
-		parent::__construct( $field, $menu_slug, $section_id, $option_group );
+		parent::__construct( $field, $menu_slug, $section_id, $option_group, $capability );
 
 		// Define the allowed HTML.
 		$this->allowed_html = wp_kses_allowed_html( 'post' );

@@ -42,13 +42,21 @@ class Sanitize {
 	protected $field;
 
 	/**
+	 * User capability
+	 * 
+	 * @var string $capability Capability needed to update the option.
+	 */
+	protected $capability = 'manage_options';
+
+	/**
 	 * Instantiate the class and assign properties from the parameters.
 	 *
 	 * @param string $field The parameters used to register a field.
 	 */
-	public function __construct( $field ) {
+	public function __construct( $field, $capability ) {
 
-		$this->field = $this->apply_defaults( $field );
+		$this->field      = $this->apply_defaults( $field );
+		$this->capability = array_key_exists( 'capability', $this->field ) ? $this->field['capability'] : $capability;
 
 	}
 
@@ -94,6 +102,11 @@ class Sanitize {
 		$option_value = get_option( $option );
 		$error        = '';
 		$data_args    = $this->field['data_args'];
+
+		// Reject users without permission.
+		if ( ! current_user_can( $this->capability ) ) {
+			return $option_value;
+		}
 
 		// Reject attempts to change a readonly value.
 		if ( array_key_exists( 'readonly', $data_args ) && false !== $data_args['readonly'] ) {

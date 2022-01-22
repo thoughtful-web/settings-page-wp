@@ -264,7 +264,8 @@ class Settings {
 							$field,
 							$this->menu_slug,
 							$section_id,
-							$this->option_group
+							$this->option_group,
+							$this->capability
 						);
 						break;
 					case 'textarea':
@@ -272,7 +273,8 @@ class Settings {
 							$field,
 							$this->menu_slug,
 							$section_id,
-							$this->option_group
+							$this->option_group,
+							$this->capability
 						);
 						break;
 					case 'number':
@@ -280,7 +282,8 @@ class Settings {
 							$field,
 							$this->menu_slug,
 							$section_id,
-							$this->option_group
+							$this->option_group,
+							$this->capability
 						);
 						break;
 					case 'checkbox':
@@ -289,14 +292,16 @@ class Settings {
 								$field,
 								$this->menu_slug,
 								$section_id,
-								$this->option_group
+								$this->option_group,
+								$this->capability
 							);
 						} elseif ( array_key_exists( 'choices', $field ) ) {
 							new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Checkboxes(
 								$field,
 								$this->menu_slug,
 								$section_id,
-								$this->option_group
+								$this->option_group,
+								$this->capability
 							);
 						}
 						break;
@@ -305,7 +310,8 @@ class Settings {
 							$field,
 							$this->menu_slug,
 							$section_id,
-							$this->option_group
+							$this->option_group,
+							$this->capability
 						);
 						break;
 					case 'color':
@@ -313,7 +319,8 @@ class Settings {
 							$field,
 							$this->menu_slug,
 							$section_id,
-							$this->option_group
+							$this->option_group,
+							$this->capability
 						);
 						break;
 					case 'email':
@@ -321,7 +328,8 @@ class Settings {
 							$field,
 							$this->menu_slug,
 							$section_id,
-							$this->option_group
+							$this->option_group,
+							$this->capability
 						);
 						break;
 					case 'select':
@@ -329,7 +337,8 @@ class Settings {
 							$field,
 							$this->menu_slug,
 							$section_id,
-							$this->option_group
+							$this->option_group,
+							$this->capability
 						);
 						break;
 					case 'tel':
@@ -337,7 +346,8 @@ class Settings {
 							$field,
 							$this->menu_slug,
 							$section_id,
-							$this->option_group
+							$this->option_group,
+							$this->capability
 						);
 						break;
 					case 'url':
@@ -345,7 +355,8 @@ class Settings {
 							$field,
 							$this->menu_slug,
 							$section_id,
-							$this->option_group
+							$this->option_group,
+							$this->capability
 						);
 						break;
 					case 'password':
@@ -353,7 +364,8 @@ class Settings {
 							$field,
 							$this->menu_slug,
 							$section_id,
-							$this->option_group
+							$this->option_group,
+							$this->capability
 						);
 						break;
 					default:

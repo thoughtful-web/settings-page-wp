@@ -84,14 +84,15 @@ class Color extends Field {
 	 *         @type string     $description       A description of the data attached to this setting. Only used for the REST API.
 	 *     }
 	 * }
-	 * @param string $menu_slug         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
+	 * @param string $menu_slug    The slug-name of the settings page on which to show the section (general, reading, writing, ...).
 	 * @param string $section_id   The slug-name of the section of the settings page in which to show the box.
 	 * @param string $option_group Name the group of database options which the fields represent.
+	 * @param string $capability   The capability needed to update the option.
 	 */
-	public function __construct( $field, $menu_slug, $section_id, $option_group ) {
+	public function __construct( $field, $menu_slug, $section_id, $option_group, $capability ) {
 
 		// Call the Field::construct() method.
-		parent::__construct( $field, $menu_slug, $section_id, $option_group );
+		parent::__construct( $field, $menu_slug, $section_id, $option_group, $capability );
 
 		// Queue the color picker scripts if they aren't already.
 		if ( ! wp_script_is( 'wp-color-picker', 'queue' ) || ! wp_style_is( 'wp-color-picker', 'queue' ) ) {
