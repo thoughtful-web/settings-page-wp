@@ -331,6 +331,7 @@ class Sanitize {
 						if ( ! in_array( $choice, $config_choices, true ) ) {
 							// A value is falsified.
 							$error = __( 'One or more values were not among the available choices. Please choose a valid option.', 'thoughtful-web' );
+							break;
 						}
 					}
 					if ( $restore_later ) {
