@@ -258,7 +258,7 @@ class Page {
 
 				switch ( $field['type'] ) {
 					case 'text':
-						new \ThoughtfulWeb\SettingsPageWP\Page\Field\Text(
+						new \ThoughtfulWeb\SettingsPageWP\Settings\Field\Text(
 							$field,
 							$this->menu_slug,
 							$section_id,
