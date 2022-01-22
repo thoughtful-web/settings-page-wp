@@ -117,12 +117,6 @@ class Field {
 	public function __construct( $field, $menu_slug, $section_id, $option_group, $capability ) {
 
 		$this->option_group = $option_group;
-		$this->capability   = array_key_exists( 'capability', $field['data_args'] ) ? $field['data_args']['capability'] : $capability;
-
-		// Render the field if the user is capable.
-		if ( ! current_user_can( $capability ) ) {
-			return;
-		}
 
 		// Merge user-defined field values with default values.
 		$field = $this->apply_defaults( $field );
@@ -158,15 +152,28 @@ class Field {
 		 */
 		register_setting( $option_group, $field['id'], $field['data_args'] );
 
-		// Register the field.
-		add_settings_field(
-			$field['id'],
-			$field['label'],
-			array( $this, 'output' ),
-			$menu_slug,
-			$section_id,
-			$field
-		);
+		// Detect the user capability requirement of the field.
+		if ( $capability ) {
+			$this->capability = $capability;
+		} elseif ( array_key_exists( 'capability', $field['data_args'] ) && ! empty( $field['data_args']['capability'] ) ) {
+			$this->capability = $field['data_args']['capability'];
+		}
+
+		// If the user is not capable of modifying the field, then
+		// only ensure the option is sanitized and defaulted properly.
+		if ( current_user_can( $capability ) ) {
+
+			// Register the field.
+			add_settings_field(
+				$field['id'],
+				$field['label'],
+				array( $this, 'output' ),
+				$menu_slug,
+				$section_id,
+				$field
+			);
+			
+		}
 
 	}
 
