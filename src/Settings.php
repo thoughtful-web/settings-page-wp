@@ -16,7 +16,6 @@ namespace ThoughtfulWeb\SettingsPageWP;
 
 use \ThoughtfulWeb\SettingsPageWP\Settings\Section;
 use \ThoughtfulWeb\SettingsPageWP\Settings\Config;
-use \ThoughtfulWeb\SettingsPageWP\Settings\Field;
 
 /**
  * The Admin Settings Page Class.
@@ -53,7 +52,7 @@ class Settings {
 	 */
 	private $config = array();
 
-	public function construct( $config ) {
+	public function __construct( $config ) {
 	
 		// Store the configuration and its key parameters for this file.
 		$this->config       = $config;
