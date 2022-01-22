@@ -75,7 +75,7 @@ The simplest implementation of this module is to include it with the autoloader 
 
 ```
 require __DIR__ . '/vendor/autoload.php;
-new \ThoughtfulWeb\SettingsPageWP\Settings();
+new \ThoughtfulWeb\SettingsPageWP\Page();
 ```
 
 ## Implementing The Class
@@ -90,15 +90,15 @@ To load the Settings class with (or without) a configuration parameter you shoul
 This class will load a file using an `include` statement if it is a PHP file or using `file_read_contents` it is a JSON file. Here is an explanation of the possible values for this parameter:
 
 1. **No parameter** assumes there is a configuration file located here: `./config/thoughtful-web/settings/settings.php`. Example:  
-   a. `new \ThoughtfulWeb\SettingsPageWP\Settings();`  
+   a. `new \ThoughtfulWeb\SettingsPageWP\Page();`  
 
 2. **File name** accepts a PHP or JSON file name and requires the file to be in the directory `./config/thoughtful-web/settings/{file}`. Examples:  
-   a. `new \ThoughtfulWeb\SettingsPageWP\Settings( 'filename.php' );`  
-   b. `new \ThoughtfulWeb\SettingsPageWP\Settings( 'filename.json' );`  
+   a. `new \ThoughtfulWeb\SettingsPageWP\Page( 'filename.php' );`  
+   b. `new \ThoughtfulWeb\SettingsPageWP\Page( 'filename.json' );`  
 
 3. **File path** can be any location on your server, as long as the `./src/Settings/Config.php` class file has read access to it. Examples:  
-   a. `new \ThoughtfulWeb\SettingsPageWP\Settings( __DIR__ . '/config/settings.json' );`  
-   b. `new \ThoughtfulWeb\SettingsPageWP\Settings( '/home/website/settings.php' );`  
+   a. `new \ThoughtfulWeb\SettingsPageWP\Page( __DIR__ . '/config/settings.json' );`  
+   b. `new \ThoughtfulWeb\SettingsPageWP\Page( '/home/website/settings.php' );`  
 
 4. **Array** The configuration values in their final state.
 
