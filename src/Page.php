@@ -180,7 +180,7 @@ class Page {
 			return;
 		}
 
-		if ( false !== strpos( $hook_suffix, 'page-' . $this->config['method_args']['menu_slug'] ) ) {
+		if ( false !== strpos( $hook_suffix, 'page_' . $this->config['method_args']['menu_slug'] ) ) {
 			wp_enqueue_style( 'settings-' . $this->config['method_args']['menu_slug'] );
 		}
 
@@ -225,7 +225,7 @@ class Page {
 			return;
 		}
 
-		if ( false !== strpos( $hook_suffix, 'page-' . $this->config['method_args']['menu_slug'] ) ) {
+		if ( false !== strpos( $hook_suffix, 'page_' . $this->config['method_args']['menu_slug'] ) ) {
 			wp_enqueue_style( 'settings-' . $this->config['method_args']['menu_slug'] );
 		}
 
