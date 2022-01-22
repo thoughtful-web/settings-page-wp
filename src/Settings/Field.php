@@ -102,7 +102,7 @@ class Field {
 	 *         @type string             $description       A description of the data attached to this setting for a REST API response.
 	 *     }
 	 * }
-	 * @param string $menu_slug         The slug-name of the settings page on which to show the section (general, reading, writing, ...).
+	 * @param string $menu_slug    The slug-name of the settings page on which to show the section (general, reading, writing, ...).
 	 * @param string $section_id   The slug-name of the section of the settings page in which to show the box.
 	 * @param string $option_group Name the group of database options which the fields represent.
 	 */
