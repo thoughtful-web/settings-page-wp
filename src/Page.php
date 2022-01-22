@@ -73,8 +73,14 @@ class Page {
 		$config_obj = new \ThoughtfulWeb\SettingsPageWP\Settings\Config( $config );
 		$config     = $config_obj->get();
 
+		// Run the Settings API related classes.
 		$settings_obj = new \ThoughtfulWeb\SettingsPageWP\Settings( $config );
 		$this->settings_form_callable = $settings_obj->settings_form_callable();
+
+		// Exit early if the user lacks the capability provided.
+		if ( ! current_user_can( $config['method_args']['capability'] ) ) {
+			return;
+		}
 
 		// Assign compiled values.
 		$this->config       = $config;
@@ -88,11 +94,13 @@ class Page {
 		// Register the stylesheet if present.
 		if ( $this->has_stylesheet() ) {
 			add_action( 'admin_init', array( $this, 'register_stylesheet' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_stylesheet' ) );
 		}
-
+		
 		// Register the script if present.
 		if ( $this->has_script() ) {
 			add_action( 'admin_init', array( $this, 'register_script' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_script' ) );
 		}
 
 	}
@@ -239,15 +247,6 @@ class Page {
 				$this->settings_form_callable,
 				$this->config['method_args']['position']
 			);
-		}
-
-		// Enqueue the stylesheet, if present.
-		if ( $this->has_stylesheet() ) {
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_stylesheet' ) );
-		}
-		// Enqueue the stylesheet, if present.
-		if ( $this->has_script() ) {
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_script' ) );
 		}
 
 	}
