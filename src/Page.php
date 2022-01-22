@@ -77,11 +77,6 @@ class Page {
 		$settings_obj = new \ThoughtfulWeb\SettingsPageWP\Settings( $config );
 		$this->settings_form_callable = $settings_obj->settings_form_callable();
 
-		// Exit early if the user lacks the capability provided.
-		if ( ! current_user_can( $config['method_args']['capability'] ) ) {
-			return;
-		}
-
 		// Assign compiled values.
 		$this->config       = $config;
 		$this->capability   = $this->config['method_args']['capability'];
@@ -154,6 +149,11 @@ class Page {
 	 */
 	public function register_stylesheet() {
 
+		// Exit early if the user lacks the capability provided.
+		if ( ! current_user_can( $this->config['method_args']['capability'] ) ) {
+			return;
+		}
+
 		$slug        = $this->config['method_args']['menu_slug'];
 		$plugin_root = dirname( __FILE__, 5 );
 		$config_path = '/config/thoughtful-web/settings/';
@@ -175,6 +175,11 @@ class Page {
 	 */
 	public function enqueue_stylesheet( $hook_suffix ) {
 
+		// Exit early if the user lacks the capability provided.
+		if ( ! current_user_can( $this->config['method_args']['capability'] ) ) {
+			return;
+		}
+
 		if ( false !== strpos( $hook_suffix, 'page-' . $this->config['method_args']['menu_slug'] ) ) {
 			wp_enqueue_style( 'settings-' . $this->config['method_args']['menu_slug'] );
 		}
@@ -187,6 +192,11 @@ class Page {
 	 * @return void
 	 */
 	public function register_script() {
+
+		// Exit early if the user lacks the capability provided.
+		if ( ! current_user_can( $this->config['method_args']['capability'] ) ) {
+			return;
+		}
 
 		$slug        = $this->config['method_args']['menu_slug'];
 		$plugin_root = dirname( __FILE__, 5 );
@@ -209,6 +219,11 @@ class Page {
 	 * @return void
 	 */
 	public function enqueue_script( $hook_suffix ) {
+
+		// Exit early if the user lacks the capability provided.
+		if ( ! current_user_can( $this->config['method_args']['capability'] ) ) {
+			return;
+		}
 
 		if ( false !== strpos( $hook_suffix, 'page-' . $this->config['method_args']['menu_slug'] ) ) {
 			wp_enqueue_style( 'settings-' . $this->config['method_args']['menu_slug'] );
