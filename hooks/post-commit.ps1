@@ -1,3 +1,4 @@
 #!/usr/bin/env pwsh
 # Create the release package.
-tar -a -cf settings-page-wp.zip config src composer.json LICENSE README.md
+$tag=@(git describe)
+tar -a -cf "settings-page-wp-$tag.zip" config src composer.json LICENSE README.md
