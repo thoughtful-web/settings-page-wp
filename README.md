@@ -25,15 +25,15 @@ Features, changes, and fixes which I plan on implementing:
 
 1. Continue developing the documentation.
 2. Create a form to generate a configuration file with.
-3. Add a network admin settings page configuration.
-4. Add a filter to the Select Field configuration to enable populating choices with data like:  
+3. Consider adding a network admin settings page configuration.
+4. Consider adding a filter to the Select Field configuration to enable populating choices with data like:  
    a) Users  
    b) User Roles  
    c) Post Types  
    d) Taxonomies  
    e) Image Sizes  
 5. Allow disabling or removing "choices" from Fields with this value in case we need to scope access to updating these values. Perhaps this should be a filter for the configuration preprocessor.
-6. Consider having the Color field use Iris if the current browser doesn't support the color input type. This will not be implemented if default browser color inputs lack essential features that Iris provides.
+6. Consider implementing a File field.
 
 ## Requirements
 
@@ -107,7 +107,6 @@ This class will load a file using an `include` statement if it is a PHP file or 
 ## Creating the Config File
 
 Documentation for this framework is a work in progress. Some documentation for creating a configuration file can be found below. You should check out the example configuration file(s) at `./config/thoughtful-web/settings/settings.example.php`. Consider checking out the class variables of each **Field** class file to see which HTML attributes they support - these must be configured in a Field's `data_args` array member.
-
 
 ```
 array(
