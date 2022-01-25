@@ -1,2 +1,5 @@
 #!/usr/bin/env bash
-c:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -ExecutionPolicy RemoteSigned -File 'hooks\post-commit.ps1'
+branchname=$(git rev-parse --abbrev-ref HEAD)
+if [ $branchname = "main" ]; then
+	exec powershell.exe -ExecutionPolicy RemoteSigned -File 'hooks\post-commit.ps1'
+fi
