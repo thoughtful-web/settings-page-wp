@@ -21,8 +21,6 @@ All HTML attributes for form fields are supported in the configuration and "patt
 
 ## Roadmap
 
-Features, changes, and fixes which I plan on implementing:
-
 1. Continue developing the documentation.
 2. Create a form to generate a configuration file with.
 3. Consider adding a network admin settings page configuration.
