@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+#!/usr/bin/env bash
 # Create the release package.
 mkdir settings-page-wp
 cp -r config src composer.json LICENSE README.md settings-page-wp
