@@ -38,11 +38,6 @@ All HTML attributes for form fields are supported in the configuration and "patt
 1. WordPress 5.4 and above.
 2. PHP 7.3.5 and above.
 
-## Development Requirements
-
-1. PHP Codesniffer composer module
-2. WP Coding Standards composer module
-
 ## Installation
 
 To install this module from Composer directly, use the command line. Then either use Composer's autoloader or require the class files directly in your PHP.
@@ -359,3 +354,8 @@ array(
 	),
 ),
 ```
+
+## Development Installation and Notes
+
+1. Run `$ git config core.hooksPath hooks` to enable the git hook script.
+2. To add a new git hook file, run `$ git add --chmod=+x hooks/<hook-file-name> && git commit -m "Add git hook"`.

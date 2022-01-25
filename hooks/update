@@ -1,2 +1,6 @@
 #!/bin/bash
-tar.exe -a -cf settings-page-wp.zip config src composer.json LICENSE README.md
+# Create the release package.
+mkdir settings-page-wp
+cp config src composer.json LICENSE README.md settings-page-wp
+tar.exe -a -cf settings-page-wp.zip settings-page-wp
+rmdir settings-page-wp
