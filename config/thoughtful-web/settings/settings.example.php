@@ -218,7 +218,7 @@ return array(
 					'type'        => 'password',
 					'description' => 'An API key used to access data.',
 					'data_args'   => array(
-						'size' => '70',
+						'copy_button' => 'Copy API key',
 					),
 				),
 			),

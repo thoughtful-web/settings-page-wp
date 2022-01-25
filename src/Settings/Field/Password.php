@@ -66,4 +66,58 @@ class Password extends Field {
 			'value'        => true,
 		),
 	);
+
+	/**
+	 * Get the settings option array and print one of its values.
+	 *
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/password
+	 *
+	 * @param array $args The arguments needed to render the setting field.
+	 *
+	 * @return void
+	 */
+	public function output( $args ) {
+
+		// Assemble the variables necessary to output the form field from settings.
+		$value = get_option( $args['id'] );
+		if ( empty( $value ) && array_key_exists( 'default', $args['data_args'] ) ) {
+			$value = $args['data_args']['default'];
+		}
+		$extra_attrs = $this->get_optional_attributes( $args );
+
+		// Render the form field output.
+		$output = sprintf(
+			'<input type="%1$s" id="%2$s" name="%3$s" value="%4$s" %5$s/>',
+			esc_attr( $args['type'] ),
+			esc_attr( $args['id'] ),
+			esc_attr( $args['data_args']['label_for'] ),
+			esc_attr( $value ),
+			$extra_attrs
+		);
+		echo wp_kses( $output, $this->allowed_html );
+
+		// Render the "copy to clipboard" button.
+		if ( array_key_exists( 'copy_button', $args['data_args'] ) ) {
+			if ( empty( $args['data_args']['copy_button'] ) ) {
+				$args['data_args']['copy_button'] = 'Copy';
+			}
+			$allowed_html = array(
+				'input' => array(
+					'type'    => 'button',
+					'value'   => true,
+					'onclick' => true,
+					'onblur'  => true,
+				),
+			);
+			$output = sprintf(
+				'<input type="button" value="%1$s" onclick="navigator.clipboard.writeText(this.previousSibling.value);this.value=\'Copied\';" onblur="this.value=\'%1$s\';" />',
+				esc_attr( $args['data_args']['copy_button'] )
+			);
+			echo wp_kses( $output, $allowed_html );
+		}
+
+		// Render the description text.
+		$this->output_description( $args );
+
+	}
 }

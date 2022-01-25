@@ -197,7 +197,7 @@
                     "type": "password",
                     "description": "An API key used to access data.",
                     "data_args": {
-                        "size": "70"
+                        "copy_button": "Copy API key"
                     }
                 }
             ]
