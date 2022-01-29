@@ -2,7 +2,7 @@
 
 *[Home](../../README.md) / [Field Configuration](../field-configuration.md) / Color*
 
-The Color field uses Iris from WordPress's script files to render a color picker. Required values are: label, id, type.
+The Color field uses Iris from WordPress's script files to render a color picker. It requires a hexidecimal color code.
 
 ```php
 array(

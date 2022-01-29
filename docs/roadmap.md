@@ -16,3 +16,4 @@ These are bug fixes or enhancements I have thought about implementing. Bug fixes
 5. Allow disabling or removing "choices" from Fields with the above value in case we need to scope access to updating these values. Perhaps this should be a filter for the configuration preprocessor.
 6. Consider implementing a File field.
 7. Check this plugin to see if we can scope admin-only actions within action hooks to minimize its impact on site performance.
+8. Consider adding support to the Color field for rgb and rgba color formats.
