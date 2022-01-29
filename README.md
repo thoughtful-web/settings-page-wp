@@ -252,15 +252,15 @@ array(
 The following Field types are supported. Refer to their class files to see supported HTML attributes which, if declared, must be in the "data_args" value of the field's configuration.
 
 1. [Checkboxes](docs/fields/checkbox.md)
-2. Color
-3. Email
-4. Number
-5. Phone
-6. Radio
-7. Select
-8. Text
-9. Textarea
-10. URL
-11. WP Editor (WYSIWYG editor)
+2. [Color](docs/fields/color.md)
+3. [Email](docs/fields/email.md)
+4. [Number](docs/fields/number.md)
+5. [Phone](docs/fields/phone.md)
+6. [Radio](docs/fields/radio.md)
+7. [Select](docs/fields/select.md)
+8. [Text](docs/fields/text.md)
+9. [Textarea](docs/fields/textarea.md)
+10. [URL](docs/fields/url.md)
+11. [WP Editor](docs/fields/wp-editor.md)
 
 [Back to top](#create-settings-pages-for-wordpress)
