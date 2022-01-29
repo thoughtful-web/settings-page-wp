@@ -1,81 +1,102 @@
-# Thoughtful Web Settings Pages for WordPress
+# Create Settings Pages for WordPress
 
 >Free open source software under the GNU GPL-2.0+ License.  
 >Copyright Zachary Kendall Watkins 2022.  
 
 This library generates both a Settings page and fully qualified Options for each of its fields from a single configuration file.
 
-All HTML attributes for form fields are supported in the configuration and "pattern" attributes are validated for both the form and in the Option's sanitization filter hook. Each Field is a separate Option and all WordPress filters and actions which apply to Options can be used for them.
+All HTML attributes for supported form fields are allowed and "pattern" attributes are validated on the client and server. Each Field is a separate [Option](https://developer.wordpress.org/plugins/settings/options-api/) and Core WordPress filters and actions apply.
+
+## Table of Contents
+
+1. [Features](#features)
+2. [Requirements](#requirements)
+3. [Installation](#installation)
+4. [Simple Implementation](#simple-implementation)
+5. [Implementation](#implementation)
+6. [Creating the Config File](#creating-the-config-file)
+7. [Sections](#sections)
+8. [Fields Overview](#fields-overview)
+9. [Field Types Supported](#field-types-supported)
+
+## Additional Documentation
+1. [Field Configuration](docs/field-configuration.md)
+2. [Action and Filter Reference](docs/action-filter-reference.md)
+3. [Roadmap](docs/roadmap.md)
+4. [Development Installation and Notes](docs/development.md)
+
+[Back to top](#create-settings-pages-for-wordpress)
 
 ## Features
 
-1. Settings page generation from a configuration file.
-2. Wrapped around the Core WordPress Settings and Options APIs.
-3. Each Field creates and updates an individual database Option, which has advantages when you use hooks and filters.
-4. Each Field is validated in a manner similar to Core WordPress options and failed server-side validation emits a Settings Page error notice.
-5. If a Field type supports it you can add the "pattern" attribute to further validate against a regular expression in both the page and the server. This works on the Settings page and also when a script calls `update_option( $option, $value )`.
-6. Configure stylesheet and/or script file assets.
-7. Configure default Field values to automatically load them into the database. If the field is ever emptied these values will load instead.
-8. Zero production dependencies beyond PHP, WordPress, and WordPress included JavaScript Iris for the color picker field.
-9. Configure and create multiple pages or subpages.
+1. Settings page generation from a configuration file using Core WordPress [Settings](https://developer.wordpress.org/plugins/settings/settings-api/) and [Options](https://developer.wordpress.org/plugins/settings/options-api/) APIs.
+2. Each Field creates and updates an database Option, allowing you to hook and filter them individually.
+3. Each Field is validated on the server in a manner similar to Core WordPress options. Failed server-side validation emits a Settings Page [error notice](https://developer.wordpress.org/reference/functions/add_settings_error/).
+4. Further validate a field using regular expressions on the client and server by adding the [pattern attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/pattern) if a Field's HTML form element supports it. This works on the Settings page and also when a script calls [`update_option()`](https://developer.wordpress.org/reference/functions/update_option/).
+5. Configure a stylesheet and/or script file for the page.
+6. Configure default Field values to automatically load them into the database. If the field is ever emptied these values will be added again.
+7. Zero production dependencies beyond PHP, WordPress, and WordPress included JavaScript (Iris) for the color picker field.
+8. Configure and create pages or subpages.
 
-## Roadmap
-
-1. Continue developing the documentation.
-2. Create a form to generate a configuration file with.
-3. Consider adding a network admin settings page configuration.
-4. Consider adding a filter to the Select Field configuration to enable populating choices with data like:  
-   a) Users  
-   b) User Roles  
-   c) Post Types  
-   d) Taxonomies  
-   e) Image Sizes  
-5. Allow disabling or removing "choices" from Fields with this value in case we need to scope access to updating these values. Perhaps this should be a filter for the configuration preprocessor.
-6. Consider implementing a File field.
+[Back to top](#create-settings-pages-for-wordpress)
 
 ## Requirements
 
 1. WordPress 5.4 and above.
 2. PHP 7.3.5 and above.
+3. This library existing two directory levels below your plugin's root directory. Examples:  
+   a. `vendor/thoughtful-web/activation-requirements-wp`  
+   b. `lib/thoughtful-web/activation-requirements-wp`  
+4. A configuration file or PHP array (*see [Creating the Config File](#creating-the-config-file)*)
+
+[Back to top](#create-settings-pages-for-wordpress)
 
 ## Installation
 
-To install this module from Composer directly, use the command line. Then either use Composer's autoloader or require the class files directly in your PHP.
+If you are familiar with the command line, you may install this module using Composer. https://getcomposer.org/
 
-`$ composer require thoughtful-web/settings-page-wp`
-
-To install this module from Github using Composer, add it as a repository to the composer.json file:
-
-```
-{
-    "name": "thoughtful-web/settings-page-wp",
-    "description": "WordPress Settings page generator and validator released as free open source software under GNU GPL-2.0+ License",
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/thoughtful-web/settings-page-wp"
-		}
-	],
-	"require": {
-		"thoughtful-web/settings-page-wp": "dev-main"
-	}
-}
+```command-line
+$ composer require thoughtful-web/settings-page-wp
 ```
 
-## Simplest Implementation
+You may also download it to a different directory in your project to meet requirement #3. You can use a [release](https://github.com/thoughtful-web/settings-page-wp/releases), the [source code](https://github.com/thoughtful-web/settings-page-wp), or the command line:
 
-The simplest implementation of this module is to include it with the autoloader and add a configuration file at `./config/thoughtful-web/settings/settings.php` or `./config/thoughtful-web/settings/settings.json`. Then declare the Settings from that configuration file by creating a new instance of the Settings page in your Plugin's main file like this:  
-
+```command-line
+$ mkdir lib/thoughtful-web
+$ cd lib/thoughtful-web
+$ git clone https://github.com/thoughtful-web/settings-page-wp
 ```
+
+To clone a specific tagged version:
+
+```command-line
+$ git clone --depth 1 --branch v1.0.0 https://github.com/thoughtful-web/settings-page-wp
+```
+
+[Back to top](#create-settings-pages-for-wordpress)
+
+## Simple Implementation
+
+The simplest implementation of this module is to include it with the Composer autoloader and add a configuration file at `./config/thoughtful-web/settings/settings.php` or `./config/thoughtful-web/settings/settings.json`. Then declare the Settings from that configuration file by creating a new instance of the Settings page in your Plugin's main file like this:  
+
+```php
 require __DIR__ . '/vendor/autoload.php;
 new \ThoughtfulWeb\SettingsPageWP\Page();
 ```
 
-## Implementing The Class
+Retrieving an option from the database is as simple as [`get_option()`](https://developer.wordpress.org/reference/functions/get_option/):
+
+```php
+$my_option = get_option( 'my_option' );
+```
+
+[Back to top](#create-settings-pages-for-wordpress)
+
+## Implementation
 
 To load the Settings class with (or without) a configuration parameter you should know the accepted values:
 
-```
+```php
 @param string|array $config (Optional) The Settings page configuration parameters.
                             Either a configuration file name, file path, or array.
 ```
@@ -97,11 +118,13 @@ This class will load a file using an `include` statement if it is a PHP file or 
 
 **Note:** Call the class without an action hook or within an action hook early enough in the execution order to not skip the WordPress actions, filters, and functions used in this feature's class files. It is yet to be determined which action hooks are compatible with this class's instantiation.
 
+[Back to top](#create-settings-pages-for-wordpress)
+
 ## Creating the Config File
 
-Documentation for this framework is a work in progress. Some documentation for creating a configuration file can be found below. You should check out the example configuration file(s) at `./config/thoughtful-web/settings/settings.example.php`. Consider checking out the class variables of each **Field** class file to see which HTML attributes they support - these must be configured in a Field's `data_args` array member.
+Documentation for this framework is a work in progress. Some documentation for creating a configuration file can be found below. You should check out the example configuration files at [`./config/thoughtful-web/settings/settings.example.php`](config/thoughtful-web/settings/settings.example.php) and [./config/thoughtful-web/settings/settings.example.json](config/thoughtful-web/settings/settings.example.json). Consider checking out the class variables of each **Field** class file to see which HTML attributes they support - these must be configured in a Field's `data_args` array member.
 
-```
+```php
 array(
 	'method_args'  => array(
 		'page_title'  => __( 'My Plugin Settings', 'thoughtful-web' ),
@@ -174,13 +197,15 @@ The "script" key allows you to register and enqueue your javascript file for the
 
 The "sections" key accepts an array of Section configurations, each with either an "include" or "fields" key to determine their main content.
 
+[Back to top](#create-settings-pages-for-wordpress)
+
 ## Sections
 
-A Section requires "section" and "title" values and either a "fields" or "include" value. Example:
+A Section requires a "section" and "title" value and either a "fields" or "include" value. Example:
 
 You may include a file by path reference in the Section configuration using the "include" value, which accepts an absolute file path string. Example:
 
-```
+```php
 array(
 	'section'     => 'section_error_logs',
 	'title'       => __( 'Error Logs', 'thoughtful-web' ),
@@ -189,11 +214,13 @@ array(
 ),
 ```
 
-## Fields
+[Back to top](#create-settings-pages-for-wordpress)
 
-Here is the most basic field configuration:
+## Fields Overview
 
-```
+This is the most basic field configuration:
+
+```php
 array(
 	'label' => 'My Text Field',
 	'id'    => 'unique_text_field_option',
@@ -201,9 +228,9 @@ array(
 )
 ```
 
-Here is an example field configuration using optional values:
+Here is an example field configuration using optional values. For a list of each Field's supported `data_args` see [Field Configuration](docs/field-configuration.md).
 
-```
+```php
 array(
 	'label'       => 'My Text Field',
 	'id'          => 'unique_text_field_option',
@@ -218,144 +245,22 @@ array(
 ),
 ```
 
-The following Field types are supported. Notes on each Field type's configuration and behavior follow. Refer to their class files to see supported HTML attributes which, if declared, must be in the "data_args" value of the field's configuration.
+[Back to top](#create-settings-pages-for-wordpress)
 
-1. Checkbox
-2. Checkboxes
-3. Color
-4. Email
-5. Number
-6. Phone
-7. Radio
-8. Select
-9. Text
-10. Textarea
-11. URL
-12. WP Editor (WYSIWYG editor)
+## Field Types Supported
 
-## Field Configuration
+The following Field types are supported. Refer to their class files to see supported HTML attributes which, if declared, must be in the "data_args" value of the field's configuration.
 
-Here is a guide for implementing each Field type. You may also wish to refer to the source code for each Field which has its own documentation in the files.
+1. [Checkboxes](docs/fields/checkbox.md)
+2. Color
+3. Email
+4. Number
+5. Phone
+6. Radio
+7. Select
+8. Text
+9. Textarea
+10. URL
+11. WP Editor (WYSIWYG editor)
 
-### Checkbox
-
-The Checkbox field uses the "choice" value to configure a single checkbox field whose value is input into the database as a string. Multiple checkboxes may be configured using "choices" instead of "choice". Each choice follows a "value => label" format. The "default" data_args value of a singular Checkbox configuration accepts a string and the multiple Checkbox configuration accepts an array of choice values. Required values are: label, id, type, choice.
-
-```
-array(
-	'label'       => 'My Checkbox Field', // Required.
-	'id'          => 'unique_checkbox_field', // Required.
-	'type'        => 'checkbox', // Required.
-	'description' => 'My checkbox field description',
-	'choice'      => array( // Required.
-		'1' => 'My Choice',
-	),
-	'data_args'   => array(
-		'default' => '1',
-	),
-),
-```
-
-Multiple checkboxes are configured as shown below:
-
-```
-array(
-	'label'       => 'My Checkbox Fields',
-	'id'          => 'unique_checkbox_fields',
-	'type'        => 'checkbox',
-	'description' => 'My checkbox fields description',
-	'choices'     => array(
-		'option_one'   => 'Option 1',
-		'option_two'   => 'Option 2',
-		'option_three' => 'Option 3',
-	),
-	'data_args' => array(
-		'default' => array(
-			'option_one',
-			'option_two',
-		),
-	),
-),
-```
-
-### Text
-
-The Text field is the simplest field to implement. Required values are: label, id, type.
-
-```
-array(
-	'label'       => 'My Text Field', // Required.
-	'id'          => 'unique_text_field',
-	'type'        => 'text',
-	'description' => 'My text field description',
-	'data_args'   => array(
-		'placeholder'   => 'my placeholder',
-		'default'       => 'A thoughtful, optional, default value',
-		'data-lpignore' => 'true',
-		'size'          => '40',
-	),
-),
-```
-
-### Color
-
-The Color field uses Iris from WordPress's script files to render a color picker. Required values are: label, id, type.
-
-```
-array(
-	'label'       => 'My Color Field',
-	'id'          => 'unique_color_field',
-	'type'        => 'color',
-	'description' => 'My color field description',
-	'data_args'   => array(
-		'default' => '#000000',
-	),
-),
-```
-
-### Select
-
-The Select field supports a "prompt" configuration value for customizing the first `<option>` element's label to describe what a user should do. The default value is "Please choose an option".
-
-**Multiselect**
-
-If you configure the field as a multiselect field, and choose to configure a default value, then you must declare the default value as an array of values.
-
-```
-array(
-	'label'       => 'My Select Field',
-	'id'          => 'unique_select_field',
-	'type'        => 'select',
-	'prompt'      => 'Select an option',
-	'description' => 'My select field description',
-	'choices'     => array(
-		'option_one'   => 'Option 1',
-		'option_two'   => 'Option 2',
-		'option_three' => 'Option 3',
-	),
-	'data_args'   => array(
-		'default' => 'option_one',
-	)
-),
-```
-
-### Password
-
-The Password field supports a "copy_button" configuration value for providing a button to use to copy the text in the password field and control the text in that button. Omit the key to not provide a button (default). Use the configuration below as a guide for implementation.
-
-```
-array(
-	'id'          => 'api_key',
-	'label'       => 'API Key',
-	'type'        => 'password',
-	'description' => 'An API key used to access data.',
-	'data_args'   => array(
-		'copy_button' => 'Copy API key',
-	),
-),
-```
-
-## Development Installation and Notes
-
-1. Run `$ git config core.hooksPath hooks` to enable the git hook script.
-2. To add a new git hook file, run `$ git add --chmod=+x hooks/<hook-file-name> && git commit -m "Add git hook"`.
+[Back to top](#create-settings-pages-for-wordpress)
