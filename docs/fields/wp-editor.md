@@ -16,16 +16,15 @@ array(
 ...
 ```
 
-Example with a default attribute:
+Example with a default value:
 
 ```php
 ...
 array(
-	'label'       => 'My WP Editor Field',
-	'id'          => 'unique_wp_editor_field',
-	'type'        => 'wp_editor',
-	'description' => 'My WP Editor field description',
-	'data_args'   => array(
+	'label'     => 'My WP Editor Field',
+	'id'        => 'unique_wp_editor_field',
+	'type'      => 'wp_editor',
+	'data_args' => array(
 		'default' => 'my default value',
 	),
 ),

@@ -9,9 +9,24 @@ The Email field supports a single email value. Sanitization is incomplete becaus
 ```php
 ...
 array(
-	'label'       => 'My Email Field',
-	'id'          => 'unique_email_field',
-	'type'        => 'email',
+	'label' => 'My Email Field',
+	'id'    => 'unique_email_field',
+	'type'  => 'email',
+),
+...
+```
+
+Example with a default value:
+
+```php
+...
+array(
+	'label'     => 'My Email Field',
+	'id'        => 'unique_email_field',
+	'type'      => 'email',
+	'data_args' => array(
+		'default' => 'contact@domain.com',
+	),
 ),
 ...
 ```

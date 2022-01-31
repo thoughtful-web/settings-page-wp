@@ -21,6 +21,26 @@ array(
 ...
 ```
 
+Example with default value:
+
+```php
+...
+array(
+	'label'     => 'My Radio Field',
+	'id'        => 'unique_radio_field',
+	'type'      => 'radio',
+	'choices'   => array(
+		'option_one'   => 'Option 1',
+		'option_two'   => 'Option 2',
+		'option_three' => 'Option 3',
+	),
+	'data_args' => array(
+		'default' => 'option_one',
+	),
+),
+...
+```
+
 ## Supported data_args
 
 Data arguments for HTML attributes are listed below. To learn how to use these attributes see the [Mozilla Developer Network documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio).

@@ -9,6 +9,18 @@ The Phone (tel) field supports the "pattern" data argument (shown below) to enfo
 ```php
 ...
 array(
+	'label' => 'My Phone Field',
+	'id'    => 'unique_phone_field',
+	'type'  => 'tel',
+),
+...
+```
+
+Example with default value:
+
+```php
+...
+array(
 	'label'     => 'My Phone Field',
 	'id'        => 'unique_phone_field',
 	'type'      => 'tel',

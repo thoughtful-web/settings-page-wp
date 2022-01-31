@@ -21,10 +21,10 @@ Configure the pattern attribute to force HTTPS:
 ```php
 ...
 array(
-	'label'       => 'My URL Field',
-	'id'          => 'unique_url_field',
-	'type'        => 'url',
-	'data_args'   => array(
+	'label'     => 'My URL Field',
+	'id'        => 'unique_url_field',
+	'type'      => 'url',
+	'data_args' => array(
 		'placeholder' => 'https://example.com/',
 		'pattern'     => 'https://.*',
 	),

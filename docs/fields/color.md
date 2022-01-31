@@ -9,22 +9,22 @@ The Color field uses Iris from WordPress's script files to render a color picker
 ```php
 ...
 array(
-	'label'       => 'My Color Field',
-	'id'          => 'unique_color_field',
-	'type'        => 'color',
+	'label' => 'My Color Field',
+	'id'    => 'unique_color_field',
+	'type'  => 'color',
 ),
 ...
 ```
 
-Provide a default value like this example:
+Example with a default value:
 
 ```php
 ...
 array(
-	'label'       => 'My Color Field',
-	'id'          => 'unique_color_field',
-	'type'        => 'color',
-	'data_args'   => array(
+	'label'     => 'My Color Field',
+	'id'        => 'unique_color_field',
+	'type'      => 'color',
+	'data_args' => array(
 		'default' => '#000000',
 	),
 ),

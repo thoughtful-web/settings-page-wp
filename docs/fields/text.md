@@ -7,24 +7,28 @@ The Text field is the simplest field to implement. Required values are: label, i
 ## Basic Config
 
 ```php
+...
 array(
 	'label' => 'My Text Field', // Required.
 	'id'    => 'unique_text_field',
 	'type'  => 'text',
 ),
+...
 ```
 
-Configuration with a default value:
+Example with default value:
 
 ```php
+...
 array(
 	'label'     => 'My Text Field', // Required.
 	'id'        => 'unique_text_field',
 	'type'      => 'text',
 	'data_args' => array(
-		'default' => 'A thoughtful, optional, default value',
+		'default' => 'My default value',
 	),
 ),
+...
 ```
 
 ## Supported data_args

@@ -9,11 +9,24 @@ The Password field supports a "copy_button" configuration value for providing a 
 ```php
 ...
 array(
+	'id'    => 'api_key',
+	'label' => 'API Key',
+	'type'  => 'password',
+),
+...
+```
+
+Example with default value and copy_button value:
+
+```php
+...
+array(
 	'id'        => 'api_key',
 	'label'     => 'API Key',
 	'type'      => 'password',
 	'data_args' => array(
 		'copy_button' => 'Copy API key',
+		'default'     => 'myapikey',
 	),
 ),
 ...

@@ -16,6 +16,21 @@ array(
 ...
 ```
 
+Example with default value:
+
+```php
+...
+array(
+	'label'     => 'My Decimal Number Field',
+	'id'        => 'unique_decimal_number_field',
+	'type'      => 'number',
+	'data_args' => array(
+		'default' => '24',
+	),
+),
+...
+```
+
 Decimal number example:
 
 ```php
