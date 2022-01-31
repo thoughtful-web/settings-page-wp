@@ -326,16 +326,16 @@ class Field {
 				$apply_attr = true;
 			}
 			if ( $apply_attr ) {
-				// Output the attribute if it is a string or true.
+				// Output the attribute name if it is a string or true.
 				if ( is_string( $attr ) || true === $attr ) {
 					$output_attr = $attr;
+					// Output the attribute value if it is a non-empty string.
+					if ( is_string( $attr_value ) ) {
+						$output_attr .= '="' . esc_attr( $attr_value ) . '"';
+					}
+					// Append the output.
+					$extra_attrs[ $attr ] = $output_attr;
 				}
-				// Output the attribute value if it is a non-empty string.
-				if ( is_string( $attr_value ) && ! empty( $attr_value ) ) {
-					$output_attr .= '="' . esc_attr( $attr_value ) . '"';
-				}
-				// Append the output.
-				$extra_attrs[ $attr ] = $output_attr;
 			}
 		}
 		// Then combine the results into a string.
