@@ -6,7 +6,7 @@ The Checkbox field uses the "choice" value to configure a single checkbox field 
 
 ## Basic Config
 
-See below for a basic example of how to configure this field. Examples with default values are shown in the next sections.
+Example with required attributes:
 
 ```php
 ...
@@ -68,12 +68,28 @@ array(
 
 ## Supported data_args
 
-Data arguments for HTML attributes are listed below. To learn how to use these attributes see the [Mozilla Developer Network documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox).
+**HTML Attributes**  
+(string)(boolean true)
 
-* checked  
+Data arguments for HTML attributes are listed below. Providing a string value to an attribute data argument adds the attribute with a value. Providing a boolean true value to an attribute data argument adds the attribute without a value. To learn how to use these attributes see the [Mozilla Developer Network documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox).
+
+* checked
 * class
 * data-*
 * default
 * disabled
 * readonly
 * required
+
+**Settings API Arguments**
+
+* sanitize_callback  
+  (boolean|callable)
+* show_in_rest  
+  (boolean)
+* type  
+  (string)
+* description
+  (string)
+
+[Back to top](#checkbox)

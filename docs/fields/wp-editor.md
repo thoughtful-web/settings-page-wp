@@ -6,6 +6,8 @@ WP Editor fields provide a Core WordPress rich content editor via the [`wp_edito
 
 ## Basic Config
 
+Example with required attributes:
+
 ```php
 ...
 array(
@@ -34,3 +36,16 @@ array(
 ## Supported data_args
 
 Data arguments for HTML attributes are not supported.
+
+**Settings API Arguments**
+
+* sanitize_callback  
+  (boolean|callable)
+* show_in_rest  
+  (boolean)
+* type  
+  (string)
+* description
+  (string)
+
+[Back to top](#wp-editor)

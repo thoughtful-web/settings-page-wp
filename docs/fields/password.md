@@ -6,6 +6,8 @@ The Password field supports a "copy_button" configuration value for providing a 
 
 ## Basic Config
 
+Example with required attributes:
+
 ```php
 ...
 array(
@@ -34,7 +36,10 @@ array(
 
 ## Supported data_args
 
-Data arguments for HTML attributes are listed below. To learn how to use these attributes see the [Mozilla Developer Network documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/password).
+**HTML Attributes**  
+(string)(boolean true)
+
+Data arguments for HTML attributes are listed below. Providing a string value to an attribute data argument adds the attribute with a value. Providing a boolean true value to an attribute data argument adds the attribute without a value. To learn how to use these attributes see the [Mozilla Developer Network documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/password).
 
 * autocomplete
 * inputmode
@@ -49,3 +54,16 @@ Data arguments for HTML attributes are listed below. To learn how to use these a
 * readonly
 * required
 * size
+
+**Settings API Arguments**
+
+* sanitize_callback  
+  (boolean|callable)
+* show_in_rest  
+  (boolean)
+* type  
+  (string)
+* description
+  (string)
+
+[Back to top](#password)
