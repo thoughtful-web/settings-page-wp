@@ -4,15 +4,33 @@
 
 The Textarea field is very simple.
 
-Example:
+## Basic Config
 
 ```php
 ...
 array(
-	'label'       => 'My Textarea Field',
-	'id'          => 'unique_textarea_field',
-	'type'        => 'textarea',
-	'description' => 'My textarea field',
+	'label' => 'My Textarea Field',
+	'id'    => 'unique_textarea_field',
+	'type'  => 'textarea',
 ),
 ...
 ```
+
+## Supported data_args
+
+Data arguments for HTML attributes are listed below. To learn how to use these attributes see the [Mozilla Developer Network documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea).
+
+* class
+* cols
+* data-*
+* disabled
+* autocomplete
+* disabled
+* maxlength
+* minlength
+* placeholder
+* readonly
+* required
+* rows
+* spellcheck
+* wrap

@@ -4,27 +4,27 @@
 
 You may declare a number field if you wish to ensure the option is always a numeric value. This field does not support scientific notation, so if you need that then use a Text field instead.
 
-Basic implementation:
+## Basic Config
 
 ```php
 ...
 array(
-	'label'       => 'My Decimal Number Field',
-	'id'          => 'unique_decimal_number_field',
-	'type'        => 'number',
+	'label' => 'My Decimal Number Field',
+	'id'    => 'unique_decimal_number_field',
+	'type'  => 'number',
 ),
 ...
 ```
 
-Decimal number implementation:
+Decimal number example:
 
 ```php
 ...
 array(
-	'label'       => 'My Decimal Number Field',
-	'id'          => 'unique_decimal_number_field',
-	'type'        => 'number',
-	'data_args'   => array(
+	'label'     => 'My Decimal Number Field',
+	'id'        => 'unique_decimal_number_field',
+	'type'      => 'number',
+	'data_args' => array(
 		'placeholder' => 'Multiple of 0.1',
 		'step'        => '0.1',
 		'min'         => '0',
@@ -34,7 +34,7 @@ array(
 ...
 ```
 
-Negative number implementation:
+Negative number example:
 
 ```php
 ...
@@ -51,3 +51,19 @@ array(
 ),
 ...
 ```
+
+## Supported data_args
+
+Data arguments for HTML attributes are listed below. To learn how to use these attributes see the [Mozilla Developer Network documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number).
+
+* class
+* data-*
+* autocomplete
+* disabled
+* list
+* max
+* min
+* placeholder
+* readonly
+* required
+* step

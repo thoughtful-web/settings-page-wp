@@ -4,7 +4,7 @@
 
 The Email field supports a single email value. Sanitization is incomplete because support for the format `My Name <email@domain.com>` needs modification. It can be used, but extreme edge cases may exist.
 
-Example:
+## Basic Config
 
 ```php
 ...
@@ -15,3 +15,20 @@ array(
 ),
 ...
 ```
+
+## Supported data_args
+
+Data arguments for HTML attributes are listed below. To learn how to use these attributes see the [Mozilla Developer Network documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email).
+
+* class
+* data-*
+* disabled
+* list
+* maxlength
+* minlength
+* multiple
+* pattern
+* placeholder'
+* readonly
+* required
+* size
