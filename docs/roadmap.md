@@ -17,3 +17,13 @@ These are bug fixes or enhancements I have thought about implementing. Bug fixes
 6. Consider implementing a File field.
 7. Check this plugin to see if we can scope admin-only actions within action hooks to minimize its impact on site performance.
 8. Consider adding support to the Color field for rgb and rgba color formats.
+
+## Bug Fixes or Quality Improvements
+
+1. Configure REST value type when the return value of the option is an array.
+2. Change data_args processing for Fields to disallow arguments like "checked" from being configured but still allow them to be output.
+3. Allow data_arg HTML attribute arguments to receive an array that maps different attributes to different choices.
+4. Apply the 'disabled' and 'readonly' HTML attribute arguments on the server during the sanitization step to disallow updating an option only if an attempt to do so is done from the Settings page (which is redirected to options.php during the POST request).
+5. Apply the 'required' HTML attribute on the server during the sanitization step only if an attempt to do so is done from the Settings page (which is redirected to options.php during the POST request).
+6. Add a 'allowed_data_args' class constant to each Field.
+7. Add REST API support. "If you plan to use your setting in the REST API, use both the rest_api_init and admin_init hooks when calling register_setting() instead of just admin_init. The show_in_rest argument is ineffective when hooked into admin_init alone." https://developer.wordpress.org/reference/functions/register_setting/#comment-content-3094
