@@ -2,9 +2,16 @@
 
 *[Home](../../README.md) / [Field Configuration](../field-configuration.md) / Checkbox*
 
+1. [Basic Configuration](#basic-configuration)
+2. [Singular Checkbox](#singular-checkbox)
+3. [Multiple Checkboxes](#multiple-checkboxes)
+4. [Supported Data Arguments](#supported-data-arguments)  
+   a. [HTML Attributes](#html-attributes)  
+   b. [Settings API Parameters](#settings-api-parameters)
+
 The Checkbox field uses the "choice" value to configure a single checkbox field whose value is input into the database as a string. Multiple checkboxes may be configured using "choices" instead of "choice". Each choice follows a "value => label" format. The "default" data_args value of a singular Checkbox configuration accepts a string and the multiple Checkbox configuration accepts an array of choice values. Required values are: label, id, type, choice.
 
-## Basic Config
+## Basic Configuration
 
 Example with required attributes:
 
@@ -21,7 +28,9 @@ array(
 ...
 ```
 
-## Singular Checkboxes
+[Back to top](#checkbox)
+
+## Singular Checkbox
 
 To use a single checkbox that sets the option value to a string, use the "choice" key. Set the "default" data_args key to the key of the choice, as shown below.
 
@@ -40,6 +49,8 @@ array(
 ),
 ...
 ```
+
+[Back to top](#checkbox)
 
 ## Multiple Checkboxes
 
@@ -66,30 +77,39 @@ array(
 ...
 ```
 
-## Supported data_args
+[Back to top](#checkbox)
 
-**HTML Attributes**  
-(string)(boolean true)
+## Supported Data Arguments
 
-Data arguments for HTML attributes are listed below. Providing a string value to an attribute data argument adds the attribute with a value. Providing a boolean true value to an attribute data argument adds the attribute without a value. To learn how to use these attributes see the [Mozilla Developer Network documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox).
+### HTML Attributes
 
-* checked
-* class
-* data-*
-* default
-* disabled
-* readonly
-* required
+Supported data arguments for HTML attributes are listed below. Provide a string value to add the attribute with a value. Provide a boolean true value to add the attribute without any value. To learn how to use these attributes see the [Mozilla Developer Network documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox).
 
-**Settings API Arguments**
+* __'class'__  
+  (string) Add a "class" attribute to all checkbox elements.
+* __'data-*'__  
+  (true | string) Add a data attribute to all checkbox elements.
+* __'readonly'__  
+  (true | string) Disallow changes to the setting's value on both the settings page and the server during the sanitization step if `update_option()` is used.
 
-* sanitize_callback  
-  (boolean|callable)
-* show_in_rest  
-  (boolean)
-* type  
-  (string)
-* description
-  (string)
+### Settings API Parameters
+
+These arguments are passed to the Core WordPress function register_setting(), although the 'sanitize_callback' is preprocessed before being passed to this function. See https://developer.wordpress.org/reference/functions/register_setting/
+
+* __'sanitize_callback'__  
+  (bool | callable) (Optional) (Default: true)  
+  Accepts true, false, or a callable function in string or array format. Default true, which enables the default sanitization operations provided by this library. A value of false disables the default sanitization. A value of callable hooks your own function to the sanitization step.
+* __'show_in_rest'__  
+  (boolean) (Optional) (Default: false)  
+  Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key. Default value is false.
+* __'type'__  
+  (string) (Optional) (Default: 'string')  
+  Used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API. The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'.
+* __'description'__  
+  (string) (Optional) (Default: '')  
+  Used by the REST API. A description of the data attached to this setting.
+* __'default'__  
+  (mixed) (Optional)  
+  Default value when calling get_option(). Provide a string if the field is configured to provide a single choice. Provide an array if the field is configured to provide multiple choices.
 
 [Back to top](#checkbox)
