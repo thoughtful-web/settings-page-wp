@@ -75,7 +75,9 @@ class Section {
 	public function description( $args ) {
 
 		if ( current_user_can( $this->capability ) ) {
-			echo wp_kses_post( $this->description );
+			if ( ! empty( $this->description ) ) {
+				echo wp_kses_post( $this->description );
+			}
 
 			if ( array_key_exists( 'include', $this->section ) && ! empty( $this->section['include'] ) ) {
 				include $this->section['include'];
