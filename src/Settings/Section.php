@@ -24,7 +24,7 @@ class Section {
 	 *
 	 * @var string $description The section description.
 	 */
-	private $description;
+	private $description = '';
 
 	/**
 	 * The settings capability.

@@ -88,10 +88,11 @@ class Settings {
 	private function add_sections() {
 
 		foreach ( $this->config['sections'] as $id => $section ) {
+			$description = isset( $section['description'] ) ? $section['description'] : '';
 			new \ThoughtfulWeb\SettingsPageWP\Settings\Section(
 				$id,
 				$section['title'],
-				$section['description'],
+				$description,
 				$this->menu_slug,
 				$this->capability,
 				$section,
