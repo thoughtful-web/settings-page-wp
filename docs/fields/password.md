@@ -2,9 +2,16 @@
 
 *[Home](../../README.md) / [Field Configuration](../field-configuration.md) / Password*
 
+## Table of Contents
+
+1. [Basic Configuration](#basic-configuration)
+2. [Supported Data Arguments](#supported-data-arguments)  
+   a. [HTML Attributes](#html-attributes)  
+   b. [Settings API Parameters](#settings-api-parameters)
+
 The Password field supports a "copy_button" configuration value for providing a button to use to copy the text in the password field and control the text in that button. Omit the key to not provide a button (default). Use the configuration below as a guide for implementation.
 
-## Basic Config
+## Basic Configuration
 
 Example with required attributes:
 
@@ -79,7 +86,7 @@ These arguments are passed to the Core WordPress function register_setting(), al
 
 ## Sources
 
-1. https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
+1. https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/password
 2. https://developer.wordpress.org/reference/functions/register_setting/
 3. https://developer.wordpress.org/reference/functions/register_setting/#div-comment-3050
 

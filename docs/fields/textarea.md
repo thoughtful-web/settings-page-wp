@@ -2,9 +2,16 @@
 
 *[Home](../../README.md) / [Field Configuration](../field-configuration.md) / Textarea*
 
+## Table of Contents
+
+1. [Basic Configuration](#basic-configuration)
+2. [Supported Data Arguments](#supported-data-arguments)  
+   a. [HTML Attributes](#html-attributes)  
+   b. [Settings API Parameters](#settings-api-parameters)
+
 The Textarea field is very simple.
 
-## Basic Config
+## Basic Configuration
 
 Example with required attributes:
 
@@ -81,7 +88,7 @@ These arguments are passed to the Core WordPress function register_setting(), al
 
 ## Sources
 
-1. https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
+1. https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea
 2. https://developer.wordpress.org/reference/functions/register_setting/
 3. https://developer.wordpress.org/reference/functions/register_setting/#div-comment-3050
 

@@ -2,9 +2,16 @@
 
 *[Home](../../README.md) / [Field Configuration](../field-configuration.md) / Select*
 
+## Table of Contents
+
+1. [Basic Configuration](#basic-configuration)
+2. [Supported Data Arguments](#supported-data-arguments)  
+   a. [HTML Attributes](#html-attributes)  
+   b. [Settings API Parameters](#settings-api-parameters)
+
 This Field supports single and multiselect configurations (shown below). The Select field also supports a "prompt" configuration value for customizing the first `<option>` element's label to describe what a user should do. The default value is "Please choose an option".
 
-## Basic Config
+## Basic Configuration
 
 Example with required attributes:
 

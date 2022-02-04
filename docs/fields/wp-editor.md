@@ -2,9 +2,16 @@
 
 *[Home](../../README.md) / [Field Configuration](../field-configuration.md) / WP Editor*
 
+## Table of Contents
+
+1. [Basic Configuration](#basic-configuration)
+2. [Supported Data Arguments](#supported-data-arguments)  
+   a. [HTML Attributes](#html-attributes)  
+   b. [Settings API Parameters](#settings-api-parameters)
+
 WP Editor fields provide a Core WordPress rich content editor via the [`wp_editor()`](https://developer.wordpress.org/reference/functions/wp_editor/) function. You may use this to create HTML that will be inserted into an option's value.
 
-## Basic Config
+## Basic Configuration
 
 Example with required attributes:
 
@@ -43,24 +50,23 @@ These arguments are passed to the Core WordPress function register_setting(), al
 
 * __'default'__  
   (mixed) (Optional)  
-  "Default value when calling get_option()." [[2]](#sources) Provide a string if the field is configured to provide a single choice. Provide an array if the field is configured to allow the user to enable more than once choice in a field, such as with multiple checkboxes or a multi-select dropdown.
+  "Default value when calling get_option()." [[1]](#sources) Provide a string if the field is configured to provide a single choice. Provide an array if the field is configured to allow the user to enable more than once choice in a field, such as with multiple checkboxes or a multi-select dropdown.
 * __'description'__  
   (string) (Optional) (Default: '')  
-  Used by the REST API. "A description of the data attached to this setting." [[2]](#sources)
+  Used by the REST API. "A description of the data attached to this setting." [[1]](#sources)
 * __'sanitize_callback'__  
   (bool | callable) (Optional) (Default: true)  
   Accepts true, false, or a callable function in string or array format. Default true, which enables the default sanitization operations provided by this library. A value of false disables the default sanitization. A value of callable hooks your own function to the sanitization step.
 * __'show_in_rest'__  
   (boolean) (Optional) (Default: false)  
-  "Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key." [[2]](#sources)
+  "Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key." [[1]](#sources)
 * __'type'__  
   (string) (Optional) (Default: 'string')  
-  "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [[3]](#sources) "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [[2]](#sources)
+  "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [[2]](#sources) "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [[1]](#sources)
 
 ## Sources
 
-1. https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
-2. https://developer.wordpress.org/reference/functions/register_setting/
-3. https://developer.wordpress.org/reference/functions/register_setting/#div-comment-3050
+1. https://developer.wordpress.org/reference/functions/register_setting/
+2. https://developer.wordpress.org/reference/functions/register_setting/#div-comment-3050
 
 [Back to top](#wp-editor)

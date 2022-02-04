@@ -6,6 +6,8 @@
 
 1. [Basic Configuration](#basic-configuration)
 2. [Supported Data Arguments](#supported-data-arguments)  
+   a. [HTML Attributes](#html-attributes)  
+   b. [Settings API Parameters](#settings-api-parameters)
 
 The Color field uses Iris from WordPress's script files to render a color picker. It requires a hexidecimal color code value.
 
@@ -81,7 +83,7 @@ These arguments are passed to the Core WordPress function register_setting(), al
 
 ## Sources
 
-1. https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
+1. https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/text
 2. https://developer.wordpress.org/reference/functions/register_setting/
 3. https://developer.wordpress.org/reference/functions/register_setting/#div-comment-3050
 
