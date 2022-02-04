@@ -41,6 +41,8 @@ array(
 ...
 ```
 
+[Back to top](#phone)
+
 ## Supported Data Arguments
 
 ### HTML Attributes
@@ -62,6 +64,8 @@ Supported data arguments for HTML attributes are listed below. Provide a **strin
 * __'pattern'__  
   (string) A regular expression compatible with both JavaScript and PHP to validate an input value.
 
+[Back to top](#phone)
+
 ### Settings API Parameters
 
 These arguments are passed to the Core WordPress function register_setting(), although the 'sanitize_callback' is preprocessed before being passed to this function. See https://developer.wordpress.org/reference/functions/register_setting/.
@@ -81,6 +85,8 @@ These arguments are passed to the Core WordPress function register_setting(), al
 * __'type'__  
   (string) (Optional) (Default: 'string')  
   "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [[3]](#sources) "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [[2]](#sources)
+
+[Back to top](#phone)
 
 ## Sources
 

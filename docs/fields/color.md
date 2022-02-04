@@ -40,6 +40,8 @@ array(
 ...
 ```
 
+[Back to top](#color)
+
 ## Supported Data Arguments
 
 ### HTML Attributes
@@ -61,6 +63,8 @@ Supported data arguments for HTML attributes are listed below. Provide a **strin
 * __'placeholder'__  
   (string) "Text that appears in the form control when it has no value set." [[1]](#sources)
 
+[Back to top](#color)
+
 ### Settings API Parameters
 
 These arguments are passed to the Core WordPress function register_setting(), although the 'sanitize_callback' is preprocessed before being passed to this function. See https://developer.wordpress.org/reference/functions/register_setting/.
@@ -80,6 +84,8 @@ These arguments are passed to the Core WordPress function register_setting(), al
 * __'type'__  
   (string) (Optional) (Default: 'string')  
   "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [[3]](#sources) "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [[2]](#sources)
+
+[Back to top](#color)
 
 ## Sources
 

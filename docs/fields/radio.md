@@ -50,6 +50,8 @@ array(
 ...
 ```
 
+[Back to top](#radio)
+
 ## Supported Data Arguments
 
 ### HTML Attributes
@@ -62,6 +64,8 @@ Supported data arguments for HTML attributes are listed below. Provide a **strin
   (true | string) Add a data attribute to all checkbox elements.
 * __'readonly'__  
   (true | string) Disallow changes to the setting's value on both the settings page and the server during the sanitization step if `update_option()` is used.
+
+[Back to top](#radio)
 
 ### Settings API Parameters
 
@@ -82,6 +86,8 @@ These arguments are passed to the Core WordPress function register_setting(), al
 * __'type'__  
   (string) (Optional) (Default: 'string')  
   "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [[3]](#sources) "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [[2]](#sources)
+
+[Back to top](#radio)
 
 ## Sources
 

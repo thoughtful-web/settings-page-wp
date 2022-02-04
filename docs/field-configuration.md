@@ -2,9 +2,14 @@
 
 *[Home](../README.md) / Field Configuration*
 
-Listed below are documents describing how to implement each Field into your configuration file. You may also wish to refer to the source code for each Field which has its own documentation in the files.
+## Table of Contents
+
+1. [Fields](#fields)
+2. [Shared Parameters](#shared-parameters)
 
 ## Fields
+
+Listed below are documents describing how to implement each Field into your configuration file.
 
 1. [Checkbox](docs/fields/checkbox.md)
 2. [Color](docs/fields/color.md)
@@ -19,41 +24,60 @@ Listed below are documents describing how to implement each Field into your conf
 10. [URL](docs/fields/url.md)
 11. [WP Editor](docs/fields/wp-editor.md)
 
-## Shared Configuration Parameters
+[Back to top](#field-configuration)
 
-Field configuration parameters common to all Field types are described below. Some are only necessary when using the WordPress REST API. See the official [`register_settings()`](https://developer.wordpress.org/reference/functions/register_setting/) code reference for full documentation.
+## Shared Parameters
+
+Field configuration parameters common to all Field types are described below. Some parameters of `data_args` are passed to the Core WordPress function register_setting(), although the 'sanitize_callback' is preprocessed before being passed to this function. See https://developer.wordpress.org/reference/functions/register_setting/.
 
 ```php
-'id'        => 'my_option_id',
-'type'      => 'checkbox',
-'data_args' => array(
-	'sanitize_callback' => true,
-	'show_in_rest'      => false,
-	'type'              => 'string',
-	'description'       => '',
+...
+array(
+	'id'          => 'my_option_id',
+	'type'        => 'checkbox',
+	'description' => 'What this checkbox is for.',
+	'data_args'   => array(
+    'default'           => '',
+		'description'       => '',
+		'sanitize_callback' => true,
+		'show_in_rest'      => false,
+		'type'              => 'string',
+	),
 ),
+...
 ```
 
-**id**
-(string) (Required) The name of an option to sanitize and save. It is recommended to namespace your option or take other measures 
+* __'id'__  
+  (string) (Required)  
+  The name of an option to sanitize and save. It is recommended to namespace your option or take other measures 
+* __'type'__    
+  (string) (Required)  
+  The type of Field the Settings Page will provide to control the Option. Valid values are 'checkbox', 'color', 'email', 'number', 'password', 'tel', 'radio', 'select', 'text', 'textarea', 'url', and 'wp_editor'.
+* __'description'__  
+  (string) (Optional)  
+  A field description for the form to include below it.
+* __'data_args'__    
+  (array) (Optional)  
+  Data used to configure the setting's use by WordPress Core APIs, this library, and the Settings Page HTML attributes of its form element.  
+  * __'default'__  
+    (mixed) (Optional)  
+    "Default value when calling get_option()." [[1]](#sources) Provide a string if the field is configured to provide a single choice. Provide an array if the field is configured to allow the user to enable more than once choice in a field, such as with multiple checkboxes or a multi-select dropdown.  
+  * __'description'__  
+    (string) (Optional) (Default: '')  
+    Used by the REST API. "A description of the data attached to this setting." [[1]](#sources)
+  * __'sanitize_callback'__  
+    (bool | callable) (Optional) (Default: true)  
+    Accepts true, false, or a callable function in string or array format. Default true, which enables the default sanitization operations provided by this library. A value of false disables the default sanitization. A value of callable hooks your own function to the sanitization step.
+  * __'show_in_rest'__  
+    (boolean) (Optional) (Default: false)  
+    "Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key." [[1]](#sources)
+  * __'type'__  
+    (string) (Optional) (Default: 'string')  
+    "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [[2]](#sources) "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [[1]](#sources)
 
-**type**
-(string) (Required) The type of Field the form will provide to control the Option. Valid values are 'checkbox', 'color', 'email', 'number', 'password', 'tel', 'radio', 'select', 'text', 'textarea', 'url', and 'wp_editor'.
+## Sources
 
-**description**
-(string) (Optional) A field description for the form to include below it.
-
-**data_args**  
-(array) (Optional) Data used to describe the setting when registered.
-* 'type'  
-  (string) The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'.  
-* 'description'  
-  (string) A description of the data attached to this setting.  
-* 'sanitize_callback'  
-  (callable) A callback function that sanitizes the option's value.  
-* 'show_in_rest'  
-  (bool|array) Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key.  
-* 'default'  
-  (mixed) Default value when calling get_option().  
+1. https://developer.wordpress.org/reference/functions/register_setting/
+2. https://developer.wordpress.org/reference/functions/register_setting/#div-comment-3050
 
 [Back to top](#field-configuration)

@@ -5,7 +5,8 @@
 ## Table of Contents
 
 1. [Basic Configuration](#basic-configuration)
-2. [Supported Data Arguments](#supported-data-arguments)  
+2. [Multiselect](#multiselect)
+3. [Supported Data Arguments](#supported-data-arguments)  
    a. [HTML Attributes](#html-attributes)  
    b. [Settings API Parameters](#settings-api-parameters)
 
@@ -51,6 +52,8 @@ array(
 ...
 ```
 
+[Back to top](#select)
+
 ## Multiselect
 
 If you configure the field as a multiselect field, and choose to configure a default value, then you must declare the default value as an array of values.
@@ -76,6 +79,8 @@ array(
 ...
 ```
 
+[Back to top](#select)
+
 ## Supported Data Arguments
 
 ### HTML Attributes
@@ -92,6 +97,8 @@ Supported data arguments for HTML attributes are listed below. Provide a **strin
   (true | string) Whether to allow multiple values.
 * __'size'__  
   (string) "If the control is presented as a scrolling list box (e.g. when multiple is specified), this attribute represents the number of rows in the list that should be visible at one time. Browsers are not required to present a select element as a scrolled list box. The default value is 0." [[1](#sources)]
+
+[Back to top](#select)
 
 ### Settings API Parameters
 
@@ -112,6 +119,8 @@ These arguments are passed to the Core WordPress function register_setting(), al
 * __'type'__  
   (string) (Optional) (Default: 'string')  
   "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [[3]](#sources) "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [[2]](#sources)
+
+[Back to top](#select)
 
 ## Sources
 

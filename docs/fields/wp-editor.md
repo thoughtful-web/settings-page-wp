@@ -40,7 +40,11 @@ array(
 ...
 ```
 
+[Back to top](#wp-editor)
+
 ## Supported Data Arguments
+
+### HTML Attributes
 
 Data arguments for HTML attributes are not supported.
 
@@ -63,6 +67,8 @@ These arguments are passed to the Core WordPress function register_setting(), al
 * __'type'__  
   (string) (Optional) (Default: 'string')  
   "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [[2]](#sources) "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [[1]](#sources)
+
+[Back to top](#wp-editor)
 
 ## Sources
 
