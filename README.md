@@ -118,7 +118,7 @@ This class will load a file using an `include` statement if it is a PHP file or 
 Documentation for this framework is a work in progress. Some documentation for creating a configuration file can be found below. It is recommended to refer to the example configuration files at [`./config/thoughtful-web/settings/settings.example.php`](config/thoughtful-web/settings/settings.example.php) and [./config/thoughtful-web/settings/settings.example.json](config/thoughtful-web/settings/settings.example.json). See [Fields](#fields) for configuration options for each Field type.
 
 ```php
-array(
+return array(
 	'method_args'  => array(
 		'page_title'  => __( 'My Plugin Settings', 'thoughtful-web' ),
 		'menu_title'  => __( 'My Settings', 'thoughtful-web' ),
