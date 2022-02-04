@@ -37,7 +37,7 @@ class Config {
 			'position'   => 2,
 		),
 		'option_group' => 'options',
-		'description'  => 'A thoughtful settings page description.',
+		'description'  => '',
 	);
 
 	/**
