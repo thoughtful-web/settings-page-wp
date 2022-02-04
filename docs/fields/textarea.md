@@ -39,20 +39,25 @@ array(
 
 Supported data arguments for HTML attributes are listed below. Provide a **string** value to add the attribute with a value. Provide a **boolean true** value to add the attribute without any value. To learn how to use these attributes see [MDN's textarea documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea).
 
-* class
-* cols
-* data-*
-* disabled
-* autocomplete
-* disabled
-* maxlength
-* minlength
-* placeholder
-* readonly
-* required
-* rows
-* spellcheck
-* wrap
+* __'class'__  
+  (string) Add a "class" attribute to all checkbox elements.
+* __'data-*'__  
+  (true | string) Add a data attribute to all checkbox elements.
+* __'readonly'__  
+  (true | string) Disallow changes to the setting's value on both the settings page and the server during the sanitization step if `update_option()` is used. "This Boolean attribute indicates that the user cannot modify the value of the control. Unlike the disabled attribute, the readonly attribute does not prevent the user from clicking or selecting in the control. The value of a read-only control is still submitted with the form." [[1]](#sources)
+* __'placeholder'__  
+  (string) "Text that appears in the form control when it has no value set." [[1]](#sources)
+* __'cols'__  
+  (string) The number of characters displayed on each line of the element.
+* __'rows'__  
+  (string) The number of rows shown at one time in the element's viewing pane.
+* __'wrap'__  
+  (string) "Indicates how the control wraps text. Possible values are:"  
+  * "__'hard'__: The browser automatically inserts line breaks (CR+LF) so that each line has no more than the width of the control; the cols attribute must also be specified for this to take effect."  
+  * "__'soft'__: The browser ensures that all line breaks in the value consist of a CR+LF pair, but does not insert any additional line breaks."  
+  * "__'off'__: Like soft but changes appearance to white-space: pre so line segments exceeding cols are not wrapped and the `textarea` becomes horizontally scrollable."
+  
+  "If this attribute is not specified, soft is its default behavior." [[1]](#sources)
 
 ### Settings API Parameters
 

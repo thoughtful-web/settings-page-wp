@@ -75,13 +75,16 @@ array(
 
 Supported data arguments for HTML attributes are listed below. Provide a **string** value to add the attribute with a value. Provide a **boolean true** value to add the attribute without any value. To learn how to use these attributes see [MDN's select documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select).
 
-* autocomplete
-* class
-* data-*
-* disabled
-* multiple
-* required
-* size
+* __'class'__  
+  (string) Add a "class" attribute to all checkbox elements.
+* __'data-*'__  
+  (true | string) Add a data attribute to all checkbox elements.
+* __'readonly'__  
+  (true | string) Disallow changes to the setting's value on both the settings page and the server during the sanitization step if `update_option()` is used.
+* __'multiple'__  
+  (true | string) Whether to allow multiple values.
+* __'size'__  
+  (string) "If the control is presented as a scrolling list box (e.g. when multiple is specified), this attribute represents the number of rows in the list that should be visible at one time. Browsers are not required to present a select element as a scrolled list box. The default value is 0." [[1](#sources)]
 
 ### Settings API Parameters
 
@@ -105,7 +108,7 @@ These arguments are passed to the Core WordPress function register_setting(), al
 
 ## Sources
 
-1. https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
+1. https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select
 2. https://developer.wordpress.org/reference/functions/register_setting/
 3. https://developer.wordpress.org/reference/functions/register_setting/#div-comment-3050
 

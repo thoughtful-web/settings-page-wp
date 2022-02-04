@@ -40,19 +40,22 @@ array(
 
 Supported data arguments for HTML attributes are listed below. Provide a **string** value to add the attribute with a value. Provide a **boolean true** value to add the attribute without any value. To learn how to use these attributes see [MDN's password input documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/password).
 
-* autocomplete
-* inputmode
-* class
-* data-*
-* disabled
-* list
-* maxlength
-* minlength
-* pattern
-* placeholder
-* readonly
-* required
-* size
+* __'class'__  
+  (string) Add a "class" attribute to all checkbox elements.
+* __'data-*'__  
+  (true | string) Add a data attribute to all checkbox elements.
+* __'readonly'__  
+  (true | string) Disallow changes to the setting's value on both the settings page and the server during the sanitization step if `update_option()` is used.
+* __'size'__  
+  (string) The number of characters to show in the input field.
+* __'list'__  
+  (string) "The value given to the list attribute should be the id of a `datalist` element located in the same document. The `datalist` provides a list of predefined values to suggest to the user for this input. Any values in the list that are not compatible with the type are not included in the suggested options. The values provided are suggestions, not requirements: users can select from this predefined list or provide a different value." [[1]](#sources)
+* __'placeholder'__  
+  (string) "Text that appears in the form control when it has no value set." [[1]](#sources)
+* __'pattern'__  
+  (string) A regular expression compatible with both JavaScript and PHP to validate an input value.
+* __'inputmode'__
+  (string) "Global value valid for all elements, it provides a hint to browsers as to the type of virtual keyboard configuration to use when editing this element or its contents. Values include none, text, tel, url, email, numeric, decimal, and search." [[1]](#sources)
 
 ### Settings API Parameters
 
