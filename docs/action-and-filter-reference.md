@@ -1,6 +1,11 @@
 # Action and Filter Reference
 
-*[Home](../../README.md) / Action and Filter Reference*
+*[Home](../README.md) / Action and Filter Reference*
+
+## Table of Contents
+
+1. [Actions](#actions)
+2. [Filters](#filters)
 
 Since each Option is an individual database entry, you can easily target them using wildcard actions and filters. I have listed them here with links to official documentation on their use. Replace `{$option}` with the ID of an option you wish to observe or manipulate.
 
@@ -21,3 +26,5 @@ Since each Option is an individual database entry, you can easily target them us
    * Filter the value of an option during the rendering of a page without changing it permanently in the database.
 2. [`pre_update_option_{$option}`](https://developer.wordpress.org/reference/hooks/pre_update_option_option/)
    * This filter is applied to the option value before being saved to the database
+
+[Back to top](#action-and-filter-reference)

@@ -1,6 +1,6 @@
 # Development Installation and Notes
 
-*[Home](../../README.md) / Development Installation and Notes*
+*[Home](../README.md) / Development Installation and Notes*
 
 These notes are for anyone who wishes to contribute to the project and needs to install a development version of the project.
 
@@ -30,3 +30,5 @@ For testing the development branch from Github using Composer, add it as a repos
 	...
 }
 ```
+
+[Back to top](#development-installation-and-notes)

@@ -243,6 +243,6 @@ array(
 
 ## Additional Documentation
 1. [Field Configuration](docs/field-configuration.md)
-2. [Action and Filter Reference](docs/action-filter-reference.md)
+2. [Action and Filter Reference](docs/action-and-filter-reference.md)
 3. [Roadmap](docs/roadmap.md)
 4. [Development Installation and Notes](docs/development.md)

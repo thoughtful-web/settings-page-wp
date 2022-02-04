@@ -1,6 +1,6 @@
 # Field Configuration
 
-*[Home](../../README.md) / Field Configuration*
+*[Home](../README.md) / Field Configuration*
 
 Listed below are documents describing how to implement each Field into your configuration file. You may also wish to refer to the source code for each Field which has its own documentation in the files.
 
@@ -55,3 +55,5 @@ Field configuration parameters common to all Field types are described below. So
   (bool|array) Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key.  
 * 'default'  
   (mixed) Default value when calling get_option().  
+
+[Back to top](#field-configuration)

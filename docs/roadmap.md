@@ -1,8 +1,15 @@
 # Roadmap
 
-*[Home](../../README.md) / Roadmap*
+*[Home](../README.md) / Roadmap*
 
-These are bug fixes or enhancements I have thought about implementing. Bug fixes will be implemented and enhancements might be implemented.
+## Table of Contents
+
+1. [Features](#features)
+2. [Bug Fixes](#bug-fixes)
+
+## Features
+
+These are new features I have thought about implementing. Bug fixes will be implemented and enhancements might be implemented.
 
 1. Continue developing the documentation.
 2. Create a form to generate a configuration file with.
@@ -19,7 +26,9 @@ These are bug fixes or enhancements I have thought about implementing. Bug fixes
 8. Consider adding support to the Color field for rgb and rgba color formats.
 9. Allow data_arg HTML attribute arguments to receive an array that maps different attributes to different choices.
 
-## Bug Fixes or Quality Improvements
+[Back to top](#roadmap)
+
+## Bug Fixes
 
 * Ensure the Select field handles get_option return types correctly when multiselect is enabled.
 * Configure REST value type when the return value of the option is an array.
@@ -27,3 +36,5 @@ These are bug fixes or enhancements I have thought about implementing. Bug fixes
 * Apply the 'disabled' and 'readonly' HTML attribute arguments on the server during the sanitization step to disallow updating an option only if an attempt to do so is done from the Settings page (which is redirected to options.php during the POST request).
 * Apply the 'required' HTML attribute on the server during the sanitization step only if an attempt to do so is done from the Settings page (which is redirected to options.php during the POST request).
 * Add REST API support. "If you plan to use your setting in the REST API, use both the rest_api_init and admin_init hooks when calling register_setting() instead of just admin_init. The show_in_rest argument is ineffective when hooked into admin_init alone." https://developer.wordpress.org/reference/functions/register_setting/#comment-content-3094
+
+[Back to top](#roadmap)
