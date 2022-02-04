@@ -1,7 +1,7 @@
 # Create Settings Pages for WordPress
 
 >Free open source software under the GNU GPL-2.0+ License.  
->Copyright Zachary Kendall Watkins 2022.  
+>Copyright Zachary Kendall Watkins 2021-2022.  
 
 This library generates both a Settings page and fully qualified Options for each of its fields from a single configuration file.
 
@@ -17,15 +17,8 @@ All HTML attributes for supported form fields are allowed and "pattern" attribut
 6. [Creating the Config File](#creating-the-config-file)
 7. [Sections](#sections)
 8. [Fields Overview](#fields-overview)
-9. [Field Types Supported](#field-types-supported)
-
-## Additional Documentation
-1. [Field Configuration](docs/field-configuration.md)
-2. [Action and Filter Reference](docs/action-filter-reference.md)
-3. [Roadmap](docs/roadmap.md)
-4. [Development Installation and Notes](docs/development.md)
-
-[Back to top](#create-settings-pages-for-wordpress)
+9. [Field Types](#field-types-supported)
+10. [Additional Documentation](#additional-documentation)
 
 ## Features
 
@@ -38,7 +31,7 @@ All HTML attributes for supported form fields are allowed and "pattern" attribut
 7. Zero production dependencies beyond PHP, WordPress, and WordPress included JavaScript (Iris) for the color picker field.
 8. Configure and create pages or subpages.
 
-[Back to top](#create-settings-pages-for-wordpress)
+[Back to top](#table-of-contents)
 
 ## Requirements
 
@@ -49,7 +42,7 @@ All HTML attributes for supported form fields are allowed and "pattern" attribut
    b. `lib/thoughtful-web/activation-requirements-wp`  
 4. A configuration file or PHP array (*see [Creating the Config File](#creating-the-config-file)*)
 
-[Back to top](#create-settings-pages-for-wordpress)
+[Back to top](#table-of-contents)
 
 ## Installation
 
@@ -70,10 +63,10 @@ $ git clone https://github.com/thoughtful-web/settings-page-wp
 To clone a specific tagged version:
 
 ```command-line
-$ git clone --depth 1 --branch v1.0.0 https://github.com/thoughtful-web/settings-page-wp
+$ git clone --depth 1 --branch v0.9.10 https://github.com/thoughtful-web/settings-page-wp
 ```
 
-[Back to top](#create-settings-pages-for-wordpress)
+[Back to top](#table-of-contents)
 
 ## Simple Implementation
 
@@ -90,7 +83,7 @@ Retrieving an option from the database is as simple as [`get_option()`](https://
 $my_option = get_option( 'my_option' );
 ```
 
-[Back to top](#create-settings-pages-for-wordpress)
+[Back to top](#table-of-contents)
 
 ## Implementation
 
@@ -118,11 +111,11 @@ This class will load a file using an `include` statement if it is a PHP file or 
 
 **Note:** Call the class without an action hook or within an action hook early enough in the execution order to not skip the WordPress actions, filters, and functions used in this feature's class files. It is yet to be determined which action hooks are compatible with this class's instantiation.
 
-[Back to top](#create-settings-pages-for-wordpress)
+[Back to top](#table-of-contents)
 
 ## Creating the Config File
 
-Documentation for this framework is a work in progress. Some documentation for creating a configuration file can be found below. You should check out the example configuration files at [`./config/thoughtful-web/settings/settings.example.php`](config/thoughtful-web/settings/settings.example.php) and [./config/thoughtful-web/settings/settings.example.json](config/thoughtful-web/settings/settings.example.json). Consider checking out the class variables of each **Field** class file to see which HTML attributes they support - these must be configured in a Field's `data_args` array member.
+Documentation for this framework is a work in progress. Some documentation for creating a configuration file can be found below. It is recommended to refer to the example configuration files at [`./config/thoughtful-web/settings/settings.example.php`](config/thoughtful-web/settings/settings.example.php) and [./config/thoughtful-web/settings/settings.example.json](config/thoughtful-web/settings/settings.example.json). See [Fields](#fields) for configuration options for each Field type.
 
 ```php
 array(
@@ -197,7 +190,7 @@ The "script" key allows you to register and enqueue your javascript file for the
 
 The "sections" key accepts an array of Section configurations, each with either an "include" or "fields" key to determine their main content.
 
-[Back to top](#create-settings-pages-for-wordpress)
+[Back to top](#table-of-contents)
 
 ## Sections
 
@@ -206,50 +199,21 @@ A Section requires a "section" and "title" value and either a "fields" or "inclu
 You may include a file by path reference in the Section configuration using the "include" value, which accepts an absolute file path string. Example:
 
 ```php
+...
 array(
 	'section'     => 'section_error_logs',
 	'title'       => __( 'Error Logs', 'thoughtful-web' ),
 	'description' => __( 'Displaying error logs.', 'thoughtful-web' ),
-	'include'     => __DIR__ . '/views/file.php',
+	'include'     => __DIR__ . '/views/file.php', // Optional
 ),
+...
 ```
 
-[Back to top](#create-settings-pages-for-wordpress)
+[Back to top](#table-of-contents)
 
-## Fields Overview
+## Fields
 
-This is the most basic field configuration:
-
-```php
-array(
-	'label' => 'My Text Field',
-	'id'    => 'unique_text_field_option',
-	'type'  => 'text',
-)
-```
-
-Here is an example field configuration using optional values. For a list of each Field's supported `data_args` see [Field Configuration](docs/field-configuration.md).
-
-```php
-array(
-	'label'       => 'My Text Field',
-	'id'          => 'unique_text_field_option',
-	'type'        => 'text',
-	'description' => 'My text field description',
-	'data_args'   => array( // Meaning you don't have to declare the data_args at all.
-		'placeholder'   => 'my placeholder',
-		'default'       => 'A default value',
-		'data-lpignore' => 'true', // Accepts any data attribute. LastPass ignores fields with this data attribute.
-		'size'          => '40', // HTML "size" attribute.
-	),
-),
-```
-
-[Back to top](#create-settings-pages-for-wordpress)
-
-## Field Types Supported
-
-The following Field types are supported. Refer to their class files to see supported HTML attributes which, if declared, must be in the "data_args" value of the field's configuration.
+The following Fields are available and link to their full configuration instructions.
 
 1. [Checkboxes](docs/fields/checkbox.md)
 2. [Color](docs/fields/color.md)
@@ -263,4 +227,22 @@ The following Field types are supported. Refer to their class files to see suppo
 10. [URL](docs/fields/url.md)
 11. [WP Editor](docs/fields/wp-editor.md)
 
-[Back to top](#create-settings-pages-for-wordpress)
+This is the most basic field configuration:
+
+```php
+...
+array(
+	'label' => 'My Text Field',
+	'id'    => 'unique_text_field_option',
+	'type'  => 'text',
+),
+...
+```
+
+[Back to top](#table-of-contents)
+
+## Additional Documentation
+1. [Field Configuration](docs/field-configuration.md)
+2. [Action and Filter Reference](docs/action-filter-reference.md)
+3. [Roadmap](docs/roadmap.md)
+4. [Development Installation and Notes](docs/development.md)
