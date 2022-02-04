@@ -15,10 +15,8 @@ All HTML attributes for supported form fields are allowed and "pattern" attribut
 4. [Simple Implementation](#simple-implementation)
 5. [Implementation](#implementation)
 6. [Creating the Config File](#creating-the-config-file)
-7. [Sections](#sections)
-8. [Fields Overview](#fields-overview)
-9. [Field Types](#field-types-supported)
-10. [Additional Documentation](#additional-documentation)
+7. [Fields](#fields)
+8. [Additional Documentation](#additional-documentation)
 
 ## Features
 
@@ -90,8 +88,10 @@ $my_option = get_option( 'my_option' );
 To load the Settings class with (or without) a configuration parameter you should know the accepted values:
 
 ```php
+...
 @param string|array $config (Optional) The Settings page configuration parameters.
                             Either a configuration file name, file path, or array.
+...
 ```
 
 This class will load a file using an `include` statement if it is a PHP file or using `file_read_contents` it is a JSON file. Here is an explanation of the possible values for this parameter:
@@ -140,7 +140,7 @@ return array(
 	),
 	'sections'     => array(
 		array(
-			'section' => 'unique_section_id',
+			'section' => 'unique_section_one_id',
 			'title'   => __( 'My Section', 'thoughtful-web' ),
 			'fields'  => array(
 				array(
@@ -160,54 +160,44 @@ return array(
 );
 ```
 
-The topmost configuration array accepts six parameters: method_args, description, option_group, stylesheet, script, and sections.
+The topmost configuration array accepts six keys: method_args, description, option_group, stylesheet, script, and sections.
 
-### method_args
-
-The "method_args" key is an array and applies its values to the add_menu_page function, or the add_submenu_page function if instead of an "icon_url" parameter you provide a "parent_slug" parameter.
-
-Documentation:
-1. https://developer.wordpress.org/reference/functions/add_menu_page/
-2. https://developer.wordpress.org/reference/functions/add_submenu_page/
-
-### description
-
-The "description" key is a text description of the menu page and appears just below the title.
-
-### option_group
-
-The "option_group" key is the slug name of the option group which settings are registered to.
-
-### stylesheet
-
-The "stylesheet" key allows you to register and enqueue your stylesheet file for the Settings page.
-
-### script
-
-The "script" key allows you to register and enqueue your javascript file for the Settings page.
-
-### sections
-
-The "sections" key accepts an array of Section configurations, each with either an "include" or "fields" key to determine their main content.
-
-[Back to top](#table-of-contents)
-
-## Sections
-
-A Section requires a "section" and "title" value and either a "fields" or "include" value. Example:
-
-You may include a file by path reference in the Section configuration using the "include" value, which accepts an absolute file path string. Example:
-
-```php
-...
-array(
-	'section'     => 'section_error_logs',
-	'title'       => __( 'Error Logs', 'thoughtful-web' ),
-	'description' => __( 'Displaying error logs.', 'thoughtful-web' ),
-	'include'     => __DIR__ . '/views/file.php', // Optional
-),
-...
-```
+* __'method_args'__  
+  *(array) (Required)* The "method_args" value is applied to the WordPress [add_menu_page function](https://developer.wordpress.org/reference/functions/add_menu_page/), or the [add_submenu_page function](https://developer.wordpress.org/reference/functions/add_submenu_page/) if you provide a "parent_slug" key value instead of an "icon_url" parameter.
+  * __'page_title'__  
+    *(string) (Required)* "The text to be displayed in the title tags of the page when the menu is selected." [1]
+  * __'menu_title'__  
+    *(string) (Required)* "The text to be used for the menu." [1]
+  * __'capability'__  
+    *(string) (Required)* "The capability required for this menu to be displayed to the user." [1]
+  * __'menu_slug'__  
+    *(string) (Required)* "The slug name to refer to this menu by. Should be unique for this menu page and only include lowercase alphanumeric, dashes, and underscores characters to be compatible with sanitize_key()." [1]
+  * __'icon_url'__  
+    *(string) (Optional)* "The URL to the icon to be used for this menu. [...] Pass a base64-encoded SVG using a data URI, which will be colored to match the color scheme. This should begin with 'data:image/svg+xml;base64,'. [...] Pass the name of a Dashicons helper class to use a font icon, e.g. 'dashicons-chart-pie'. [...] Pass 'none' to leave div.wp-menu-image empty so an icon can be added via CSS. [...] Default value: '' " [1]
+  * __'position'__  
+    *(int) (Optional)* "The position in the menu order this item should appear. Default value: null" [1]
+  * __'parent_slug'__  
+    *(string) (Optional)* "The slug name for the parent menu (or the file name of a standard WordPress admin page)." [1]
+* __'option_group'__  
+  *(string) (Required)* The slug name of the option group which settings are registered to.
+* __'description'__  
+  *(string) (Optional)* A description of the menu page which appears just below the title.
+* __'stylesheet'__  
+  *(array) (Optional)* Allows you to register and enqueue your stylesheet file for the Settings page.
+* __'script'__  
+  *(array) (Optional)* Allows you to register and enqueue your javascript file for the Settings page.
+* __'sections'__  
+  *(array) (Required)* Accepts an array of Section configurations with an "include" and/or "fields" key to provide dynamic content.
+  * __'section'__  
+    *(string) (Required)* A unique section ID.
+  * __'title'__  
+    *(string) (Required)* A section title to display to the user.
+  * __'description'__  
+    *(string) (Optional)* A section description to give context to the section's fields.
+  * __'include'__  
+    *(string) (Optional)* An absolute file path to include in the description area of the section.
+  * __'fields'__  
+    *(array) (Optional)* An array of arrays configuring database options that are rendered to a user as settings page fields.
 
 [Back to top](#table-of-contents)
 
@@ -246,3 +236,7 @@ array(
 2. [Action and Filter Reference](docs/action-and-filter-reference.md)
 3. [Roadmap](docs/roadmap.md)
 4. [Development Installation and Notes](docs/development.md)
+
+## Sources
+
+1. https://developer.wordpress.org/reference/functions/add_menu_page/
