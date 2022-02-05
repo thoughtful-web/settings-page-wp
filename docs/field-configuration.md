@@ -47,37 +47,41 @@ array(
 ...
 ```
 
+* __'label'__  
+  *(string) (Required)* "$title [...] Formatted title of the field. Shown as the label for the field during output." [3]
 * __'id'__  
-  (string) (Required)  
-  The name of an option to sanitize and save. It is recommended to namespace your option or take other measures 
-* __'type'__    
-  (string) (Required)  
-  The type of Field the Settings Page will provide to control the Option. Valid values are 'checkbox', 'color', 'email', 'number', 'password', 'tel', 'radio', 'select', 'text', 'textarea', 'url', and 'wp_editor'.
+  *(string) (Required)* "Slug-name to identify the field. Used in the 'id' attribute of tags." Also the database option table key. **NOTE: It is recommended to namespace your options or take other measures to ensure you do not override a pre-existing database option.** [3]
+* __'type'__  
+  *(string) (Required)* The logic to apply to the presentation and validation of this Field. Accepts 'checkbox', 'color', 'email', 'number', 'password', 'tel', 'radio', 'select', 'text', 'textarea', 'url', or 'wp_editor'.
 * __'description'__  
-  (string) (Optional)  
-  A field description for the form to include below it.
-* __'data_args'__    
-  (array) (Optional)  
-  Data used to configure the setting's use by WordPress Core APIs, this library, and the Settings Page HTML attributes of its form element.  
+  *(string) (Optional)* The HTML rendered on the Settings Page after the form element which represents this Field.
+* __'data_args'__  
+  *(array) (Optional)* Data used to configure the setting's use by WordPress Core APIs, this library, and the Settings Page HTML attributes of its form element. Accepts the following keys.
   * __'default'__  
-    (mixed) (Optional)  
-    "Default value when calling get_option()." [[1]](#sources) Provide a string if the field is configured to provide a single choice. Provide an array if the field is configured to allow the user to enable more than once choice in a field, such as with multiple checkboxes or a multi-select dropdown.  
+      *(mixed) (Optional)* "Default value when calling get_option()." [1] Provide a string if the field is configured to provide a single choice. Provide an array if the field is configured to allow the user to enable more than once choice in a field, like with multiple checkboxes or a multi-select dropdown.  
   * __'description'__  
-    (string) (Optional) (Default: '')  
-    Used by the REST API. "A description of the data attached to this setting." [[1]](#sources)
-  * __'sanitize_callback'__  
-    (bool | callable) (Optional) (Default: true)  
-    Accepts true, false, or a callable function in string or array format. Default true, which enables the default sanitization operations provided by this library. A value of false disables the default sanitization. A value of callable hooks your own function to the sanitization step.
+      *(string) (Optional)* "A description of the data attached to this setting." [1] "Only used by the REST API." [2]  
+      *Default value: ''*
+    * __'sanitize_callback'__  
+      *(bool | callable) (Optional)*  
+      Accepts true, false, or a callable function in string or array format. Default true, which enables the default sanitization operations provided by this library. A value of false disables the default sanitization. A value of callable hooks your own function to the sanitization step.  
+      *Default value: true*
   * __'show_in_rest'__  
-    (boolean) (Optional) (Default: false)  
-    "Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key." [[1]](#sources)
-  * __'type'__  
-    (string) (Optional) (Default: 'string')  
-    "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [[2]](#sources) "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [[1]](#sources)
+      *(boolean) (Optional)*  
+      "Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key." [1]  
+      *Default value: false*
+    * __'type'__  
+      *(string) (Optional)*  
+      "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [2] "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [1]  
+      *Default value: 'string'*
 
 ## Sources
 
-1. https://developer.wordpress.org/reference/functions/register_setting/
-2. https://developer.wordpress.org/reference/functions/register_setting/#div-comment-3050
+1. WordPress Developer Resources; Function: register_setting()  
+   *https://developer.wordpress.org/reference/functions/register_setting/*
+2. WordPress Developer Resources; Comment on Function: register_setting()  
+   *https://developer.wordpress.org/reference/functions/register_setting/#div-comment-3050*
+3. WordPress Developer Resources; Function: add_settings_field()  
+   *https://developer.wordpress.org/reference/functions/add_settings_field/*
 
 [Back to top](#field-configuration)

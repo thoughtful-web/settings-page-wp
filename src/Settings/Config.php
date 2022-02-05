@@ -27,14 +27,13 @@ class Config {
 	 * @var array defaults The default values for the settings page registration parameters.
 	 */
 	private $defaults = array(
-		'method'       => 'add_menu_page',
 		'method_args'  => array(
 			'page_title' => 'A Thoughtful Settings Page',
 			'menu_title' => 'Thoughtful Settings',
 			'capability' => 'manage_options',
 			'menu_slug'  => 'thoughtful-settings',
 			'icon_url'   => 'dashicons-admin-settings',
-			'position'   => 2,
+			'position'   => null,
 		),
 		'option_group' => 'options',
 		'description'  => '',
