@@ -5,7 +5,7 @@
 
 ## Introduction
 
-This object-oriented PHP library can use a configuration file to generate both a settings page and sanitized database options for your WordPress plugin or theme. Each field you configure is a registered [Option](https://developer.wordpress.org/plugins/settings/options-api/) and Core WordPress filters and actions apply.
+This PHP library uses your configuration file to create a settings page and sanitized database options for your WordPress plugin or theme. Each field you configure is a registered WordPress [Option](https://developer.wordpress.org/plugins/settings/options-api/), so [filters and actions](docs/action-and-filter-reference.md) can observe them.
 
 ## Table of Contents
 

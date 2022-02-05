@@ -1,13 +1,13 @@
-# Action and Filter Reference
+# Actions and Filters
 
-*[Home](../README.md) / Action and Filter Reference*
+*[Home](../README.md) / Actions and Filters*
 
 ## Table of Contents
 
 1. [Actions](#actions)
 2. [Filters](#filters)
 
-Since each Option is an individual database entry, you can easily target them using wildcard actions and filters. I have listed them here with links to official documentation on their use. Replace `{$option}` with the ID of an option you wish to observe or manipulate.
+Since each Option is an individual database entry, you can easily target them using wildcard actions and filters. I have listed them here with links to official documentation on their use. Replace `{$option}` with the 'id' of a field you wish to observe or manipulate.
 
 ## Actions
 
@@ -18,6 +18,8 @@ Since each Option is an individual database entry, you can easily target them us
 3. [`delete_option_{$option}`](https://developer.wordpress.org/reference/hooks/delete_option_option/)
    * Fires after a specific option has been deleted. 
 
+[Back to top](#actions-and-filters)
+
 ## Filters
 
 1. [`option_{$option}`](https://developer.wordpress.org/reference/hooks/option_option/)
@@ -27,4 +29,4 @@ Since each Option is an individual database entry, you can easily target them us
 2. [`pre_update_option_{$option}`](https://developer.wordpress.org/reference/hooks/pre_update_option_option/)
    * This filter is applied to the option value before being saved to the database
 
-[Back to top](#action-and-filter-reference)
+[Back to top](#actions-and-filters)
