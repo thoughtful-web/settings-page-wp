@@ -12,12 +12,13 @@ This PHP library uses your configuration file to create a settings page and sani
 1. [Features](#features)
 2. [Requirements](#requirements)
 3. [Installation](#installation)
-4. [Simple Implementation](#simple-implementation)
-5. [Implementation](#implementation)
-6. [Creating the Config File](#creating-the-config-file)
-7. [Fields](#fields)
-8. [Additional Documentation](#additional-documentation)
-9. [Sources](#sources)
+4. [Implementation](#implementation)  
+   a. [Simple Method](#simple)  
+   b. [All Methods](#full)  
+5. [Configuration File](#configuration-file)
+6. [Fields](#fields)
+7. [Additional Documentation](#additional-documentation)
+8. [Sources](#sources)
 
 ## Features
 
@@ -67,7 +68,9 @@ $ git clone --depth 1 --branch v0.9.10 https://github.com/thoughtful-web/setting
 
 [Back to top](#table-of-contents)
 
-## Simple Implementation
+## Implementation
+
+### Simple Method
 
 The simplest implementation of this module is to include it with the Composer autoloader and add a configuration file at `./config/thoughtful-web/settings/settings.php` or `./config/thoughtful-web/settings/settings.json`. Then declare the Settings from that configuration file by creating a new instance of the Settings page in your Plugin's main file like this:  
 
@@ -84,7 +87,7 @@ $my_option = get_option( 'my_option' );
 
 [Back to top](#table-of-contents)
 
-## Implementation
+### All Methods
 
 To load the Settings class with (or without) a configuration parameter you should know the accepted values:
 
@@ -108,13 +111,13 @@ This class will load a file using an `include` statement if it is a PHP file or 
    a. `new \ThoughtfulWeb\SettingsPageWP\Page( __DIR__ . '/config/settings.json' );`  
    b. `new \ThoughtfulWeb\SettingsPageWP\Page( '/home/website/settings.php' );`  
 
-4. **Array** The configuration values in their final state.
+4. **Array** is the configuration array in its final state. Use this to generate values dynamically.
 
 **Note:** Call the class without an action hook or within an action hook early enough in the execution order to not skip the WordPress actions, filters, and functions used in this feature's class files. It is yet to be determined which action hooks are compatible with this class's instantiation.
 
 [Back to top](#table-of-contents)
 
-## Creating the Config File
+## Configuration File
 
 Documentation for this framework is a work in progress. Some documentation for creating a configuration file can be found below. It is recommended to refer to the example configuration files at [`./config/thoughtful-web/settings/settings.example.php`](config/thoughtful-web/settings/settings.example.php) and [./config/thoughtful-web/settings/settings.example.json](config/thoughtful-web/settings/settings.example.json). See [Fields](#fields) for configuration options for each Field type.
 
