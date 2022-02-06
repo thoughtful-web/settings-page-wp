@@ -23,26 +23,26 @@ This PHP library uses your configuration file to create a settings page and sani
 ## Features
 
 1. Settings page generation from a configuration file using Core WordPress [Settings](https://developer.wordpress.org/plugins/settings/settings-api/) and [Options](https://developer.wordpress.org/plugins/settings/options-api/) APIs.
-2. Each Field creates and updates an database Option, allowing you to hook and filter them individually.
-3. Each Field is validated on the server in a manner similar to Core WordPress options. Failed server-side validation emits a Settings Page [error notice](https://developer.wordpress.org/reference/functions/add_settings_error/).
-4. Further validate a field using regular expressions on the client and server by adding the [pattern attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/pattern) if a Field's HTML form element supports it. This works on the Settings page and also when a script calls [`update_option()`](https://developer.wordpress.org/reference/functions/update_option/).
-5. Configure a stylesheet and/or script file for the page.
+2. Each Field creates and updates a database option which allows you to hook and filter them individually.
+3. Each Field is validated on the server in a manner similar to Core WordPress options. Failed server-side validation emits a Settings Page error notice at the top of the page.
+4. Further validate a field using regular expressions when its settings page form element supports the `pattern` attribute. This works on the settings page and when a script calls the WordPress [`update_option()`](https://developer.wordpress.org/reference/functions/update_option/) function.
+5. Configure a stylesheet and/or script file for the settings page.
 6. Configure default Field values to automatically load them into the database. If the field is ever emptied these values will be added again.
 7. Zero production dependencies beyond PHP, WordPress, and WordPress included JavaScript (Iris) for the color picker field.
 8. Configure and create pages or subpages.
 
-[Back to top](#table-of-contents)
+[Back to top](#introduction)
 
 ## Requirements
 
 1. WordPress 5.4 and above.
 2. PHP 7.3.5 and above.
-3. This library existing two directory levels below your plugin's root directory. Examples:  
-   a. `vendor/thoughtful-web/activation-requirements-wp`  
-   b. `lib/thoughtful-web/activation-requirements-wp`  
-4. A configuration file or PHP array (*see [Creating the Config File](#creating-the-config-file)*)
+3. A configuration file or PHP array (*see [Configuration File](#configuration-file)*)
+4. This library must exist two directory levels below the plugin or theme's root directory. Examples:  
+   a. *./vendor/thoughtful-web/settings-page-wp*  
+   b. *./lib/thoughtful-web/settings-page-wp*  
 
-[Back to top](#table-of-contents)
+[Back to top](#introduction)
 
 ## Installation
 
@@ -52,7 +52,7 @@ If you are familiar with the command line, you may install this module using Com
 $ composer require thoughtful-web/settings-page-wp
 ```
 
-You may also download it to a different directory in your project to meet requirement #3. You can use a [release](https://github.com/thoughtful-web/settings-page-wp/releases), the [source code](https://github.com/thoughtful-web/settings-page-wp), or the command line:
+You may download it to a different directory in your plugin or theme while still meeting requirement #4. You can use a [release](https://github.com/thoughtful-web/settings-page-wp/releases), the [source code](https://github.com/thoughtful-web/settings-page-wp), or the command line:
 
 ```command-line
 $ mkdir lib/thoughtful-web
@@ -63,29 +63,29 @@ $ git clone https://github.com/thoughtful-web/settings-page-wp
 To clone a specific tagged version:
 
 ```command-line
-$ git clone --depth 1 --branch v0.9.10 https://github.com/thoughtful-web/settings-page-wp
+$ git clone --depth 1 --branch v0.9.11 https://github.com/thoughtful-web/settings-page-wp
 ```
 
-[Back to top](#table-of-contents)
+[Back to top](#introduction)
 
 ## Implementation
 
 ### Simple Method
 
-The simplest implementation of this module is to include it with the Composer autoloader and add a configuration file at `./config/thoughtful-web/settings/settings.php` or `./config/thoughtful-web/settings/settings.json`. Then declare the Settings from that configuration file by creating a new instance of the Settings page in your Plugin's main file like this:  
+The simplest implementation of this module is to include it with the Composer autoloader and add a configuration file at *./config/thoughtful-web/settings/settings.php* or *./config/thoughtful-web/settings/settings.json*. Then declare the Settings from that configuration file by creating a new instance of the Settings page in your Plugin's main file like this:  
 
 ```php
 require __DIR__ . '/vendor/autoload.php;
 new \ThoughtfulWeb\SettingsPageWP\Page();
 ```
 
-Retrieving an option from the database is as simple as [`get_option()`](https://developer.wordpress.org/reference/functions/get_option/):
+Retrieve an option from the database using the WordPress [`get_option()`](https://developer.wordpress.org/reference/functions/get_option/) function:
 
 ```php
 $my_option = get_option( 'my_option' );
 ```
 
-[Back to top](#table-of-contents)
+[Back to top](#introduction)
 
 ### All Methods
 
@@ -98,12 +98,12 @@ To load the Settings class with (or without) a configuration parameter you shoul
 ...
 ```
 
-This class will load a file using an `include` statement if it is a PHP file or using `file_read_contents` it is a JSON file. Here is an explanation of the possible values for this parameter:
+This class will load a file using an `include` statement if it is a PHP file or using the `file_read_contents()` function if it is a JSON file. Here is an explanation of the possible values for this parameter:
 
-1. **No parameter** assumes there is a configuration file located here: `./config/thoughtful-web/settings/settings.php`. Example:  
+1. **No parameter** assumes there is a configuration file located at *./config/thoughtful-web/settings/settings.php* or *./config/thoughtful-web/settings/settings.json*. Example:  
    a. `new \ThoughtfulWeb\SettingsPageWP\Page();`  
 
-2. **File name** accepts a PHP or JSON file name and requires the file to be in the directory `./config/thoughtful-web/settings/{file}`. Examples:  
+2. **File name** accepts a PHP or JSON file name and requires the file to be in the directory *./config/thoughtful-web/settings/*. Examples:  
    a. `new \ThoughtfulWeb\SettingsPageWP\Page( 'filename.php' );`  
    b. `new \ThoughtfulWeb\SettingsPageWP\Page( 'filename.json' );`  
 
@@ -115,11 +115,11 @@ This class will load a file using an `include` statement if it is a PHP file or 
 
 **Note:** Call the class without an action hook or within an action hook early enough in the execution order to not skip the WordPress actions, filters, and functions used in this feature's class files. It is yet to be determined which action hooks are compatible with this class's instantiation.
 
-[Back to top](#table-of-contents)
+[Back to top](#introduction)
 
 ## Configuration File
 
-Documentation for this framework is a work in progress. Some documentation for creating a configuration file can be found below. It is recommended to refer to the example configuration files at [`./config/thoughtful-web/settings/settings.example.php`](config/thoughtful-web/settings/settings.example.php) and [./config/thoughtful-web/settings/settings.example.json](config/thoughtful-web/settings/settings.example.json). See [Fields](#fields) for configuration options for each Field type.
+An example configuration file is included below to give you an idea of what yours should look like. Following this is a complete list of each configuration parameter, its accepted values, its default value, and a description. It is recommended to refer to the example configuration files at [*./config/thoughtful-web/settings/settings.example.php*](config/thoughtful-web/settings/settings.example.php) and [*./config/thoughtful-web/settings/settings.example.json*](config/thoughtful-web/settings/settings.example.json). See [Fields](#fields) for configuration options for each Field type.
 
 ```php
 return array(
@@ -164,7 +164,7 @@ return array(
 );
 ```
 
-The topmost configuration array accepts six keys: method_args, description, option_group, stylesheet, script, and sections.
+Specifications for the configuration file are included below. Text in quotations followed by a number in braces serve as a citation from the WordPress Developer Reference at https://developer.wordpress.org. These citations indicate how a configuration parameter is used by a WordPress function.
 
 * __'method_args'__  
   *(array) (Required)* The "method_args" value is applied to the WordPress [add_menu_page function](https://developer.wordpress.org/reference/functions/add_menu_page/), or the [add_submenu_page function](https://developer.wordpress.org/reference/functions/add_submenu_page/) if you provide a "parent_slug" key value instead of an "icon_url" parameter. Accepts the following keys.
@@ -197,7 +197,7 @@ The topmost configuration array accepts six keys: method_args, description, opti
 * __'stylesheet'__  
   *(array) (Optional)* Register and enqueue a stylesheet file on the Settings Page.
   * __'file'__  
-    *(string)* Either a file name to look for in `./config/thoughtful-web/settings/*.css` or the absolute path to a CSS file.
+    *(string)* Either a file name to look for in *./config/thoughtful-web/settings/* or the absolute path to a CSS file.
   * __'deps'__  
     *(string[]) (Optional)*
 	Dependencies that must be loaded before the registered stylesheet is loaded.  
@@ -205,7 +205,7 @@ The topmost configuration array accepts six keys: method_args, description, opti
 * __'script'__  
   *(array) (Optional)* Register and enqueue a javascript file on the Settings Page.
   * __'file'__  
-    *(string)* Either a file name to look for in `./config/thoughtful-web/settings/*.css` or the absolute path to a CSS file.
+    *(string)* Either a file name to look for in *./config/thoughtful-web/settings/* or the absolute path to a CSS file.
   * __'deps'__  
     *(string[]) (Optional)*
 	Dependencies that must be loaded before the registered stylesheet is loaded.  
@@ -251,7 +251,7 @@ The topmost configuration array accepts six keys: method_args, description, opti
         "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [4] "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [3]  
 		*Default value: 'string'*
 
-[Back to top](#table-of-contents)
+[Back to top](#introduction)
 
 ## Fields
 
@@ -269,7 +269,7 @@ The following Fields are available and link to their full configuration instruct
 10. [URL](docs/fields/url.md)
 11. [WP Editor](docs/fields/wp-editor.md)
 
-[Back to top](#table-of-contents)
+[Back to top](#introduction)
 
 ## Additional Documentation
 1. [Field Configuration](./docs/field-configuration.md)
@@ -277,7 +277,7 @@ The following Fields are available and link to their full configuration instruct
 3. [Roadmap](./docs/roadmap.md)
 4. [Development Installation and Notes](./docs/development.md)
 
-[Back to top](#table-of-contents)
+[Back to top](#introduction)
 ## Sources
 
 1. WordPress Developer Resources; Function: add_menu_page()  
@@ -290,5 +290,11 @@ The following Fields are available and link to their full configuration instruct
    *https://developer.wordpress.org/reference/functions/register_setting/#div-comment-3050*
 5. WordPress Developer Resources; Function: add_settings_field()  
    *https://developer.wordpress.org/reference/functions/add_settings_field/*
+6. WordPress Plugin Handbook; Settings API  
+   *https://developer.wordpress.org/plugins/settings/settings-api/*
+7. WordPress Plugin Handbook; Options API  
+   *https://developer.wordpress.org/plugins/settings/options-api/*
+8. Composer: A Dependency Manager for PHP  
+   *https://getcomposer.org/*
 
-[Back to top](#table-of-contents)
+[Back to top](#introduction)
