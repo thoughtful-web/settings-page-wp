@@ -19,7 +19,7 @@ This PHP library uses your configuration file to create a settings page and sani
 6. [Fields](#fields)
 7. [Additional Documentation](#additional-documentation)
 8. [Contributing](#contributing)
-9. [Sources](#sources)
+9. [References](#references)
 
 ## Features
 
@@ -282,10 +282,10 @@ The following Fields are available and link to their full configuration instruct
 
 ## Contributing
 
-
+I welcome questions and discussion and have opened up Github's features to create a space for this. Please see the [contribution guidelines](./Contributing.md) for details.
 
 [Back to top](#introduction)
-## Sources
+## References
 
 1. WordPress Developer Resources; Function: add_menu_page()  
    *https://developer.wordpress.org/reference/functions/add_menu_page/*
