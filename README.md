@@ -18,7 +18,8 @@ This PHP library uses your configuration file to create a settings page and sani
 5. [Configuration File](#configuration-file)
 6. [Fields](#fields)
 7. [Additional Documentation](#additional-documentation)
-8. [Sources](#sources)
+8. [Contributing](#contributing)
+9. [Sources](#sources)
 
 ## Features
 
@@ -276,6 +277,12 @@ The following Fields are available and link to their full configuration instruct
 2. [Action and Filter Reference](./docs/action-and-filter-reference.md)
 3. [Roadmap](./docs/roadmap.md)
 4. [Development Installation and Notes](./docs/development.md)
+
+[Back to top](#introduction)
+
+## Contributing
+
+
 
 [Back to top](#introduction)
 ## Sources
