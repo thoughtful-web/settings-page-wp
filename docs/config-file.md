@@ -10,10 +10,6 @@
 
 ## Example File
 
-
-
-## Configuration File
-
 An example configuration file is included below to give you an idea of what yours should look like. It is recommended to refer to the example configuration files at [*./config/thoughtful-web/settings/settings.example.php*](config/thoughtful-web/settings/settings.example.php) and [*./config/thoughtful-web/settings/settings.example.json*](config/thoughtful-web/settings/settings.example.json). Some field types have a different setup than the others - see [field-configuration.md](./field-configuration.md) for configuration options for each Field type.
 
 ```php
@@ -63,7 +59,7 @@ return array(
 
 ## File Location
 
-There are several places where you may keep your configuration file, and listed below are the different ways to tell the `Page()` class where it is:
+There are several places where you may keep your configuration file. Tell the `Page()` class where it is using the options below:
 
 1. Provide no parameter to the class, and it assumes there is a configuration file located at *./config/thoughtful-web/settings/settings.php* or *./config/thoughtful-web/settings/settings.json*. Example:  
    a. `new \ThoughtfulWeb\SettingsPageWP\Page();`  
@@ -170,3 +166,5 @@ Specifications for the configuration file are included below. Text in quotations
         *(string) (Optional)*  
         "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [4] "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [3]  
 		*Default value: 'string'*
+
+[Back to top](#configuration-file)
