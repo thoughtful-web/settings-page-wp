@@ -26,11 +26,13 @@ This library uses [Github Issues](https://github.com/thoughtful-web/settings-pag
 This library's code follows certain standards and practices.
 
 1. WordPress Coding Standards, with the exception that PHP class file names follow the PSR-4 format.
-2. No production dependencies.
-3. Stick to the founding principles:  
+3. Principles:  
    a. Secure defaults  
+   b. No production dependencies  
    b. Minimal time to implement  
    c. Simplicity where possible
+
+See [Development Installation and Notes](./docs/development.md) for information related to setting up the library for development purposes.
 
 Thank you!  
 *Zach Watkins*
