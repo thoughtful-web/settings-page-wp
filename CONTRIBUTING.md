@@ -29,7 +29,7 @@ This library's code follows certain standards and practices.
 2. No production dependencies.
 3. Stick to the founding principles:  
    a. Secure defaults  
-   b. Minimal time spent to implement  
+   b. Minimal time to implement  
    c. Simplicity where possible
 
 Thank you!  
