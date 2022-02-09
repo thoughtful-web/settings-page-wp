@@ -45,13 +45,15 @@ In any case, this library must exist two directory levels below the plugin or th
 
 *Note: For full specification details on the configuration file values and other possible locations for a configuration file, see here: [docs/config-file.md](./docs/config-file.md)*
 
-**Step 1:** Download the composer module.
+**Step 1**  
+Download the composer module.
 
 ```command-line
 $ composer require thoughtful-web/settings-page-wp
 ```
 
-**Step 2:** Include the library in your plugin or theme using the Composer autoloader:
+**Step 2**  
+Include the library in your plugin or theme using the Composer autoloader:
 
 ```php
 require __DIR__ . '/vendor/autoload.php;
@@ -59,11 +61,14 @@ require __DIR__ . '/vendor/autoload.php;
 new \ThoughtfulWeb\SettingsPageWP\Page();
 ```
 
-**Step 3:** Copy the [example configuration file](./config/thoughtful-web/settings/settings.example.php) to your plugin or theme's directory at `./config/thoughtful-web/settings/settings.php`.
+**Step 3**  
+Copy the [example configuration file](./config/thoughtful-web/settings/settings.example.php) to your plugin or theme's directory at `./config/thoughtful-web/settings/settings.php`.
 
-**Step 4:** Visit your new settings page at https://your-domain.com/wp-admin/admin.php?page=thoughtful-settings and fill it in as you wish.
+**Step 4**  
+Visit your new settings page at https://your-domain.com/wp-admin/admin.php?page=thoughtful-settings and fill it in as you wish.
 
-**Step 5:** Retrieve an option from the database using WordPress's [`get_option()`](https://developer.wordpress.org/reference/functions/get_option/) function:
+**Step 5**  
+Retrieve an option from the database using WordPress's [`get_option()`](https://developer.wordpress.org/reference/functions/get_option/) function:
 
 ```php
 $the_option = get_option( 'unique_text_field' );
