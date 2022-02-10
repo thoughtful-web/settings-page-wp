@@ -10,7 +10,7 @@
 
 ## Example File
 
-An example configuration file is included below to give you an idea of what yours should look like. It is recommended to refer to the example configuration files at [*./config/thoughtful-web/settings/settings.example.php*](config/thoughtful-web/settings/settings.example.php) and [*./config/thoughtful-web/settings/settings.example.json*](config/thoughtful-web/settings/settings.example.json). Some field types have a different setup than the others - see [field-configuration.md](./field-configuration.md) for configuration options for each Field type.
+An example configuration file is included below to give you an idea of what yours should look like. It is recommended to refer to the example configuration files at [*./config/thoughtful-web/settings.example.php*](config/thoughtful-web/settings.example.php) and [*./config/thoughtful-web/settings.example.json*](config/thoughtful-web/settings.example.json). Some field types have a different setup than the others - see [field-configuration.md](./field-configuration.md) for configuration options for each Field type.
 
 ```php
 return array(
@@ -61,10 +61,10 @@ return array(
 
 There are several places where you may keep your configuration file. Tell the `Page()` class where it is using the options below:
 
-1. Provide no parameter to the class, and it assumes there is a configuration file located at *./config/thoughtful-web/settings/settings.php* or *./config/thoughtful-web/settings/settings.json*. Example:  
+1. Provide no parameter to the class, and it assumes there is a configuration file located at *./config/thoughtful-web/settings.php* or *./config/thoughtful-web/settings.json*. Example:  
    a. `new \ThoughtfulWeb\SettingsPageWP\Page();`  
 
-2. Provide a file name to the class, and it accepts a PHP or JSON file name from the directory *./config/thoughtful-web/settings/*. Examples:  
+2. Provide a file name to the class, and it accepts a PHP or JSON file name from the directory *./config/thoughtful-web/*. Examples:  
    a. `new \ThoughtfulWeb\SettingsPageWP\Page( 'filename.php' );`  
    b. `new \ThoughtfulWeb\SettingsPageWP\Page( 'filename.json' );`  
 
@@ -113,7 +113,7 @@ Specifications for the configuration file are included below. Text in quotations
 * __'stylesheet'__  
   *(array) (Optional)* Register and enqueue a stylesheet file on the Settings Page.
   * __'file'__  
-    *(string)* Either a file name to look for in *./config/thoughtful-web/settings/* or the absolute path to a CSS file.
+    *(string)* A file name to look for in *./config/thoughtful-web/settings/*. This is on the roadmap to allow it to be located elsewhere in your plugin or theme.
   * __'deps'__  
     *(string[]) (Optional)*
 	Dependencies that must be loaded before the registered stylesheet is loaded.  
@@ -121,7 +121,7 @@ Specifications for the configuration file are included below. Text in quotations
 * __'script'__  
   *(array) (Optional)* Register and enqueue a javascript file on the Settings Page.
   * __'file'__  
-    *(string)* Either a file name to look for in *./config/thoughtful-web/settings/* or the absolute path to a CSS file.
+    *(string)* A file name to look for in *./config/thoughtful-web/settings*. This is on the roadmap to allow it to be located elsewhere in your plugin or theme.
   * __'deps'__  
     *(string[]) (Optional)*
 	Dependencies that must be loaded before the registered stylesheet is loaded.  

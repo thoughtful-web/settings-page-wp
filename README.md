@@ -1,6 +1,6 @@
 # Create Settings Pages for WordPress
 
-This PHP library is a quick, easy way to add a settings page to your plugin or theme. It uses your configuration file to create a settings page and sanitized database options for your WordPress plugin or theme. Each field you configure is a registered WordPress Option so filters and actions can observe them.
+This PHP library provides a quick, easy way to add a settings page to your plugin or theme. One configuration file defines both your settings and the page that manages them.
 
 ## Table of Contents
 
@@ -12,10 +12,10 @@ This PHP library is a quick, easy way to add a settings page to your plugin or t
 
 ## Features
 
-1. Settings page generation from a configuration file (*.php, *.json).
+1. Settings page generation from a configuration file (*.php or *.json).
 2. Validation on the server by default.
 3. No external libraries beyond WordPress's Iris library for color fields.
-4. The following field types are supported:  
+4. Supports these form field types:  
    1. Checkboxes
    2. Color
    3. Email
@@ -46,7 +46,7 @@ In any case, this library must exist two directory levels below the plugin or th
 *Note: For full specification details on the configuration file values and other possible locations for a configuration file, see here: [docs/config-file.md](./docs/config-file.md)*
 
 **Step 1**  
-Download the composer module.
+> Download the composer module.
 
 ```command-line
 $ composer require thoughtful-web/settings-page-wp
@@ -62,7 +62,7 @@ new \ThoughtfulWeb\SettingsPageWP\Page();
 ```
 
 **Step 3**  
-Copy the [example configuration file](./config/thoughtful-web/settings/settings.example.php) to your plugin or theme's directory at `./config/thoughtful-web/settings/settings.php`.
+Copy the [example configuration file](./config/thoughtful-web/settings.example.php) to your plugin or theme's directory at `./config/thoughtful-web/settings.php`.
 
 **Step 4**  
 Visit your new settings page at https://your-domain.com/wp-admin/admin.php?page=thoughtful-settings and fill it in as you wish.

@@ -11,8 +11,8 @@
 
 These are new features I have thought about implementing. Bug fixes will be implemented and enhancements might be implemented.
 
-1. Continue developing the documentation.
-2. Create a form to generate a configuration file with.
+1. Allow stylesheet and script files to be located anywhere in your plugin or theme, using a file location approach similar to the main config file.
+2. Consider creating a form to generate a configuration file with.
 3. Consider adding a network admin settings page configuration.
 4. Consider adding a filter to the Select Field configuration to enable populating choices with data like:  
    a) Users  
@@ -24,7 +24,7 @@ These are new features I have thought about implementing. Bug fixes will be impl
 6. Consider implementing a File field.
 7. Check this plugin to see if we can scope admin-only actions within action hooks to minimize its impact on site performance. Currently known supported action hook is 'wp_loaded'.
 8. Consider adding support to the Color field for rgb and rgba color formats.
-9. Allow data_arg HTML attribute arguments to receive an array that maps different attributes to different choices.
+9. Consider allowing data_arg HTML attribute arguments to receive an array that maps different attributes to different 'choices'.
 
 [Back to top](#roadmap)
 
