@@ -72,28 +72,34 @@ class Config {
 
 		$try_loading_file = empty( $config ) || is_string( $config ) ? true : false;
 		if ( $try_loading_file ) {
-			$path_from_subfolder = dirname( __FILE__, 6 ) . '/config/thoughtful-web/settings/';
-			$is_json             = false;
-			if ( is_string( $config ) && ! empty( $config ) && preg_match( '/(\.php|\.json)$/', $config ) ) {
-				// Load a file from the path provided by the user.
-				$is_json = preg_match( '/\.json$/', $config );
-				// If only a file name is provided, it must be in the config directory.
-				// If a file path is provided, it must be a complete file path.
-				$file_path_pre = preg_match( '/\//', $config ) ? '' : $path_from_subfolder;
-			} elseif ( empty( $config ) ) {
-				// If no parameter is provided then assume the file name is just "settings.json|php".
-				$file_path_pre = $path_from_subfolder;
-				$is_json       = file_exists( "{$path_from_subfolder}settings.json" );
-				$config        = $is_json ? 'settings.json' : 'settings.php';
-			}
-			// Check for JSON, then PHP.
-			$file_path = "{$file_path_pre}{$config}";
-			if ( file_exists( $file_path ) ) {
-				if ( $is_json ) {
-					$str    = file_get_contents( $file_path );
-					$config = json_decode( $str, true );
-				} else {
-					$config = include $file_path;
+			// Legacy support for previous required path.
+			$paths_from_subfolder = array(
+				dirname( __FILE__, 6 ) . '/config/thoughtful-web/',
+				dirname( __FILE__, 6 ) . '/config/thoughtful-web/settings/',
+			);
+			foreach ( $paths_from_subfolder as $path_from_subfolder ) {
+				$is_json = false;
+				if ( is_string( $config ) && ! empty( $config ) && preg_match( '/(\.php|\.json)$/', $config ) ) {
+					// Load a file from the path provided by the user.
+					$is_json = preg_match( '/\.json$/', $config );
+					// If only a file name is provided, it must be in the config directory.
+					// If a file path is provided, it must be a complete file path.
+					$file_path_pre = preg_match( '/\//', $config ) ? '' : $path_from_subfolder;
+				} elseif ( empty( $config ) ) {
+					// If no parameter is provided then assume the file name is just "settings.json|php".
+					$file_path_pre = $path_from_subfolder;
+					$is_json       = file_exists( "{$path_from_subfolder}settings.json" );
+					$config        = $is_json ? 'settings.json' : 'settings.php';
+				}
+				// Check for JSON, then PHP.
+				$file_path = "{$file_path_pre}{$config}";
+				if ( file_exists( $file_path ) ) {
+					if ( $is_json ) {
+						$str    = file_get_contents( $file_path );
+						$config = json_decode( $str, true );
+					} else {
+						$config = include $file_path;
+					}
 				}
 			}
 		}

@@ -6,7 +6,7 @@
  * @author     Zachary Kendall Watkins <watkinza@gmail.com>
  * @copyright  Zachary Kendall Watkins 2022
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
- * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/config/thoughtful-web/settings/settings.example.php
+ * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/config/thoughtful-web/settings.example.php
  * @since      0.1.0
  */
 
