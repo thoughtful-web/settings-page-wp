@@ -2,5 +2,5 @@
 # Create the release archive file on Windows.
 branchname=$(git rev-parse --abbrev-ref HEAD)
 if [ $branchname = "main" ]; then
-	exec powershell.exe -ExecutionPolicy RemoteSigned -File 'hooks\post-commit.ps1'
+	exec powershell.exe -ExecutionPolicy RemoteSigned -File 'bin\make-release-pkg.ps1'
 fi
