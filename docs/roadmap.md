@@ -25,6 +25,7 @@ These are new features I have thought about implementing. Bug fixes will be impl
 7. Check this plugin to see if we can scope admin-only actions within action hooks to minimize its impact on site performance. Currently known supported action hook is 'wp_loaded'.
 8. Consider adding support to the Color field for rgb and rgba color formats.
 9. Consider allowing data_arg HTML attribute arguments to receive an array that maps different attributes to different 'choices'.
+10. Improve REST API support, including configuring a field's REST value type when the return value of the option is an array. "If you plan to use your setting in the REST API, use both the rest_api_init and admin_init hooks when calling register_setting() instead of just admin_init. The show_in_rest argument is ineffective when hooked into admin_init alone." https://developer.wordpress.org/reference/functions/register_setting/#comment-content-3094
 
 [Back to top](#roadmap)
 
@@ -33,7 +34,5 @@ These are new features I have thought about implementing. Bug fixes will be impl
 1. Add a 'allowed_data_args' class constant to each Field. This should involve changing data_args processing to disallow arguments like "checked" from being configured but still allow them to be output. 
 2. Apply the 'disabled' and 'readonly' HTML attribute arguments on the server during the sanitization step to disallow updating an option only if an attempt to do so is done from the Settings page (which is redirected to options.php during the POST request).
 3. Apply the 'required' HTML attribute on the server during the sanitization step only if an attempt to do so is done from the Settings page (which is redirected to options.php during the POST request).
-4. Configure REST value type when the return value of the option is an array.
-5. Improve REST API support. "If you plan to use your setting in the REST API, use both the rest_api_init and admin_init hooks when calling register_setting() instead of just admin_init. The show_in_rest argument is ineffective when hooked into admin_init alone." https://developer.wordpress.org/reference/functions/register_setting/#comment-content-3094
 
 [Back to top](#roadmap)
