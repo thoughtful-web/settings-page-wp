@@ -108,8 +108,11 @@ class Sanitize {
 			return $option_value;
 		}
 
-		// Reject attempts to change a readonly value.
-		if ( array_key_exists( 'readonly', $data_args ) && false !== $data_args['readonly'] ) {
+		// Reject attempts to change a readonly or disabled field value.
+		if (
+			( array_key_exists( 'readonly', $data_args ) && false !== $data_args['readonly'] )
+			|| ( array_key_exists( 'disabled', $data_args ) && false !== $data_args['disabled'] )
+		) {
 			$value = $option_value;
 		}
 
