@@ -88,11 +88,17 @@ array(
 Supported data arguments for HTML attributes are listed below. Provide a **string** value to add the attribute with a value. Provide a **boolean true** value to add the attribute without any value. To learn how to use these attributes see [MDN's checkbox input documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox).
 
 * __'class'__  
-  (string) Add a "class" attribute to all checkbox elements.
+  *(string)*
+  Add a "class" attribute to all checkbox elements.
 * __'data-*'__  
-  (true | string) Add a data attribute to all checkbox elements.
+  *(true | string)*
+  Add a data attribute to all checkbox elements.
+* __'disabled'__  
+  *(true | string)*
+  On the settings page, this argument prevents the element from being changed and excludes its value from the form's submitted values. On the server, this argument uses the option sanitization filter to disallow changes to the value when performed using `update_option()`.
 * __'readonly'__  
-  (true | string) Disallow changes to the setting's value on both the settings page and the server during the sanitization step if `update_option()` is used.
+  *(true | string)*
+  On the settings page, this argument prevents the element from being changed but includes its value with the form's submitted values. On the server, this argument uses the option sanitization filter to disallow changes to the value when performed using `update_option()`.
 
 [Back to top](#checkbox)
 
@@ -101,20 +107,24 @@ Supported data arguments for HTML attributes are listed below. Provide a **strin
 These arguments are passed to the Core WordPress function register_setting(), although the 'sanitize_callback' is preprocessed before being passed to this function. See https://developer.wordpress.org/reference/functions/register_setting/.
 
 * __'default'__  
-  (mixed) (Optional)  
+  *(mixed) (Optional)* 
   "Default value when calling get_option()." [[2]](#sources) Provide a string if the field is configured to provide a single choice. Provide an array if the field is configured to allow the user to enable more than once choice in a field, such as with multiple checkboxes or a multi-select dropdown.
 * __'description'__  
-  (string) (Optional) (Default: '')  
-  Used by the REST API. "A description of the data attached to this setting." [[2]](#sources)
+  *(string) (Optional)* 
+  Used by the REST API. "A description of the data attached to this setting." [[2]](#sources)  
+  *Default: ''*
 * __'sanitize_callback'__  
-  (bool | callable) (Optional) (Default: true)  
-  Accepts true, false, or a callable function in string or array format. Default true, which enables the default sanitization operations provided by this library. A value of false disables the default sanitization. A value of callable hooks your own function to the sanitization step.
+  *(bool | callable) (Optional)* 
+  Accepts true, false, or a callable function in string or array format. Default true, which enables the default sanitization operations provided by this library. A value of false disables the default sanitization. A value of callable hooks your own function to the sanitization step.  
+  *Default: true*
 * __'show_in_rest'__  
-  (boolean) (Optional) (Default: false)  
-  "Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key." [[2]](#sources)
+  *(boolean) (Optional)* 
+  "Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key." [[2]](#sources)  
+  *Default: false*
 * __'type'__  
-  (string) (Optional) (Default: 'string')  
-  "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [[3]](#sources) "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [[2]](#sources)
+  *(string) (Optional)* 
+  "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [[3]](#sources) "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [[2]](#sources)  
+  *Default: 'string'*
 
 [Back to top](#checkbox)
 

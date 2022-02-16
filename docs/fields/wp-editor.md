@@ -53,20 +53,26 @@ Data arguments for HTML attributes are not supported.
 These arguments are passed to the Core WordPress function register_setting(), although the 'sanitize_callback' is preprocessed before being passed to this function. See https://developer.wordpress.org/reference/functions/register_setting/.
 
 * __'default'__  
-  (mixed) (Optional)  
+  *(mixed) (Optional)* 
   "Default value when calling get_option()." [[1]](#sources) Provide a string if the field is configured to provide a single choice. Provide an array if the field is configured to allow the user to enable more than once choice in a field, such as with multiple checkboxes or a multi-select dropdown.
 * __'description'__  
-  (string) (Optional) (Default: '')  
-  Used by the REST API. "A description of the data attached to this setting." [[1]](#sources)
+  *(string) (Optional)* 
+  Used by the REST API. "A description of the data attached to this setting." [[1]](#sources)  
+  *Default: ''*
 * __'sanitize_callback'__  
-  (bool | callable) (Optional) (Default: true)  
-  Accepts true, false, or a callable function in string or array format. Default true, which enables the default sanitization operations provided by this library. A value of false disables the default sanitization. A value of callable hooks your own function to the sanitization step.
+  *(boolean | callable) (Optional)* 
+  Accepts true, false, or a callable function in string or array format. Default true, which enables the default sanitization operations provided by this library. A value of false disables the default sanitization. A value of callable hooks your own function to the sanitization step.  
+  *Default: true*
 * __'show_in_rest'__  
-  (boolean) (Optional) (Default: false)  
-  "Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key." [[1]](#sources)
+  *(boolean) (Optional)* 
+  "Whether data associated with this setting should be included in the REST API. When registering complex settings, this argument may optionally be an array with a 'schema' key." [[1]](#sources)  
+  *Default: false*
 * __'type'__  
-  (string) (Optional) (Default: 'string')  
-  "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [[2]](#sources) "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [[1]](#sources)
+  *(string) (Optional)* 
+  "Only used by the REST API to define the schema associated with the setting and to implement sanitization over the REST API." [[2]](#sources) "The type of data associated with this setting. Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'." [[1]](#sources)  
+  *Default: 'string'*
+
+[Back to top](#wp-editor)
 
 [Back to top](#wp-editor)
 
