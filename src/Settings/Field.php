@@ -167,8 +167,9 @@ class Field {
 		register_setting( $option_group, $field['id'], $field['data_args'] );
 
 		// Detect the user capability requirement of the field.
-		if ( array_key_exists( 'capability', $field['data_args'] ) && ! empty( $field['data_args']['capability'] ) ) {
-			$this->capability = $field['data_args']['capability'];
+		$field_capability = array_key_exists( 'capability', $field['data_args'] ) ? $field['data_args']['capability'] : '';
+		if ( ! empty( $field_capability ) ) {
+			$this->capability = $field_capability;
 		} elseif ( $capability ) {
 			$this->capability = $capability;
 		}
@@ -245,7 +246,7 @@ class Field {
 	 * @return string
 	 */
 	public function sanitize( $value ) {
-
+		
 		$sanitizer = new Sanitize( $this->field, $this->capability );
 		$value     = $sanitizer->sanitize( $value );
 		return $value;
@@ -265,6 +266,7 @@ class Field {
 
 		// Assemble the variables necessary to output the form field from settings.
 		$value = get_option( $args['id'] );
+		// TODO: See if this if statement is necessary by removing it.
 		if ( empty( $value ) && array_key_exists( 'default', $args['data_args'] ) ) {
 			$value = $args['data_args']['default'];
 		}
