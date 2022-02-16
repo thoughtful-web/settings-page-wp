@@ -101,6 +101,13 @@ These arguments are passed to the Core WordPress function register_setting(), al
 
 [Back to top](#text)
 
+### Other Arguments
+
+* __'capability'__  
+  *(string) (Required)* 
+  The user capability required for this field's control to be displayed to a user visiting the settings page.  
+  *Default: The value of the method_args capability argument.*
+
 [Back to top](#text)
 
 ## Sources
