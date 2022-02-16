@@ -7,7 +7,7 @@ This PHP library provides a quick, easy way to add a settings page to your plugi
 1. [Features](#features)
 3. [Requirements](#installation)
 4. [Quick Start](#quick-start)
-5. [Documentation](#additional-documentation)
+5. [Documentation](#documentation)
 8. [Contributing](#contributing)
 
 ## Features
