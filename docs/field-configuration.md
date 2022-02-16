@@ -11,18 +11,18 @@
 
 Listed below are documents describing how to implement each Field into your configuration file.
 
-1. [Checkbox](docs/fields/checkbox.md)
-2. [Color](docs/fields/color.md)
-3. [Email](docs/fields/email.md)
-4. [Number](docs/fields/number.md)
-5. [Password](docs/fields/password.md)
-5. [Phone](docs/fields/phone.md)
-6. [Radio](docs/fields/radio.md)
-7. [Select](docs/fields/select.md)
-8. [Text](docs/fields/text.md)
-9. [Textarea](docs/fields/textarea.md)
-10. [URL](docs/fields/url.md)
-11. [WP Editor](docs/fields/wp-editor.md)
+1. [Checkbox](./fields/checkbox.md)
+2. [Color](./fields/color.md)
+3. [Email](./fields/email.md)
+4. [Number](./fields/number.md)
+5. [Password](./fields/password.md)
+5. [Phone](./fields/phone.md)
+6. [Radio](./fields/radio.md)
+7. [Select](./fields/select.md)
+8. [Text](./fields/text.md)
+9. [Textarea](./fields/textarea.md)
+10. [URL](./fields/url.md)
+11. [WP Editor](./fields/wp-editor.md)
 
 [Back to top](#field-configuration)
 
