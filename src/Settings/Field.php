@@ -39,6 +39,20 @@ class Field {
 	);
 
 	/**
+	 * The allowed data arguments for configuration.
+	 */
+	protected $allowed_html_args = array(
+		'class',
+		'data-*',
+		'list',
+		'maxlength',
+		'minlength',
+		'pattern',
+		'placeholder',
+		'size',
+	);
+
+	/**
 	 * Allowed HTML.
 	 *
 	 * @var array $allowed_html The allowed HTML for the element produced by this class.
@@ -303,43 +317,25 @@ class Field {
 
 		// Determine additional HTML attributes to append to the element.
 		$extra_attrs = array();
-		// Disallow some valid attributes from being configured, which our library already handles.
-		$disallowed_config_attrs = array(
-			'type',
-			'value',
-			'name',
-			'id',
-		);
-		// Then choose those among the data_args array members.
-		$field_allowed_html_key = array_keys( $this->allowed_html )[0];
-		$field_allowed_html     = $this->allowed_html[ $field_allowed_html_key ];
+		// Allow certain data_args to be used as HTML attributes.
 		foreach ( $field['data_args'] as $attr => $attr_value ) {
 			// Test the data_arg to see if it is an allowable HTML attribute.
-			$apply_attr = false;
-			if ( array_key_exists( $attr, $field_allowed_html )
-				&& ! in_array( $attr, $disallowed_config_attrs, true ) ) {
-				// This attribute is explicitly declared in the allowed_html class variable and
-				// not in the disallow list.
-				$apply_attr = true;
-			} elseif ( strpos( $attr, 'data-' ) === 0 ) {
-				// This is a data attribute.
-				$apply_attr = true;
-			}
-			if ( $apply_attr ) {
+			if ( in_array( $attr, $this->allowed_html_args, true ) || 0 === strpos( $attr, 'data-' ) ) {
 				// Output the attribute name if it is a string or true.
-				if ( is_string( $attr ) || true === $attr ) {
-					$output_attr = $attr;
-					// Output the attribute value if it is a non-empty string.
-					if ( is_string( $attr_value ) ) {
-						$output_attr .= '="' . esc_attr( $attr_value ) . '"';
-					}
-					// Append the output.
-					$extra_attrs[ $attr ] = $output_attr;
+				$output_attr = $attr;
+				// Output the attribute value if it is a non-empty string.
+				if ( is_string( $attr_value ) ) {
+					$output_attr .= '="' . esc_attr( $attr_value ) . '"';
 				}
+				// Append the output.
+				$extra_attrs[ $attr ] = $output_attr;
 			}
 		}
 		// Then combine the results into a string.
-		$extra_attrs = ! empty( $extra_attrs ) ? implode( ' ', $extra_attrs ) . ' ' : '';
+		$extra_attrs = implode( ' ', $extra_attrs );
+		if ( ! empty( $extra_attrs ) ) {
+			$extra_attrs .= ' ';
+		}
 
 		return $extra_attrs;
 
