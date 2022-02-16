@@ -8,7 +8,6 @@ Since each Option is an individual database entry, you can easily target them us
 
 1. [Actions](#actions)
 2. [Filters](#filters)
-3. [Sources](#sources)
 
 ## Actions
 
@@ -37,18 +36,3 @@ Since each Option is an individual database entry, you can easily target them us
    *https://developer.wordpress.org/reference/hooks/pre_update_option_option/*
 
 [Back to top](#actions-and-filters)
-
-## Sources
-
-1. WordPress Developer Resources; Action Hooks: add_option_{$option}  
-   *https://developer.wordpress.org/reference/hooks/add_option_option/*
-2. WordPress Developer Resources; Action Hooks: update_option_{$option}  
-   *https://developer.wordpress.org/reference/hooks/update_option_option/*
-3. WordPress Developer Resources; Action Hooks: delete_option_{$option}  
-   *https://developer.wordpress.org/reference/hooks/delete_option_option/*
-4. WordPress Developer Resources; Filter Hooks: option_{$option}  
-   *https://developer.wordpress.org/reference/hooks/option_option/*
-5. WordPress Developer Resources; Filter Hooks: pre_option_{$option}  
-   *https://developer.wordpress.org/reference/hooks/pre_option_option/*
-6. WordPress Developer Resources; Filter Hooks: pre_update_option_{$option}  
-   *https://developer.wordpress.org/reference/hooks/pre_update_option_option/*
