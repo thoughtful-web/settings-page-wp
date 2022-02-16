@@ -31,8 +31,6 @@ These are new features I have thought about implementing. Bug fixes will be impl
 
 ## Bug Fixes
 
-1. Add a 'allowed_data_args' class constant to each Field. This should involve changing data_args processing to disallow arguments like "checked" from being configured but still allow them to be output. 
-2. Apply the 'disabled' and 'readonly' HTML attribute arguments on the server during the sanitization step to disallow updating an option only if an attempt to do so is done from the Settings page (which is redirected to options.php during the POST request).
-3. Apply the 'required' HTML attribute on the server during the sanitization step only if an attempt to do so is done from the Settings page (which is redirected to options.php during the POST request).
+1. Apply the 'required' HTML attribute on the server during the sanitization step only if an attempt to do so is done from the Settings page (which is redirected to options.php during the POST request).
 
 [Back to top](#roadmap)
