@@ -41,6 +41,22 @@ class Url extends Field {
 	);
 
 	/**
+	 * The allowed data arguments for configuration.
+	 */
+	protected $allowed_html_args = array(
+		'class',
+		'data-*',
+		'disabled',
+		'list',
+		'maxlength',
+		'minlength',
+		'pattern',
+		'placeholder',
+		'readonly',
+		'size',
+	);
+
+	/**
 	 * Allowed HTML.
 	 *
 	 * @var array $allowed_html The allowed HTML for the element produced by this class.

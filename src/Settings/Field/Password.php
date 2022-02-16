@@ -41,6 +41,21 @@ class Password extends Field {
 	);
 
 	/**
+	 * The allowed data arguments for configuration.
+	 */
+	protected $allowed_html_args = array(
+		'class',
+		'data-*',
+		'readonly',
+		'size',
+		'list',
+		'placeholder',
+		'pattern',
+		'disabled',
+		'inputmode',
+	);
+
+	/**
 	 * Allowed HTML.
 	 *
 	 * @var array $allowed_html The allowed HTML for the element produced by this class.

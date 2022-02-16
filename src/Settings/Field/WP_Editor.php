@@ -39,6 +39,11 @@ class WP_Editor extends Field {
 	);
 
 	/**
+	 * The allowed data arguments for configuration.
+	 */
+	protected $allowed_html_args = array();
+
+	/**
 	 * Allowed HTML. Defined during construction.
 	 *
 	 * @var array $allowed_html The allowed HTML for the element produced by this class.
