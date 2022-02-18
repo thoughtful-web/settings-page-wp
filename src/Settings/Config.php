@@ -89,10 +89,10 @@ class Config {
 					// If no parameter is provided then assume the file name is just "settings.json|php".
 					$file_path_pre = $path_from_subfolder;
 					$is_json       = file_exists( "{$path_from_subfolder}settings.json" );
-					$config        = $is_json ? 'settings.json' : 'settings.php';
+					$filename      = $is_json ? 'settings.json' : 'settings.php';
 				}
 				// Check for JSON, then PHP.
-				$file_path = "{$file_path_pre}{$config}";
+				$file_path = "{$file_path_pre}{$filename}";
 				if ( file_exists( $file_path ) ) {
 					if ( $is_json ) {
 						$str    = file_get_contents( $file_path );
@@ -100,6 +100,7 @@ class Config {
 					} else {
 						$config = include $file_path;
 					}
+					break;
 				}
 			}
 		}
