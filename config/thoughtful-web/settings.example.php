@@ -84,9 +84,7 @@ return array(
 						'1' => 'My Choice',
 					),
 					'data_args'   => array(
-						'default' => array(
-							'1' => 'My Choice',
-						),
+						'default' => '1',
 					),
 				),
 				array(

@@ -63,9 +63,7 @@
                         "1": "My Choice"
                     },
                     "data_args": {
-                        "default": {
-                            "1": "My Choice"
-                        }
+                        "default": "1"
                     }
                 },
                 {
