@@ -46,6 +46,7 @@ class Checkbox extends Field {
 		'data-*',
 		'disabled',
 		'readonly',
+		'required',
 	);
 
 	/**

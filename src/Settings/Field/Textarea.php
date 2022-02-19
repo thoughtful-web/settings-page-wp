@@ -48,6 +48,7 @@ class Textarea extends Field {
 		'disabled',
 		'placeholder',
 		'readonly',
+		'required',
 		'rows',
 		'wrap',
 	);

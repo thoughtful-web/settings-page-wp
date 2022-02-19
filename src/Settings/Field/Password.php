@@ -47,6 +47,7 @@ class Password extends Field {
 		'class',
 		'data-*',
 		'readonly',
+		'required',
 		'size',
 		'list',
 		'placeholder',

@@ -53,6 +53,7 @@ class Url extends Field {
 		'pattern',
 		'placeholder',
 		'readonly',
+		'required',
 		'size',
 	);
 

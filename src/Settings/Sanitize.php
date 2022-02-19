@@ -358,8 +358,8 @@ class Sanitize {
 		}
 
 		// Check for "required" data argument and emit an error if the value is empty while required.
-		if ( array_key_exists( 'required', $data_args ) && $data_args['required'] && empty( $value ) ) {
-			$error = __( 'A value is required. Please enter a value.' );
+		if ( array_key_exists( 'required', $data_args ) && false !== $value && empty( $value ) ) {
+			$error = 'A value is required. Please enter a value.';
 		}
 
 		if ( ! empty( $error ) ) {

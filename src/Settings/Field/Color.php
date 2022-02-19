@@ -48,6 +48,7 @@ class Color extends Field {
 		'list',
 		'placeholder',
 		'readonly',
+		'required',
 		'size',
 	);
 

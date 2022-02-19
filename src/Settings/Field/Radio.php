@@ -46,6 +46,7 @@ class Radio extends Field {
 		'data-*',
 		'disabled',
 		'readonly',
+		'required',
 	);
 
 	/**

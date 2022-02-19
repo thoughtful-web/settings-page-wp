@@ -108,6 +108,9 @@ Supported data arguments for HTML attributes are listed below. Provide a **strin
 * __'readonly'__  
   *(true | string)*
   On the settings page, this argument prevents the element from being changed but includes its value with the form's submitted values. On the server, this argument uses the option sanitization filter to disallow changes to the value when performed using `update_option()`.
+* __'required'__  
+  *(true)*
+  On the settings page, this argument prevents the element from being empty when the form is submitted. On the server, this argument uses the option sanitization filter to disallow an empty string, array, or null value from being assigned to the option when performed using `update_option()`.
 * __'step'__  
   *(string)*
   The increment at which the numeric value must use. Used in the sanitization step and will disallow attempts to update the database using `update_option()` for numeric values that do not conform to this constraint.

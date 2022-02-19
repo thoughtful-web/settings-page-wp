@@ -51,6 +51,7 @@ class Phone extends Field {
 		'pattern',
 		'placeholder',
 		'readonly',
+		'required',
 		'size',
 	);
 

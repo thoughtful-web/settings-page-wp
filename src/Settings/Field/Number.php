@@ -52,6 +52,7 @@ class Number extends Field {
 		'min',
 		'placeholder',
 		'readonly',
+		'required',
 		'disabled',
 		'step',
 	);
