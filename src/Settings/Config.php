@@ -57,7 +57,7 @@ class Config {
 
 		$config = $this->maybe_autoload_file( $config );
 
-		$this->preprocess( $config );
+		$this->config = $this->preprocess( $config );
 
 	}
 
@@ -127,7 +127,7 @@ class Config {
 		// Associate labels.
 		$config = $this->associate_label_for( $config );
 
-		$this->config = $config;
+		return $config;
 
 	}
 
