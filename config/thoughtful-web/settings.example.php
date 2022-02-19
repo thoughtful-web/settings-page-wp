@@ -31,11 +31,11 @@ return array(
 	'option_group' => 'thoughtful_settings',
 	'description'  => 'A thoughtful settings page description.',
 	'stylesheet'   => array(
-		'file' => 'settings.css',
+		'file' => '/css/settings.css',
 		'deps' => array(),
 	),
 	'script'       => array(
-		'file'      => 'settings.js',
+		'file'      => '/scripts/settings.js',
 		'deps'      => array(),
 		'in_footer' => true,
 	),

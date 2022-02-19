@@ -10,11 +10,11 @@
     "option_group": "thoughtful_settings",
     "description": "A thoughtful settings page description.",
     "stylesheet": {
-        "file": "settings.css",
+        "file": "/styles/settings.css",
         "deps": []
     },
     "script": {
-        "file": "settings.js",
+        "file": "/scripts/settings.js",
         "deps": [],
         "in_footer": true
     },
