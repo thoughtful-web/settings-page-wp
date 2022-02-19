@@ -96,7 +96,7 @@ class Checkbox extends Field {
 		}
 		// Render the output.
 		$output = sprintf(
-			'<input type="checkbox" id="%1$s" name="%1$s" value="%2$s" %3$s%4$s/> <label for="%1$s__%2$s" />%5$s</label>',
+			'<input type="checkbox" id="%1$s" name="%1$s" value="%2$s" %3$s%4$s/> <label for="%1$s" />%5$s</label>',
 			esc_attr( $args['id'] ),
 			esc_attr( strval( array_key_first( $args['choice'] ) ) ),
 			$checked,
