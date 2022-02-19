@@ -145,7 +145,7 @@ class Field {
 		$this->field = $field;
 
 		// Register the option.
-		if ( false === get_option( $field['id'] ) ) {
+		if ( 'tws-not-exists-in-db' === get_option( $field['id'], 'tws-not-exists-in-db' ) ) {
 			add_filter( "sanitize_option_{$field['id']}", array( $this, 'sanitize' ) );
 			add_filter( "default_option_{$field['id']}", array( $this, 'default_option' ) );
 			if ( array_key_exists( 'default', $field['data_args'] ) ) {
