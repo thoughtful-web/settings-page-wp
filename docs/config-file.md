@@ -124,7 +124,7 @@ Specifications for the configuration file are included below. Text in quotations
   Register and enqueue a stylesheet file on the Settings Page.
   * __'file'__  
     *(string)*
-	A file name to look for in *./config/thoughtful-web/settings/*. This is on the roadmap to allow it to be located elsewhere in your plugin or theme.
+	A file path from your plugin or theme's root directory. Must begin with a slash. Example: */scripts/settings.js*
   * __'deps'__  
     *(string[]) (Optional)*
 	Dependencies that must be loaded before the registered stylesheet is loaded.  
@@ -134,7 +134,7 @@ Specifications for the configuration file are included below. Text in quotations
   Register and enqueue a javascript file on the Settings Page.
   * __'file'__  
     *(string)*
-	A file name to look for in *./config/thoughtful-web/settings*. Allowing it to be located elsewhere is on the roadmap.
+	A file path from your plugin or theme's root directory. Must begin with a slash. Example: */styles/settings.css*
   * __'deps'__  
     *(string[]) (Optional)*
 	Dependencies that must be loaded before the registered stylesheet is loaded.  

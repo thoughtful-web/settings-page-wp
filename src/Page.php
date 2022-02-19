@@ -149,10 +149,9 @@ class Page {
 
 		$slug        = $this->menu_slug;
 		$plugin_root = dirname( __FILE__, 5 );
-		$config_path = '/config/thoughtful-web/settings/';
 		$deps        = array_key_exists( 'deps', $this->config['stylesheet'] ) ? $this->config['stylesheet']['deps'] : array();
-		$file_url    = plugins_url( basename( $plugin_root ) . $config_path . $this->config['stylesheet']['file'] );
-		$file_path   = $plugin_root . $config_path . $this->config['stylesheet']['file'];
+		$file_url    = plugins_url( basename( $plugin_root ) . $this->config['stylesheet']['file'] );
+		$file_path   = $plugin_root . $this->config['stylesheet']['file'];
 		$version     = filemtime( $file_path );
 		// Register the stylesheet.
 		wp_register_style( 'settings-' . $slug, $file_url, $deps, $version );
@@ -183,10 +182,9 @@ class Page {
 
 		$slug        = $this->menu_slug;
 		$plugin_root = dirname( __FILE__, 5 );
-		$config_path = '/config/thoughtful-web/settings/';
 		$deps        = array_key_exists( 'deps', $this->config['script'] ) ? $this->config['script']['deps'] : array();
-		$file_url    = plugins_url( basename( $plugin_root ) . $config_path . $this->config['script']['file'] );
-		$file_path   = $plugin_root . $config_path . $this->config['script']['file'];
+		$file_url    = plugins_url( basename( $plugin_root ) . $this->config['script']['file'] );
+		$file_path   = $plugin_root . $this->config['script']['file'];
 		$version     = filemtime( $file_path );
 		$in_footer   = array_key_exists( 'position', $this->config['script'] ) ? boolval( $this->config['script'] ) : false;
 		// Register the stylesheet.
