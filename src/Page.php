@@ -98,7 +98,7 @@ class Page {
 		$has_stylesheet = false;
 
 		// Exit early if the user lacks the capability provided.
-		if ( ! current_user_can( $this->config['method_args']['capability'] ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			return $has_stylesheet;
 		}
 
@@ -124,7 +124,7 @@ class Page {
 		$has_script = false;
 
 		// Exit early if the user lacks the capability provided.
-		if ( ! current_user_can( $this->config['method_args']['capability'] ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			return $has_script;
 		}
 
@@ -147,7 +147,7 @@ class Page {
 	 */
 	public function register_stylesheet() {
 
-		$slug        = $this->config['method_args']['menu_slug'];
+		$slug        = $this->menu_slug;
 		$plugin_root = dirname( __FILE__, 5 );
 		$config_path = '/config/thoughtful-web/settings/';
 		$deps        = array_key_exists( 'deps', $this->config['stylesheet'] ) ? $this->config['stylesheet']['deps'] : array();
@@ -168,8 +168,8 @@ class Page {
 	 */
 	public function enqueue_stylesheet( $hook_suffix ) {
 
-		if ( false !== strpos( $hook_suffix, 'page_' . $this->config['method_args']['menu_slug'] ) ) {
-			wp_enqueue_style( 'settings-' . $this->config['method_args']['menu_slug'] );
+		if ( false !== strpos( $hook_suffix, 'page_' . $this->menu_slug ) ) {
+			wp_enqueue_style( 'settings-' . $this->menu_slug );
 		}
 
 	}
@@ -181,7 +181,7 @@ class Page {
 	 */
 	public function register_script() {
 
-		$slug        = $this->config['method_args']['menu_slug'];
+		$slug        = $this->menu_slug;
 		$plugin_root = dirname( __FILE__, 5 );
 		$config_path = '/config/thoughtful-web/settings/';
 		$deps        = array_key_exists( 'deps', $this->config['script'] ) ? $this->config['script']['deps'] : array();
@@ -203,8 +203,8 @@ class Page {
 	 */
 	public function enqueue_script( $hook_suffix ) {
 
-		if ( false !== strpos( $hook_suffix, 'page_' . $this->config['method_args']['menu_slug'] ) ) {
-			wp_enqueue_style( 'settings-' . $this->config['method_args']['menu_slug'] );
+		if ( false !== strpos( $hook_suffix, 'page_' . $this->menu_slug ) ) {
+			wp_enqueue_style( 'settings-' . $this->menu_slug );
 		}
 
 	}
@@ -224,8 +224,8 @@ class Page {
 			$page = add_menu_page(
 				$this->config['method_args']['page_title'],
 				$this->config['method_args']['menu_title'],
-				$this->config['method_args']['capability'],
-				$this->config['method_args']['menu_slug'],
+				$this->capability,
+				$this->menu_slug,
 				$this->settings_form_callable,
 				$this->config['method_args']['icon_url'],
 				$this->config['method_args']['position']
@@ -235,8 +235,8 @@ class Page {
 				$this->config['method_args']['parent_slug'],
 				$this->config['method_args']['page_title'],
 				$this->config['method_args']['menu_title'],
-				$this->config['method_args']['capability'],
-				$this->config['method_args']['menu_slug'],
+				$this->capability,
+				$this->menu_slug,
 				$this->settings_form_callable,
 				$this->config['method_args']['position']
 			);
