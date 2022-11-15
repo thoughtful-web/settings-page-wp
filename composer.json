@@ -56,9 +56,6 @@
 		}
 	},
 	"scripts": {
-		"post-install-cmd": [
-			"@config-wpcs"
-		],
 		"config-wpcs": [
 			"./vendor/bin/phpcs --config-set default_standard WordPress",
 			"./vendor/bin/phpcs --config-set report_format source",
