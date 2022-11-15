@@ -1,31 +1,36 @@
 {
-    "name": "thoughtful-web/settings-page-wp",
-    "description": "WordPress Settings page generator and validator released as free open source software under GNU GPL-2.0+ License",
-	"homepage": "https://github.com/thoughtful-web/settings-page-wp",
-    "type": "library",
-	"keywords": ["wordpress", "settings", "options", "settings page"],
+	"name": "thoughtful-web/settings-page-wp",
+	"description": "WordPress Settings page generator and validator released as free open source software under GNU GPL-2.0+ License",
+	"homepage": "https://packagist.org/packages/thoughtful-web/settings-page-wp",
+	"type": "library",
+	"keywords": [
+		"wordpress",
+		"settings",
+		"options",
+		"settings page"
+	],
 	"require": {
 		"php": ">=7.3.5"
 	},
-    "license": "GPL-2.0-or-later",
+	"license": "GPL-2.0-or-later",
 	"repositories": [
 		{
 			"type": "vcs",
 			"url": "https://github.com/thoughtful-web/settings-page-wp"
 		}
 	],
-    "authors": [
-        {
-            "name": "Zachary Kendall Watkins",
-            "email": "watkinza@gmail.com",
-			"homepage": "https://github.com/zachwatkins/",
-            "role": "Creator"
-        },
+	"authors": [
 		{
-			"name"    : "Contributors",
+			"name": "Zachary Kendall Watkins",
+			"email": "zwatkins.it@gmail.com",
+			"homepage": "https://zachwatkins.dev/",
+			"role": "Creator"
+		},
+		{
+			"name": "Contributors",
 			"homepage": "https://github.com/thoughtful-web/settings-page-wp/graphs/contributors"
 		}
-    ],
+	],
 	"support": {
 		"issues": "https://github.com/thoughtful-web/settings-page-wp/issues",
 		"source": "https://github.com/thoughtful-web/settings-page-wp/",
@@ -33,15 +38,42 @@
 	},
 	"readme": "README.md",
 	"autoload": {
-        "psr-4": {
+		"psr-4": {
 			"ThoughtfulWeb\\SettingsPageWP\\": "src/"
 		}
 	},
-    "require-dev": {
-        "squizlabs/php_codesniffer": "^3.6",
-        "wp-coding-standards/wpcs": "^2.3"
-    },
+	"minimum-stability": "dev",
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+		"squizlabs/php_codesniffer": "^3.6",
+		"wp-coding-standards/wpcs": "^2.3"
+	},
+	"config": {
+		"optimize-autoloader": true,
+		"preferred-install": "dist",
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
 	"scripts": {
-		
+		"post-install-cmd": [
+			"@config-wpcs"
+		],
+		"config-wpcs": [
+			"./vendor/bin/phpcs --config-set default_standard WordPress",
+			"./vendor/bin/phpcs --config-set report_format source",
+			"./vendor/bin/phpcs --config-set colors 1"
+		],
+		"install-codestandards": [
+			"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
+		],
+		"format": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf",
+		"format:modified": "@format --filter=gitmodified",
+		"lint": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
+		"lint:errors": "@lint -n",
+		"lint:modified": "@lint --filter=gitmodified"
+	},
+	"extra": {
+		"namespace": "ThoughtfulWeb\\SettingsPageWP"
 	}
 }
