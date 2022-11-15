@@ -9,6 +9,9 @@
  * @license    https://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
  * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Page.php
  * @since      0.1.0
+ * @composer
+ *
+ *
  */
 
 declare(strict_types=1);
@@ -55,7 +58,7 @@ class Page {
 
 	/**
 	 * The Settings class page form hook.
-	 * 
+	 *
 	 * @var array $settings_form_callable The Settings class callable form.
 	 */
 
@@ -219,7 +222,7 @@ class Page {
 		if (
 			! isset( $this->config['method_args']['parent_slug'] )
 		) {
-			$page = add_menu_page(
+			add_menu_page(
 				$this->config['method_args']['page_title'],
 				$this->config['method_args']['menu_title'],
 				$this->capability,
@@ -229,7 +232,7 @@ class Page {
 				$this->config['method_args']['position']
 			);
 		} else {
-			$page = add_submenu_page(
+			add_submenu_page(
 				$this->config['method_args']['parent_slug'],
 				$this->config['method_args']['page_title'],
 				$this->config['method_args']['menu_title'],
@@ -245,7 +248,7 @@ class Page {
 			add_action( 'admin_init', array( $this, 'register_stylesheet' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_stylesheet' ) );
 		}
-		
+
 		// Register the script if present.
 		if ( $this->has_script() ) {
 			add_action( 'admin_init', array( $this, 'register_script' ) );
