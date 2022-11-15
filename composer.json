@@ -64,9 +64,9 @@
 		"install-codestandards": [
 			"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
 		],
-		"format": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf",
+		"format": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf --ignore=vendor,node_modules",
 		"format:modified": "@format --filter=gitmodified",
-		"lint": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
+		"lint": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --ignore=vendor,node_modules",
 		"lint:errors": "@lint -n",
 		"lint:modified": "@lint --filter=gitmodified"
 	},
