@@ -65,8 +65,10 @@
 			"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
 		],
 		"format": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf --ignore=vendor,node_modules",
+		"format:all": "@format .",
 		"format:modified": "@format --filter=gitmodified",
 		"lint": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --ignore=vendor,node_modules",
+		"lint:all": "@lint .",
 		"lint:errors": "@lint -n",
 		"lint:modified": "@lint --filter=gitmodified"
 	},
