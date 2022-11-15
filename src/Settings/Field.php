@@ -29,8 +29,8 @@ class Field {
 	 * @var array $default_field The default field parameter member values.
 	 */
 	protected $default_field = array(
-		'type'        => 'text',
-		'data_args'   => array(
+		'type'      => 'text',
+		'data_args' => array(
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'type'              => 'string',
@@ -95,7 +95,7 @@ class Field {
 
 	/**
 	 * User capability
-	 * 
+	 *
 	 * @var string $capability Capability needed to update the option.
 	 */
 	protected $capability = 'manage_options';
@@ -187,7 +187,7 @@ class Field {
 				$section_id,
 				$field
 			);
-			
+
 		}
 
 	}
@@ -246,7 +246,7 @@ class Field {
 	 * @return string
 	 */
 	public function sanitize( $value ) {
-		
+
 		$sanitizer = new Sanitize( $this->field, $this->capability );
 		$value     = $sanitizer->sanitize( $value );
 		return $value;

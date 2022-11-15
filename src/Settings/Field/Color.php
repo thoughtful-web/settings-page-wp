@@ -29,8 +29,8 @@ class Color extends Field {
 	 * @var array $default The default field parameter member values.
 	 */
 	protected $default_field = array(
-		'type'        => 'color',
-		'data_args'   => array(
+		'type'      => 'color',
+		'data_args' => array(
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'type'              => 'string',

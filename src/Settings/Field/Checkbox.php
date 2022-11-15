@@ -29,8 +29,8 @@ class Checkbox extends Field {
 	 * @var array $default The default field parameter member values.
 	 */
 	protected $default_field = array(
-		'type'        => 'checkbox',
-		'data_args'   => array(
+		'type'      => 'checkbox',
+		'data_args' => array(
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'type'              => 'string',

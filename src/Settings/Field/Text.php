@@ -29,8 +29,8 @@ class Text extends Field {
 	 * @var array $default The default field parameter member values.
 	 */
 	protected $default_field = array(
-		'type'        => 'text',
-		'data_args'   => array(
+		'type'      => 'text',
+		'data_args' => array(
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'type'              => 'string',

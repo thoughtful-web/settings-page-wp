@@ -53,7 +53,7 @@ class Settings {
 	private $config = array();
 
 	public function __construct( $config ) {
-	
+
 		// Store the configuration and its key parameters for this file.
 		$this->config       = $config;
 		$this->capability   = $config['method_args']['capability'];
@@ -61,7 +61,7 @@ class Settings {
 		$this->option_group = $config['option_group'];
 
 		add_action( 'admin_init', array( $this, 'settings_init' ) );
-	
+
 	}
 
 	/**
@@ -274,7 +274,7 @@ class Settings {
 
 	/**
 	 * Return the Settings page form in callable format.
-	 * 
+	 *
 	 * @since 0.9.8
 	 *
 	 * @return void

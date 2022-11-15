@@ -128,7 +128,7 @@ class Select extends Field {
 
 		}
 		$output[] = '</select>';
-		$output = implode( '', $output );
+		$output   = implode( '', $output );
 		echo wp_kses( $output, $this->allowed_html );
 
 		// Render the description text.

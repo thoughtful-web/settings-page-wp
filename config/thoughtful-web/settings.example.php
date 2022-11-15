@@ -73,7 +73,7 @@ return array(
 					'description' => 'My textarea field',
 					'data_args'   => array(
 						'placeholder' => 'my placeholder',
-					)
+					),
 				),
 				array(
 					'label'       => 'My Checkbox Field',
@@ -178,7 +178,7 @@ return array(
 					),
 					'data_args'   => array(
 						'multiple' => true,
-						'default'  => array('option_one', 'option_two'),
+						'default'  => array( 'option_one', 'option_two' ),
 					),
 				),
 				array(
@@ -188,7 +188,7 @@ return array(
 					'description' => 'My email field description',
 					'data_args'   => array(
 						'placeholder' => 'my placeholder',
-					)
+					),
 				),
 				array(
 					'label'       => 'My Phone Field',

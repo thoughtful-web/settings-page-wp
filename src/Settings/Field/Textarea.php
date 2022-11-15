@@ -29,8 +29,8 @@ class Textarea extends Field {
 	 * @var array $default The default field parameter member values.
 	 */
 	protected $default_field = array(
-		'type'        => 'textarea',
-		'data_args'   => array(
+		'type'      => 'textarea',
+		'data_args' => array(
 			'type'              => 'string',
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,

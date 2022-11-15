@@ -10,8 +10,6 @@
  * @link       https://github.com/thoughtful-web/settings-page-wp/blob/main/src/Page.php
  * @since      0.1.0
  * @composer
- *
- *
  */
 
 declare(strict_types=1);
@@ -77,7 +75,7 @@ class Page {
 		$config     = $config_obj->get();
 
 		// Run the Settings API related classes.
-		$settings_obj = new \ThoughtfulWeb\SettingsPageWP\Settings( $config );
+		$settings_obj                 = new \ThoughtfulWeb\SettingsPageWP\Settings( $config );
 		$this->settings_form_callable = $settings_obj->settings_form_callable();
 
 		// Assign compiled values.

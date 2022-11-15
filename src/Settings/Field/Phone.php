@@ -31,8 +31,8 @@ class Phone extends Field {
 	 * @var array $default The default field parameter member values.
 	 */
 	protected $default_field = array(
-		'type'        => 'tel',
-		'data_args'   => array(
+		'type'      => 'tel',
+		'data_args' => array(
 			'sanitize_callback' => 'sanitize_text_field',
 			'show_in_rest'      => false,
 			'type'              => 'string',
@@ -62,21 +62,21 @@ class Phone extends Field {
 	 */
 	protected $allowed_html = array(
 		'input' => array(
-			'class'        => true,
-			'data-*'       => true,
-			'disabled'     => true,
-			'id'           => true,
-			'list'         => true,
-			'maxlength'    => true,
-			'minlength'    => true,
-			'name'         => true,
-			'pattern'      => true,
-			'placeholder'  => true,
-			'readonly'     => true,
-			'required'     => true,
-			'size'         => true,
-			'type'         => 'text',
-			'value'        => true,
+			'class'       => true,
+			'data-*'      => true,
+			'disabled'    => true,
+			'id'          => true,
+			'list'        => true,
+			'maxlength'   => true,
+			'minlength'   => true,
+			'name'        => true,
+			'pattern'     => true,
+			'placeholder' => true,
+			'readonly'    => true,
+			'required'    => true,
+			'size'        => true,
+			'type'        => 'text',
+			'value'       => true,
 		),
 	);
 }

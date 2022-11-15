@@ -31,8 +31,8 @@ class Password extends Field {
 	 * @var array $default The default field parameter member values.
 	 */
 	protected $default_field = array(
-		'type'        => 'password',
-		'data_args'   => array(
+		'type'      => 'password',
+		'data_args' => array(
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'type'              => 'string',
@@ -125,7 +125,7 @@ class Password extends Field {
 					'onblur'  => true,
 				),
 			);
-			$output = sprintf(
+			$output       = sprintf(
 				'<input type="button" value="%1$s" onclick="navigator.clipboard.writeText(this.previousSibling.value);this.value=\'Copied\';" onblur="this.value=\'%1$s\';" />',
 				esc_attr( $args['data_args']['copy_button'] )
 			);

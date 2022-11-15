@@ -43,7 +43,7 @@ class Sanitize {
 
 	/**
 	 * User capability
-	 * 
+	 *
 	 * @var string $capability Capability needed to update the option.
 	 */
 	protected $capability = 'manage_options';

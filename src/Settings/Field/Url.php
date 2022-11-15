@@ -31,8 +31,8 @@ class Url extends Field {
 	 * @var array $default The default field parameter member values.
 	 */
 	protected $default_field = array(
-		'type'        => 'url',
-		'data_args'   => array(
+		'type'      => 'url',
+		'data_args' => array(
 			'sanitize_callback' => true,
 			'show_in_rest'      => false,
 			'type'              => 'string',
@@ -64,21 +64,21 @@ class Url extends Field {
 	 */
 	protected $allowed_html = array(
 		'input' => array(
-			'class'        => true,
-			'data-*'       => true,
-			'disabled'     => true,
-			'id'           => true,
-			'list'         => true,
-			'maxlength'    => true,
-			'minlength'    => true,
-			'name'         => true,
-			'pattern'      => true,
-			'placeholder'  => true,
-			'readonly'     => true,
-			'required'     => true,
-			'size'         => true,
-			'type'         => 'url',
-			'value'        => true,
+			'class'       => true,
+			'data-*'      => true,
+			'disabled'    => true,
+			'id'          => true,
+			'list'        => true,
+			'maxlength'   => true,
+			'minlength'   => true,
+			'name'        => true,
+			'pattern'     => true,
+			'placeholder' => true,
+			'readonly'    => true,
+			'required'    => true,
+			'size'        => true,
+			'type'        => 'url',
+			'value'       => true,
 		),
 	);
 }
