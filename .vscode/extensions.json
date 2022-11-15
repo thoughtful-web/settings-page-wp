@@ -1,0 +1,12 @@
+{
+	"recommendations": [
+		"editorconfig.editorconfig",
+		"webben.browserslist",
+		"neilbrayfield.php-docblocker",
+		"devsense.composer-php-vscode",
+		"johnbillion.vscode-wordpress-hooks",
+		"shevaua.phpcs",
+		"persoderlind.vscode-phpcbf",
+		"bmewburn.vscode-intelephense-client"
+	]
+}
